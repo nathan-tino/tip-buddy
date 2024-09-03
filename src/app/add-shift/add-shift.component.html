@@ -1,0 +1,32 @@
+<h2>Add Shift</h2>
+<form (ngSubmit)="onSubmit()">
+    <p>
+        <label for="credit-tips">Credit Tips</label>
+        <input type="number" id="credit-tips" name="credit-tips" [(ngModel)]="enteredCreditTips" />
+    </p>
+
+    <p>
+        <label for="cash-tips">Cash Tips</label>
+        <input type="number" id="cash-tips" name="cash-tips" [(ngModel)]="enteredCashTips" />
+    </p>
+
+    <p>
+        <label for="tipout">Tipout</label>
+        <input type="number" id="tipout" name="tipout" [(ngModel)]="enteredTipout" />
+    </p>
+
+    <p>
+        <label for="hours-worked">Hours Worked</label>
+        <input type="number" id="hours-worked" name="hours-worked" [(ngModel)]="hoursWorked" />
+    </p>
+
+    <p>
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date" [(ngModel)]="enteredDate" />
+    </p>
+
+    <p class="actions">
+        <button type="button" (click)="onCancel()">Cancel</button>
+        <button type="submit">Add Shift</button>
+    </p>
+</form>
