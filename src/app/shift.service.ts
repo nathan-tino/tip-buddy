@@ -30,6 +30,11 @@ export class ShiftService {
         this.saveShifts();
     }
 
+    deleteShift(id: string) {
+        this.shifts = this.shifts.filter((shift) => shift.id !== id);
+        this.saveShifts();
+    }
+
     private saveShifts() {
       localStorage.setItem('shifts', JSON.stringify(this.shifts));
     }
