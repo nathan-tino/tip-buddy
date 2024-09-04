@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AddShiftComponent } from './add-shift/add-shift.component';
+import { AddShiftComponent } from './shifts/add-shift/add-shift.component';
 import { ShiftService } from './shift.service';
-import { AddShiftModel } from './add-shift/add-shift.model';
+import { AddShiftModel } from './shifts/add-shift/add-shift.model';
 import { ShiftsComponent } from "./shifts/shifts.component";
 
 @Component({

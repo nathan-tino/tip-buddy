@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ShiftData } from "./add-shift/shift.model";
-import { AddShiftModel } from "./add-shift/add-shift.model";
+import { ShiftData } from "./shifts/shift.model";
+import { AddShiftModel } from "./shifts/add-shift/add-shift.model";
 
 @Injectable({ providedIn: 'root' })
 export class ShiftService {
