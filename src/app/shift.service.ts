@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
-import { ShiftData } from "./add-shift/shift.model";
-import { AddShiftModel } from "./add-shift/add-shift.model";
+import { ShiftModel } from "./shifts/shift/shift.model";
+import { AddShiftModel } from "./shifts/add-shift/add-shift.model";
 
 @Injectable({ providedIn: 'root' })
 export class ShiftService {
-    private shifts: ShiftData[] = [];
+    private shifts: ShiftModel[] = [];
 
     constructor() {
         const shifts = localStorage.getItem('shifts');
@@ -27,6 +27,11 @@ export class ShiftService {
             tipout: shift.tipout,
             hoursWorked: shift.hoursWorked
         });
+        this.saveShifts();
+    }
+
+    deleteShift(id: string) {
+        this.shifts = this.shifts.filter((shift) => shift.id !== id);
         this.saveShifts();
     }
 

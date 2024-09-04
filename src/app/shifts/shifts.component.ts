@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { ShiftService } from '../shift.service';
+import { ShiftComponent } from "./shift/shift.component";
 
 @Component({
   selector: 'app-shifts',
   standalone: true,
-  imports: [],
+  imports: [ShiftComponent],
   templateUrl: './shifts.component.html',
   styleUrl: './shifts.component.css'
 })
