@@ -11,10 +11,19 @@ import { ShiftService } from '../../shift.service';
 })
 export class ShiftComponent {
   shift = input.required<ShiftModel>();
+  isEditingShift = false;
 
-  constructor(private shiftService: ShiftService) {}
+  constructor(private shiftService: ShiftService) { }
 
   onDeleteShift() {
     this.shiftService.deleteShift(this.shift().id);
+  }
+
+  onEditShift() {
+    this.isEditingShift = true;
+  }
+
+  onFinishEditShift() {
+    this.isEditingShift = false;
   }
 }
