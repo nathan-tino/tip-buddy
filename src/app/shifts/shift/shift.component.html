@@ -1,0 +1,12 @@
+<h3>{{shift().date}}</h3>
+Credit Tips: {{shift().creditTips}} <br>
+Cash Tips: {{shift().cashTips}} <br>
+Tipout: {{shift().tipout}} <br>
+Total Tips: {{shift().creditTips + shift().cashTips - shift().tipout}} <br>
+@if (shift().hoursWorked !== undefined) {
+    Hours worked: {{shift().hoursWorked}} <br>
+    Hourly: {{
+        (shift().creditTips + shift().cashTips - (shift().tipout !== undefined ? shift().tipout : 0)) / shift().hoursWorked!
+    }}
+}
+<button (click)="onDeleteShift()">Delete</button>

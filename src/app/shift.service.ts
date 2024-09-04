@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
-import { ShiftData } from "./shifts/shift.model";
+import { ShiftModel } from "./shifts/shift/shift.model";
 import { AddShiftModel } from "./shifts/add-shift/add-shift.model";
 
 @Injectable({ providedIn: 'root' })
 export class ShiftService {
-    private shifts: ShiftData[] = [];
+    private shifts: ShiftModel[] = [];
 
     constructor() {
         const shifts = localStorage.getItem('shifts');

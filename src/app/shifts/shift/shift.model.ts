@@ -1,4 +1,4 @@
-export interface ShiftData {
+export interface ShiftModel {
   id: string,
   date: string;
   creditTips: number;

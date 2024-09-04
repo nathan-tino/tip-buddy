@@ -1,15 +1,6 @@
 <ul>
     @for(shift of shifts; track shift.id) {
-        <li>{{shift.date}}
-            <br>
-            @if(shift.hoursWorked !== undefined) {
-              Credit Tips: {{shift.creditTips}} <br>
-              Cash Tips: {{shift.cashTips}} <br>
-              Tipout: {{shift.tipout}} <br>
-              Total Tips: {{shift.creditTips + shift.cashTips - shift.tipout}} <br>
-              Hours worked: {{shift.hoursWorked}} <br>
-              Hourly: {{(shift.creditTips + shift.cashTips - shift.tipout) / shift.hoursWorked}}
-            }
+        <li><app-shift [shift]="shift"></app-shift>
         </li>
     }
   </ul>
