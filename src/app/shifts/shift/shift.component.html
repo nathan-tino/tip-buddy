@@ -8,5 +8,6 @@ Total Tips: {{shift().creditTips + shift().cashTips - shift().tipout}} <br>
     Hourly: {{
         (shift().creditTips + shift().cashTips - (shift().tipout !== undefined ? shift().tipout : 0)) / shift().hoursWorked!
     }}
+    <br>
 }
 <button (click)="onDeleteShift()">Delete</button>
