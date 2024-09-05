@@ -14,3 +14,7 @@ Total Tips: {{shift().creditTips + shift().cashTips - shift().tipout}} <br>
     <button (click)="onEditShift()">Edit</button>
     <button (click)="onDeleteShift()">Delete</button>
 </div>
+
+@if(isEditingShift) {
+    <app-edit-shift [shift]="shift()" (close)="onFinishEditShift()"></app-edit-shift>
+}
