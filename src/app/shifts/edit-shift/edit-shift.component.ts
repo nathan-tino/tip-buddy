@@ -24,7 +24,7 @@ export class EditShiftComponent {
   constructor(private shiftService: ShiftService) {}
 
   //Use ngOnInit here because we can't access this.shift() in constructor
-  ngOnInit(): void {
+  ngOnInit() {
     this.creditTipsInput = this.shift().creditTips;
     this.cashTipsInput = this.shift().cashTips;
     this.tipoutInput = this.shift().tipout;
