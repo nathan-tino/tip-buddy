@@ -1,4 +1,4 @@
-export interface AddShiftModel {
+export interface AddEditShiftModel {
   date: string;
   creditTips: number;
   cashTips: number;
