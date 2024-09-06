@@ -1,6 +1,7 @@
 import { Component, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AddShiftModel } from './add-shift.model';
+
+import { ShiftService } from '../../shift.service';
 
 @Component({
   selector: 'app-add-shift',
@@ -10,35 +11,34 @@ import { AddShiftModel } from './add-shift.model';
   styleUrl: './add-shift.component.css'
 })
 export class AddShiftComponent {
-  enteredCreditTips = 0;
-  enteredCashTips = 0;
-  enteredTipout = 0;
-  enteredDate = '';
-  hoursWorked?: number;
-
-  newShift = output<AddShiftModel>();
+  creditTipsInput = 0;
+  cashTipsInput = 0;
+  tipoutInput = 0;
+  dateInput = '';
+  hoursWorkedInput?: number;
 
   onCancel() {
     this.resetInputs();
   }
 
+  constructor(private shiftService: ShiftService) {}
+
   onSubmit() {
-    this.newShift.emit({
-      date: this.enteredDate,
-      creditTips: this.enteredCreditTips,
-      cashTips: this.enteredCashTips,
-      tipout: this.enteredTipout,
-      //TODO: negative numbers shouldn't be allowed on input
-      hoursWorked: this.hoursWorked !== undefined && this.hoursWorked > 0 ? this.hoursWorked : undefined
+    this.shiftService.addShift({
+      date: this.dateInput,
+      creditTips: this.creditTipsInput,
+      cashTips: this.cashTipsInput,
+      tipout: this.tipoutInput,
+      hoursWorked: this.hoursWorkedInput !== undefined && this.hoursWorkedInput > 0 ? this.hoursWorkedInput : undefined
     });
 
     this.resetInputs();
   }
 
   private resetInputs() {
-    this.enteredCashTips = this.enteredCreditTips = this.enteredTipout = 0;
-    this.enteredDate = '';
-    this.hoursWorked = undefined;
+    this.cashTipsInput = this.creditTipsInput = this.tipoutInput = 0;
+    this.dateInput = '';
+    this.hoursWorkedInput = undefined;
   }
 }
 

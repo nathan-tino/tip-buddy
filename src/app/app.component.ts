@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+
 import { AddShiftComponent } from './shifts/add-shift/add-shift.component';
-import { ShiftService } from './shift.service';
-import { AddShiftModel } from './shifts/add-shift/add-shift.model';
 import { ShiftsComponent } from "./shifts/shifts.component";
 
 @Component({
@@ -13,9 +12,4 @@ import { ShiftsComponent } from "./shifts/shifts.component";
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  constructor(private shiftService: ShiftService) {}
-
-  onAddShift(shift: AddShiftModel) {
-    this.shiftService.addShift(shift);
-  }
 }

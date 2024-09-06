@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
+
 import { ShiftModel } from "./shifts/shift/shift.model";
-import { AddShiftModel } from "./shifts/add-shift/add-shift.model";
+import { AddEditShiftModel } from "./shifts/add-edit-shift.model";
 
 @Injectable({ providedIn: 'root' })
 export class ShiftService {
@@ -18,7 +19,7 @@ export class ShiftService {
         return this.shifts;
     }
 
-    addShift(shift: AddShiftModel) {
+    addShift(shift: AddEditShiftModel) {
         this.shifts.push({
             id: new Date().getTime().toString(),
             date: shift.date,
@@ -33,6 +34,23 @@ export class ShiftService {
     deleteShift(id: string) {
         this.shifts = this.shifts.filter((shift) => shift.id !== id);
         this.saveShifts();
+    }
+
+    editShift(shiftId: string, shift: AddEditShiftModel) {
+        let shiftToUpdate = this.shifts.find(x => x.id === shiftId);
+        
+        if (shiftToUpdate !== undefined) {
+            shiftToUpdate.creditTips = shift.creditTips;
+            shiftToUpdate.cashTips = shift.cashTips;
+            shiftToUpdate.tipout = shift.tipout;
+            shiftToUpdate.date = shift.date;
+            shiftToUpdate.hoursWorked = shift.hoursWorked;
+
+            this.shifts[this.shifts.findIndex(x => x.id === shiftId)] = shiftToUpdate;
+            this.saveShifts()
+        }
+
+        //TODO: throw exception or sumting
     }
 
     private saveShifts() {
