@@ -2,11 +2,12 @@ import { Component, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ShiftService } from '../../shift.service';
+import { CardComponent } from '../../shared/card/card.component';
 
 @Component({
   selector: 'app-add-shift',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CardComponent],
   templateUrl: './add-shift.component.html',
   styleUrl: './add-shift.component.css'
 })
