@@ -1,20 +1,27 @@
-<h3>{{shift().date}}</h3>
-Credit Tips: {{shift().creditTips}} <br>
-Cash Tips: {{shift().cashTips}} <br>
-Tipout: {{shift().tipout}} <br>
-Total Tips: {{shift().creditTips + shift().cashTips - shift().tipout}} <br>
-@if (shift().hoursWorked !== undefined) {
-    Hours worked: {{shift().hoursWorked}} <br>
-    Hourly: {{
-        (shift().creditTips + shift().cashTips - (shift().tipout !== undefined ? shift().tipout : 0)) / shift().hoursWorked!
-    }}
-    <br>
-}
-<div>
-    <button (click)="onEditShift()">Edit</button>
-    <button (click)="onDeleteShift()">Delete</button>
-</div>
+<app-card>
+    <article>
+        <h2>{{shift().date}}</h2>
+        <ul id="details">
+            <li>Credit Tips: {{shift().creditTips}}</li>
+            <li>Cash Tips: {{shift().cashTips}}</li>
+            <li>Tipout: {{shift().tipout}}</li>
+            <li>Total Tips: {{shift().creditTips + shift().cashTips - shift().tipout}}</li>
 
-@if(isEditingShift) {
-    <app-edit-shift [shift]="shift()" (close)="onFinishEditShift()"></app-edit-shift>
-}
+            @if (shift().hoursWorked !== undefined) {
+                <li>Hours worked: {{shift().hoursWorked}}</li>
+                <li>Hourly: {{
+                    (shift().creditTips + shift().cashTips - (shift().tipout !== undefined ? shift().tipout : 0)) /
+                    shift().hoursWorked!}}
+                </li>
+            }
+            <div id="actions">
+                <button (click)="onEditShift()">Edit</button>
+                <button (click)="onDeleteShift()">Delete</button>
+            </div>
+
+            @if(isEditingShift) {
+                <app-edit-shift [shift]="shift()" (close)="onFinishEditShift()" />
+            }
+        </ul>
+    </article>
+</app-card>

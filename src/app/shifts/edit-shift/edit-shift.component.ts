@@ -3,11 +3,12 @@ import { FormsModule } from '@angular/forms';
 
 import { ShiftModel } from '../shift/shift.model';
 import { ShiftService } from '../../shift.service';
+import { CardComponent } from "../../shared/card/card.component";
 
 @Component({
   selector: 'app-edit-shift',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CardComponent],
   templateUrl: './edit-shift.component.html',
   styleUrl: './edit-shift.component.css'
 })
