@@ -1,6 +1,5 @@
-<ul id="shifts">
+<section id="shifts">
     @for(shift of shifts; track shift.id) {
-        <li><app-shift [shift]="shift"></app-shift>
-        </li>
+        <app-shift [shift]="shift"></app-shift>
     }
-  </ul>
+</section>
