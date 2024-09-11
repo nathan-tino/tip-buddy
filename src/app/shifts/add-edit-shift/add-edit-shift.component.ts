@@ -9,10 +9,10 @@ import { CardComponent } from "../../shared/card/card.component";
   selector: 'app-edit-shift',
   standalone: true,
   imports: [FormsModule, CardComponent],
-  templateUrl: './edit-shift.component.html',
-  styleUrl: './edit-shift.component.css'
+  templateUrl: './add-edit-shift.component.html',
+  styleUrl: './add-edit-shift.component.css'
 })
-export class EditShiftComponent {
+export class AddEditShiftComponent {
   shift = input<ShiftModel>();
   close = output();
   addingShift = false;
