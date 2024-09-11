@@ -1,7 +1,7 @@
 <app-card>
-    <section class="shift">
-        <header><h2>{{shift().date}}</h2></header>
-        <ul>
+    <article>
+        <h2>{{shift().date}}</h2>
+        <ul id="details">
             <li>Credit Tips: {{shift().creditTips}}</li>
             <li>Cash Tips: {{shift().cashTips}}</li>
             <li>Tipout: {{shift().tipout}}</li>
@@ -11,18 +11,17 @@
                 <li>Hours worked: {{shift().hoursWorked}}</li>
                 <li>Hourly: {{
                     (shift().creditTips + shift().cashTips - (shift().tipout !== undefined ? shift().tipout : 0)) /
-                    shift().hoursWorked!
-                    }}
+                    shift().hoursWorked!}}
                 </li>
             }
-            <div>
+            <div id="actions">
                 <button (click)="onEditShift()">Edit</button>
                 <button (click)="onDeleteShift()">Delete</button>
             </div>
 
             @if(isEditingShift) {
-                <app-edit-shift [shift]="shift()" (close)="onFinishEditShift()"></app-edit-shift>
+                <app-edit-shift [shift]="shift()" (close)="onFinishEditShift()" />
             }
         </ul>
-    </section>
+    </article>
 </app-card>
