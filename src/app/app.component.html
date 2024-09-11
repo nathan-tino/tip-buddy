@@ -1,5 +1,10 @@
 <app-header />
 
 <main>
-    <app-shifts></app-shifts>
+    <button (click)="onAddShift()">Add Shift</button>
+    <app-shifts />
 </main>
+
+@if(isAddingShift) {
+    <app-edit-shift (close)="onFinishAddShift()" />
+}

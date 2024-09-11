@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditShiftComponent } from './edit-shift.component';
+import { AddEditShiftComponent } from './add-edit-shift.component';
 
 describe('EditShiftComponent', () => {
-  let component: EditShiftComponent;
-  let fixture: ComponentFixture<EditShiftComponent>;
+  let component: AddEditShiftComponent;
+  let fixture: ComponentFixture<AddEditShiftComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EditShiftComponent]
+      imports: [AddEditShiftComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(EditShiftComponent);
+    fixture = TestBed.createComponent(AddEditShiftComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

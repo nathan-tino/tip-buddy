@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 
 import { ShiftModel } from "./shifts/shift/shift.model";
-import { AddEditShiftModel } from "./shifts/add-edit-shift.model";
+import { AddEditShiftModel } from "./shifts/add-edit-shift/add-edit-shift.model";
 
 @Injectable({ providedIn: 'root' })
 export class ShiftService {
