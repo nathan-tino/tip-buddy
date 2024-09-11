@@ -13,8 +13,9 @@ import { CardComponent } from "../../shared/card/card.component";
   styleUrl: './edit-shift.component.css'
 })
 export class EditShiftComponent {
-  shift = input.required<ShiftModel>();
+  shift = input<ShiftModel>();
   close = output();
+  addingShift = false;
 
   creditTipsInput!: number;
   cashTipsInput!: number;
@@ -22,15 +23,21 @@ export class EditShiftComponent {
   dateInput!: string;
   hoursWorkedInput?: number;
 
-  constructor(private shiftService: ShiftService) {}
+  constructor(private shiftService: ShiftService) { }
 
   //Use ngOnInit here because we can't access this.shift() in constructor
   ngOnInit() {
-    this.creditTipsInput = this.shift().creditTips;
-    this.cashTipsInput = this.shift().cashTips;
-    this.tipoutInput = this.shift().tipout;
-    this.dateInput = this.shift().date;
-    this.hoursWorkedInput = this.shift().hoursWorked;
+    // we are adding a new shift if we don't get a Shift object as an input
+    this.addingShift = this.shift() === undefined;
+
+    if (!this.addingShift) {
+      // we're editing an existing shift; so, set inputs
+      this.creditTipsInput = this.shift()!.creditTips;
+      this.cashTipsInput = this.shift()!.cashTips;
+      this.tipoutInput = this.shift()!.tipout;
+      this.dateInput = this.shift()!.date;
+      this.hoursWorkedInput = this.shift()!.hoursWorked;
+    }
   }
 
   onCancel() {
@@ -38,13 +45,24 @@ export class EditShiftComponent {
   }
 
   onSubmit() {
-    this.shiftService.editShift(this.shift().id, {
-      creditTips: this.creditTipsInput,
-      cashTips: this.cashTipsInput,
-      tipout: this.tipoutInput,
-      date: this.dateInput,
-      hoursWorked: this.hoursWorkedInput
-    });
+    if (this.addingShift) {
+      this.shiftService.addShift({
+        date: this.dateInput,
+        creditTips: this.creditTipsInput,
+        cashTips: this.cashTipsInput,
+        tipout: this.tipoutInput,
+        hoursWorked: this.hoursWorkedInput !== undefined && this.hoursWorkedInput > 0 ? this.hoursWorkedInput : undefined
+      });
+    }
+    else {
+      this.shiftService.editShift(this.shift()!.id, {
+        creditTips: this.creditTipsInput,
+        cashTips: this.cashTipsInput,
+        tipout: this.tipoutInput,
+        date: this.dateInput,
+        hoursWorked: this.hoursWorkedInput
+      });
+    }
     this.close.emit();
   }
 }
