@@ -21,6 +21,7 @@ export class ShiftComponent {
   }
 
   onDeleteShift() {
+    console.log('shift component delete shift: ' + this.shift().id);
     this.deleteShift.emit(this.shift().id);
   }
 }

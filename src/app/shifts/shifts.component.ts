@@ -28,7 +28,6 @@ export class ShiftsComponent implements OnInit {
     this.shiftService.getShifts().subscribe((shifts: GetShiftDto[]) => {
       this.shifts = shifts;
     });
-    console.log('Shifts loaded:', this.shifts);
   }
 
   onAddShift() {
@@ -36,7 +35,6 @@ export class ShiftsComponent implements OnInit {
   }
 
   onFinishAddShift(shift: GetShiftDto | undefined) {
-    console.log('Finished adding shift' + shift);
     if (shift !== undefined) {
       this.shifts.push(shift);
     }
@@ -45,7 +43,6 @@ export class ShiftsComponent implements OnInit {
   }
 
   onEditShift(shift: GetShiftDto) {
-    console.log('editing shift: ' + shift);
     this.activeShift = shift;
     this.isEditingShift = true;
   }
@@ -53,9 +50,6 @@ export class ShiftsComponent implements OnInit {
   onFinishEditShift(updatedShift: GetShiftDto | undefined) {
     if (updatedShift !== undefined) {
       const index = this.shifts.findIndex(shift => shift.id === updatedShift.id);
-      console.log('old value credit tips: ' + this.shifts[index].creditTips);
-      console.log('new value credit tips: ' + updatedShift.creditTips);
-
 
       if (index !== -1) {
         this.shifts[index] = {
@@ -73,6 +67,18 @@ export class ShiftsComponent implements OnInit {
   }
 
   onDeleteShift(id: number) {
-    this.shiftService.deleteShift(id);
+    this.shiftService.deleteShift(id).subscribe({
+      next: () => {
+        console.log('Shift deleted successfully');
+        const index = this.shifts.findIndex(shift => shift.id === id);
+        if (index !== -1) {
+          this.shifts.splice(index, 1);
+        }
+      },
+      error: (err) => {
+        console.error('Error deleting shift', err);
+        // TODO: Handle error scenario, like showing an error message
+      }
+    });
   }
 }

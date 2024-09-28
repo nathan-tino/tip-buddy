@@ -1,15 +1,13 @@
 import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { HttpClient } from "@angular/common/http";
 
 import { GetShiftDto } from "./dtos/get-shift.dto";
-import { AddEditShiftModel } from "./shifts/add-edit-shift/add-edit-shift.model";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
 import { CreateShiftDto } from "./dtos/create-shift.dto";
 import { UpdateShiftDto } from "./dtos/update-shift.dto";
 
 @Injectable({ providedIn: 'root' })
 export class ShiftService {
-    private shifts: GetShiftDto[] = [];
     private apiUrl = 'https://localhost:7001/api/shifts';
 
     constructor(private http: HttpClient) { }
