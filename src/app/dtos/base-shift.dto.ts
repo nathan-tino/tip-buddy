@@ -1,6 +1,5 @@
-export interface ShiftModel {
-  id: string,
-  date: string;
+export interface BaseShiftDto {
+  date: Date;
   creditTips: number;
   cashTips: number;
   tipout: number;

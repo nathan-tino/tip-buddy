@@ -1,7 +1,7 @@
 import { Component, input, output, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { ShiftModel } from '../shift/shift.model';
+import { GetShiftDto } from '../../dtos/get-shift.dto';
 import { ShiftService } from '../../shift.service';
 import { CardComponent } from "../../shared/card/card.component";
 
@@ -13,8 +13,8 @@ import { CardComponent } from "../../shared/card/card.component";
   styleUrl: './add-edit-shift.component.css'
 })
 export class AddEditShiftComponent {
-  shift = input<ShiftModel>();
-  close = output();
+  shift = input<GetShiftDto>();
+  close = output<GetShiftDto | undefined>();
   addingShift = false;
 
   creditTipsInput!: number;
@@ -31,38 +31,66 @@ export class AddEditShiftComponent {
     this.addingShift = this.shift() === undefined;
 
     if (!this.addingShift) {
+      //TODO: shift.date is not coming through correctly.
+      //need to figure out a way to receive dates automatically from the API
+      const dateValue = new Date(this.shift()!.date);
+
       // we're editing an existing shift; so, set inputs
       this.creditTipsInput = this.shift()!.creditTips;
       this.cashTipsInput = this.shift()!.cashTips;
       this.tipoutInput = this.shift()!.tipout;
-      this.dateInput = this.shift()!.date;
+      this.dateInput = dateValue.toISOString().slice(0, 10);
       this.hoursWorkedInput = this.shift()!.hoursWorked;
     }
   }
 
   onCancel() {
-    this.close.emit();
+    this.close.emit(undefined);
   }
 
   onSubmit() {
+    let shift: GetShiftDto | undefined = undefined;
+
     if (this.addingShift) {
       this.shiftService.addShift({
-        date: this.dateInput,
+        date: new Date(this.dateInput),
         creditTips: this.creditTipsInput,
         cashTips: this.cashTipsInput,
         tipout: this.tipoutInput,
         hoursWorked: this.hoursWorkedInput !== undefined && this.hoursWorkedInput > 0 ? this.hoursWorkedInput : undefined
+      }).subscribe({
+        next: (response) => { 
+          shift = response;
+          console.log('Shift added successfully: ', shift)
+        },
+        error: (e) => console.error(e),
+        complete: () => {
+          this.close.emit(shift);
+          console.info('complete')
+        }
       });
     }
     else {
-      this.shiftService.editShift(this.shift()!.id, {
+      const updatedShift = {
+        id: this.shift()!.id,
         creditTips: this.creditTipsInput,
         cashTips: this.cashTipsInput,
         tipout: this.tipoutInput,
-        date: this.dateInput,
+        date: new Date(this.dateInput),
         hoursWorked: this.hoursWorkedInput
+      };
+      this.shiftService.editShift(this.shift()!.id, updatedShift)
+      .subscribe({
+        next: (response) => { 
+          shift = updatedShift; 
+          console.log('Shift updated successfully: ', response) 
+        },
+        error: (e) => console.error(e),
+        complete: () => {
+          this.close.emit(shift);
+          console.info('complete')
+        }
       });
     }
-    this.close.emit();
   }
 }

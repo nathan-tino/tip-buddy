@@ -1,59 +1,31 @@
 import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { HttpClient } from "@angular/common/http";
 
-import { ShiftModel } from "./shifts/shift/shift.model";
-import { AddEditShiftModel } from "./shifts/add-edit-shift/add-edit-shift.model";
+import { GetShiftDto } from "./dtos/get-shift.dto";
+import { CreateShiftDto } from "./dtos/create-shift.dto";
+import { UpdateShiftDto } from "./dtos/update-shift.dto";
 
 @Injectable({ providedIn: 'root' })
 export class ShiftService {
-    private shifts: ShiftModel[] = [];
+    private apiUrl = 'https://localhost:7001/api/shifts';
 
-    constructor() {
-        const shifts = localStorage.getItem('shifts');
+    constructor(private http: HttpClient) { }
 
-        if (shifts) {
-            this.shifts = JSON.parse(shifts);
-        }
+    getShifts(): Observable<GetShiftDto[]> {
+        console.log('Fetching shifts from API...');
+        return this.http.get<GetShiftDto[]>(this.apiUrl);
     }
 
-    getShifts() {
-        return this.shifts;
+    addShift(shift: CreateShiftDto): Observable<GetShiftDto> {
+        return this.http.post<GetShiftDto>(this.apiUrl, shift);
     }
 
-    addShift(shift: AddEditShiftModel) {
-        this.shifts.push({
-            id: new Date().getTime().toString(),
-            date: shift.date,
-            creditTips: shift.creditTips,
-            cashTips: shift.cashTips,
-            tipout: shift.tipout,
-            hoursWorked: shift.hoursWorked
-        });
-        this.saveShifts();
+    deleteShift(id: number): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/${id}`);
     }
 
-    deleteShift(id: string) {
-        this.shifts = this.shifts.filter((shift) => shift.id !== id);
-        this.saveShifts();
-    }
-
-    editShift(shiftId: string, shift: AddEditShiftModel) {
-        let shiftToUpdate = this.shifts.find(x => x.id === shiftId);
-        
-        if (shiftToUpdate !== undefined) {
-            shiftToUpdate.creditTips = shift.creditTips;
-            shiftToUpdate.cashTips = shift.cashTips;
-            shiftToUpdate.tipout = shift.tipout;
-            shiftToUpdate.date = shift.date;
-            shiftToUpdate.hoursWorked = shift.hoursWorked;
-
-            this.shifts[this.shifts.findIndex(x => x.id === shiftId)] = shiftToUpdate;
-            this.saveShifts()
-        }
-
-        //TODO: throw exception or sumting
-    }
-
-    private saveShifts() {
-      localStorage.setItem('shifts', JSON.stringify(this.shifts));
+    editShift(id: number, shift: UpdateShiftDto): Observable<any> {
+        return this.http.put(`${this.apiUrl}/${id}`, shift);
     }
 }
