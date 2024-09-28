@@ -18,10 +18,6 @@
                 <button (click)="onEditShift()">Edit</button>
                 <button (click)="onDeleteShift()">Delete</button>
             </div>
-
-            @if(isEditingShift) {
-                <app-edit-shift [shift]="shift()" (close)="onFinishEditShift()" />
-            }
         </ul>
     </article>
 </app-card>

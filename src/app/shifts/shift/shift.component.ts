@@ -1,6 +1,6 @@
-import { Component, input } from '@angular/core';
-import { Shift } from '../../models/shift.model';
-import { ShiftService } from '../../shift.service';
+import { Component, input, output } from '@angular/core';
+
+import { GetShiftDto } from '../../dtos/get-shift.dto';
 import { AddEditShiftComponent } from '../add-edit-shift/add-edit-shift.component';
 import { CardComponent } from "../../shared/card/card.component";
 
@@ -12,22 +12,15 @@ import { CardComponent } from "../../shared/card/card.component";
   styleUrl: './shift.component.css'
 })
 export class ShiftComponent {
-  shift = input.required<Shift>();
-  isEditingShift = false;
-
-  constructor(private shiftService: ShiftService) {
-    console.log('shift created')
-   }
-
-  onDeleteShift() {
-    this.shiftService.deleteShift(this.shift().id);
-  }
+  shift = input.required<GetShiftDto>();
+  editShift = output<GetShiftDto>();
+  deleteShift = output<number>();
 
   onEditShift() {
-    this.isEditingShift = true;
+    this.editShift.emit(this.shift());
   }
 
-  onFinishEditShift() {
-    this.isEditingShift = false;
+  onDeleteShift() {
+    this.deleteShift.emit(this.shift().id);
   }
 }

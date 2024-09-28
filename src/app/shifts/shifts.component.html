@@ -1,5 +1,18 @@
+<button (click)="onAddShift()">Add Shift</button>
+
 <section id="shifts">
     @for(shift of shifts; track shift.id) {
-        <app-shift [shift]="shift"></app-shift>
+        <app-shift
+            [shift]="shift"
+            (deleteShift)="onDeleteShift($event)"
+            (editShift)="onEditShift($event)" />
     }
 </section>
+
+@if(isAddingShift) {
+    <app-edit-shift (close)="onFinishAddShift($event)" />
+}
+
+@if(isEditingShift) {
+    <app-edit-shift [shift]="activeShift!" (close)="onFinishEditShift($event)" />
+}
