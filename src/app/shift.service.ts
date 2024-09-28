@@ -1,27 +1,25 @@
 import { Injectable } from "@angular/core";
 
-import { ShiftModel } from "./shifts/shift/shift.model";
+import { Shift } from "./models/shift.model";
 import { AddEditShiftModel } from "./shifts/add-edit-shift/add-edit-shift.model";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class ShiftService {
-    private shifts: ShiftModel[] = [];
+    private shifts: Shift[] = [];
+    private apiUrl = 'https://localhost:7001/api/shifts';
 
-    constructor() {
-        const shifts = localStorage.getItem('shifts');
-
-        if (shifts) {
-            this.shifts = JSON.parse(shifts);
-        }
-    }
+    constructor(private http: HttpClient) { }
 
     getShifts() {
-        return this.shifts;
+        console.log('Fetching shifts from API...');
+        return this.http.get<Shift[]>(this.apiUrl);
     }
 
     addShift(shift: AddEditShiftModel) {
         this.shifts.push({
-            id: new Date().getTime().toString(),
+            id: new Date().getTime(),
             date: shift.date,
             creditTips: shift.creditTips,
             cashTips: shift.cashTips,
@@ -31,12 +29,12 @@ export class ShiftService {
         this.saveShifts();
     }
 
-    deleteShift(id: string) {
+    deleteShift(id: number) {
         this.shifts = this.shifts.filter((shift) => shift.id !== id);
         this.saveShifts();
     }
 
-    editShift(shiftId: string, shift: AddEditShiftModel) {
+    editShift(shiftId: number, shift: AddEditShiftModel) {
         let shiftToUpdate = this.shifts.find(x => x.id === shiftId);
         
         if (shiftToUpdate !== undefined) {

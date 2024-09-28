@@ -1,7 +1,7 @@
 import { Component, input, output, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { ShiftModel } from '../shift/shift.model';
+import { Shift } from '../../models/shift.model';
 import { ShiftService } from '../../shift.service';
 import { CardComponent } from "../../shared/card/card.component";
 
@@ -13,7 +13,7 @@ import { CardComponent } from "../../shared/card/card.component";
   styleUrl: './add-edit-shift.component.css'
 })
 export class AddEditShiftComponent {
-  shift = input<ShiftModel>();
+  shift = input<Shift>();
   close = output();
   addingShift = false;
 
