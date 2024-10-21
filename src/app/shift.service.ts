@@ -12,9 +12,26 @@ export class ShiftService {
 
     constructor(private http: HttpClient) { }
 
-    getShifts(): Observable<GetShiftDto[]> {
+    getShifts(startDate?: Date, endDate?: Date): Observable<GetShiftDto[]> {
         console.log('Fetching shifts from API...');
-        return this.http.get<GetShiftDto[]>(this.apiUrl);
+    
+        let url = this.apiUrl;
+    
+        const params: string[] = [];
+    
+        if (startDate) {
+            params.push(`startDate=${startDate.toISOString()}`);
+        }
+    
+        if (endDate) {
+            params.push(`endDate=${endDate.toISOString()}`);
+        }
+    
+        if (params.length > 0) {
+            url += '?' + params.join('&');
+        }
+    
+        return this.http.get<GetShiftDto[]>(url);
     }
 
     addShift(shift: CreateShiftDto): Observable<GetShiftDto> {

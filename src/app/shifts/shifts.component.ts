@@ -25,7 +25,11 @@ export class ShiftsComponent implements OnInit {
   }
 
   loadShifts(): void {
-    this.shiftService.getShifts().subscribe((shifts: GetShiftDto[]) => {
+    const now = new Date();
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+    this.shiftService.getShifts(firstDay, lastDay).subscribe((shifts: GetShiftDto[]) => {
       this.shifts = shifts;
     });
   }
