@@ -25,9 +25,7 @@ export class ShiftsComponent implements OnInit {
   }
 
   loadShifts(): void {
-    const now = new Date();
-    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    const { firstDay, lastDay } = this.getFirstAndLastDayOfCurrentWeek();
 
     this.shiftService.getShifts(firstDay, lastDay).subscribe((shifts: GetShiftDto[]) => {
       this.shifts = shifts;
@@ -84,5 +82,20 @@ export class ShiftsComponent implements OnInit {
         // TODO: Handle error scenario, like showing an error message
       }
     });
+  }
+
+  private getFirstAndLastDayOfCurrentWeek(): { firstDay: Date; lastDay: Date } {
+    const now = new Date();
+    const dayOfWeek = now.getDay(); // 0 (Sunday) to 6 (Saturday)
+    
+    // First day of the week (Sunday)
+    const firstDay = new Date(now);
+    firstDay.setDate(now.getDate() - dayOfWeek);
+
+    // Last day of the week (Saturday)
+    const lastDay = new Date(now);
+    lastDay.setDate(now.getDate() + (6 - dayOfWeek));
+
+    return { firstDay, lastDay };
   }
 }
