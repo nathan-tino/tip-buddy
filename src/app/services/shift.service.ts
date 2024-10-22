@@ -45,4 +45,8 @@ export class ShiftService {
     editShift(id: number, shift: UpdateShiftDto): Observable<any> {
         return this.http.put(`${this.apiUrl}/${id}`, shift);
     }
+
+    sortByDateAscending(a: GetShiftDto, b: GetShiftDto): number {
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
+    }
 }

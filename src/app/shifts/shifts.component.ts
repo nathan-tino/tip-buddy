@@ -5,6 +5,7 @@ import { ShiftService } from '../services/shift.service';
 import { ShiftComponent } from './shift/shift.component';
 import { GetShiftDto } from '../dtos/get-shift.dto';
 import { AddEditShiftComponent } from "./add-edit-shift/add-edit-shift.component";
+import { DateService } from '../services/date.service';
 
 @Component({
   selector: 'app-shifts',
@@ -21,17 +22,20 @@ export class ShiftsComponent implements OnInit {
   firstDayOfInterval: Date | undefined;
   lastDayOfInterval: Date | undefined;
 
-  constructor(private shiftService: ShiftService) { }
+  constructor(private shiftService: ShiftService, private dateService: DateService) { }
 
   ngOnInit(): void {
-    this.getFirstAndLastDayOfWeek(new Date());
+    const { firstDayOfWeek, lastDayOfWeek } = this.dateService.getFirstAndLastDayOfWeek(new Date());
+    this.firstDayOfInterval = firstDayOfWeek;
+    this.lastDayOfInterval = lastDayOfWeek;
+    
     this.loadShifts();
   }
 
   loadShifts(): void {
     this.shiftService.getShifts(this.firstDayOfInterval, this.lastDayOfInterval)
       .subscribe((shifts: GetShiftDto[]) => {
-        this.shifts = shifts.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        this.shifts = shifts.sort(this.shiftService.sortByDateAscending);
       });
   }
 
@@ -44,7 +48,7 @@ export class ShiftsComponent implements OnInit {
       // Not pushing "shifts.push(shift)" the new shift to the array because we don't
       // want to edit the array in place.
       // Use "spread syntax" here to copy the old array to the new array along w/ new shift
-      this.shifts = [...this.shifts, shift].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      this.shifts = [...this.shifts, shift].sort(this.shiftService.sortByDateAscending);
     }
 
     this.isAddingShift = false;
@@ -67,7 +71,7 @@ export class ShiftsComponent implements OnInit {
           date: updatedShift.date,
           hoursWorked: updatedShift.hoursWorked
         } : shift
-      ).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      ).sort(this.shiftService.sortByDateAscending);
     }
     this.isEditingShift = false;
   }
@@ -76,6 +80,7 @@ export class ShiftsComponent implements OnInit {
     this.shiftService.deleteShift(id).subscribe({
       next: () => {
         console.log('Shift deleted successfully');
+        // TODO: show a dialog on success
         const index = this.shifts.findIndex(shift => shift.id === id);
         if (index !== -1) {
           this.shifts.splice(index, 1);
@@ -100,24 +105,8 @@ export class ShiftsComponent implements OnInit {
 
   updateInterval(days: number) {
     if (this.firstDayOfInterval && this.lastDayOfInterval) {
-      this.firstDayOfInterval = new Date(this.firstDayOfInterval);
-      this.firstDayOfInterval.setDate(this.firstDayOfInterval.getDate() + days);
-
-      this.lastDayOfInterval = new Date(this.lastDayOfInterval);
-      this.lastDayOfInterval.setDate(this.lastDayOfInterval.getDate() + days);
+      this.firstDayOfInterval = this.dateService.addDaysToDate(this.firstDayOfInterval, days);
+      this.lastDayOfInterval = this.dateService.addDaysToDate(this.lastDayOfInterval, days);
     }
-  }
-
-  // TODO: Move to service
-  getFirstAndLastDayOfWeek(dateInWeek: Date) {
-    const dayOfWeek = dateInWeek.getDay(); // 0 (Sunday) to 6 (Saturday)
-    
-    // First day of the week (Sunday)
-    this.firstDayOfInterval = new Date(dateInWeek);
-    this.firstDayOfInterval.setDate(dateInWeek.getDate() - dayOfWeek);
-
-    // Last day of the week (Saturday)
-    this.lastDayOfInterval = new Date(dateInWeek);
-    this.lastDayOfInterval.setDate(dateInWeek.getDate() + (6 - dayOfWeek));
   }
 }
