@@ -1,5 +1,11 @@
 <button (click)="onAddShift()">Add Shift</button>
 
+<h4>
+    <button (click)="onPreviousInterval()"> &lt; </button>
+    {{firstDayOfInterval | date: 'shortDate'}} - {{lastDayOfInterval | date: 'shortDate'}}
+    <button (click)="onNextInterval()"> &gt; </button>
+</h4>
+
 <section id="shifts">
     @for(shift of shifts; track shift.id) {
         <app-shift

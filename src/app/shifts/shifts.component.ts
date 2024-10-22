@@ -4,11 +4,12 @@ import { ShiftService } from '../shift.service';
 import { ShiftComponent } from './shift/shift.component';
 import { GetShiftDto } from '../dtos/get-shift.dto';
 import { AddEditShiftComponent } from "./add-edit-shift/add-edit-shift.component";
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-shifts',
   standalone: true,
-  imports: [ShiftComponent, AddEditShiftComponent],
+  imports: [ShiftComponent, AddEditShiftComponent, DatePipe],
   templateUrl: './shifts.component.html',
   styleUrl: './shifts.component.css'
 })
@@ -17,17 +18,19 @@ export class ShiftsComponent implements OnInit {
   isEditingShift = false;
   shifts: GetShiftDto[] = [];
   activeShift: GetShiftDto | null = null;
+  firstDayOfInterval: Date | undefined;
+  lastDayOfInterval: Date | undefined;
 
-  constructor(private shiftService: ShiftService) { }
+  constructor(private shiftService: ShiftService) {
+    this.getFirstAndLastDayOfWeek(new Date());
+  }
 
   ngOnInit(): void {
     this.loadShifts();
   }
 
   loadShifts(): void {
-    const { firstDay, lastDay } = this.getFirstAndLastDayOfCurrentWeek();
-
-    this.shiftService.getShifts(firstDay, lastDay).subscribe((shifts: GetShiftDto[]) => {
+    this.shiftService.getShifts(this.firstDayOfInterval, this.lastDayOfInterval).subscribe((shifts: GetShiftDto[]) => {
       this.shifts = shifts;
     });
   }
@@ -84,18 +87,43 @@ export class ShiftsComponent implements OnInit {
     });
   }
 
-  private getFirstAndLastDayOfCurrentWeek(): { firstDay: Date; lastDay: Date } {
-    const now = new Date();
-    const dayOfWeek = now.getDay(); // 0 (Sunday) to 6 (Saturday)
+  onNextInterval() {
+    if (this.firstDayOfInterval) {
+      this.firstDayOfInterval = new Date(this.firstDayOfInterval);
+      this.firstDayOfInterval.setDate(this.firstDayOfInterval.getDate() + 7);
+    }
+
+    if (this.lastDayOfInterval) {
+      this.lastDayOfInterval = new Date(this.lastDayOfInterval);
+      this.lastDayOfInterval.setDate(this.lastDayOfInterval.getDate() + 7);
+    }
+
+    this.loadShifts();
+  }
+
+  onPreviousInterval() {
+    if (this.firstDayOfInterval) {
+      this.firstDayOfInterval = new Date(this.firstDayOfInterval);
+      this.firstDayOfInterval.setDate(this.firstDayOfInterval.getDate() - 7);
+    }
+
+    if (this.lastDayOfInterval) {
+      this.lastDayOfInterval = new Date(this.lastDayOfInterval);
+      this.lastDayOfInterval.setDate(this.lastDayOfInterval.getDate() - 7);
+    }
+
+    this.loadShifts();
+  }
+
+  getFirstAndLastDayOfWeek(dateInWeek: Date) {
+    const dayOfWeek = dateInWeek.getDay(); // 0 (Sunday) to 6 (Saturday)
     
     // First day of the week (Sunday)
-    const firstDay = new Date(now);
-    firstDay.setDate(now.getDate() - dayOfWeek);
+    this.firstDayOfInterval = new Date(dateInWeek);
+    this.firstDayOfInterval.setDate(dateInWeek.getDate() - dayOfWeek);
 
     // Last day of the week (Saturday)
-    const lastDay = new Date(now);
-    lastDay.setDate(now.getDate() + (6 - dayOfWeek));
-
-    return { firstDay, lastDay };
+    this.lastDayOfInterval = new Date(dateInWeek);
+    this.lastDayOfInterval.setDate(dateInWeek.getDate() + (6 - dayOfWeek));
   }
 }
