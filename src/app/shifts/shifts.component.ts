@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
 
-import { ShiftService } from '../shift.service';
+import { ShiftService } from '../services/shift.service';
 import { ShiftComponent } from './shift/shift.component';
 import { GetShiftDto } from '../dtos/get-shift.dto';
 import { AddEditShiftComponent } from "./add-edit-shift/add-edit-shift.component";
-import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-shifts',

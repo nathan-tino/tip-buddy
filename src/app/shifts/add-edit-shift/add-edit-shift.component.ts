@@ -2,7 +2,7 @@ import { Component, input, output, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { GetShiftDto } from '../../dtos/get-shift.dto';
-import { ShiftService } from '../../shift.service';
+import { ShiftService } from '../../services/shift.service';
 import { CardComponent } from "../../shared/card/card.component";
 
 @Component({

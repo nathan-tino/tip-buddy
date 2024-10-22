@@ -2,9 +2,9 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 
-import { GetShiftDto } from "./dtos/get-shift.dto";
-import { CreateShiftDto } from "./dtos/create-shift.dto";
-import { UpdateShiftDto } from "./dtos/update-shift.dto";
+import { GetShiftDto } from "../dtos/get-shift.dto";
+import { CreateShiftDto } from "../dtos/create-shift.dto";
+import { UpdateShiftDto } from "../dtos/update-shift.dto";
 
 @Injectable({ providedIn: 'root' })
 export class ShiftService {
