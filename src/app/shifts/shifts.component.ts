@@ -21,18 +21,18 @@ export class ShiftsComponent implements OnInit {
   firstDayOfInterval: Date | undefined;
   lastDayOfInterval: Date | undefined;
 
-  constructor(private shiftService: ShiftService) {
-    this.getFirstAndLastDayOfWeek(new Date());
-  }
+  constructor(private shiftService: ShiftService) { }
 
   ngOnInit(): void {
+    this.getFirstAndLastDayOfWeek(new Date());
     this.loadShifts();
   }
 
   loadShifts(): void {
-    this.shiftService.getShifts(this.firstDayOfInterval, this.lastDayOfInterval).subscribe((shifts: GetShiftDto[]) => {
-      this.shifts = shifts;
-    });
+    this.shiftService.getShifts(this.firstDayOfInterval, this.lastDayOfInterval)
+      .subscribe((shifts: GetShiftDto[]) => {
+        this.shifts = shifts.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      });
   }
 
   onAddShift() {
@@ -40,8 +40,11 @@ export class ShiftsComponent implements OnInit {
   }
 
   onFinishAddShift(shift: GetShiftDto | undefined) {
-    if (shift !== undefined) {
-      this.shifts.push(shift);
+    if (shift) {
+      // Not pushing "shifts.push(shift)" the new shift to the array because we don't
+      // want to edit the array in place.
+      // Use "spread syntax" here to copy the old array to the new array along w/ new shift
+      this.shifts = [...this.shifts, shift].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     }
 
     this.isAddingShift = false;
@@ -53,21 +56,19 @@ export class ShiftsComponent implements OnInit {
   }
 
   onFinishEditShift(updatedShift: GetShiftDto | undefined) {
-    if (updatedShift !== undefined) {
-      const index = this.shifts.findIndex(shift => shift.id === updatedShift.id);
-
-      if (index !== -1) {
-        this.shifts[index] = {
-          id: this.shifts[index].id,
-          date: updatedShift.date,
+    if (updatedShift) {
+      // Similar thing done here as in onFinishAddShift: assigning new array to this.shifts
+      this.shifts = this.shifts.map(shift =>
+        shift.id === updatedShift.id ? {
+          id: updatedShift.id,
           creditTips: updatedShift.creditTips,
           cashTips: updatedShift.cashTips,
           tipout: updatedShift.tipout,
+          date: updatedShift.date,
           hoursWorked: updatedShift.hoursWorked
-        };
-      }
+        } : shift
+      ).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     }
-
     this.isEditingShift = false;
   }
 
@@ -88,33 +89,26 @@ export class ShiftsComponent implements OnInit {
   }
 
   onNextInterval() {
-    if (this.firstDayOfInterval) {
-      this.firstDayOfInterval = new Date(this.firstDayOfInterval);
-      this.firstDayOfInterval.setDate(this.firstDayOfInterval.getDate() + 7);
-    }
-
-    if (this.lastDayOfInterval) {
-      this.lastDayOfInterval = new Date(this.lastDayOfInterval);
-      this.lastDayOfInterval.setDate(this.lastDayOfInterval.getDate() + 7);
-    }
-
+    this.updateInterval(7);
     this.loadShifts();
   }
 
   onPreviousInterval() {
-    if (this.firstDayOfInterval) {
-      this.firstDayOfInterval = new Date(this.firstDayOfInterval);
-      this.firstDayOfInterval.setDate(this.firstDayOfInterval.getDate() - 7);
-    }
-
-    if (this.lastDayOfInterval) {
-      this.lastDayOfInterval = new Date(this.lastDayOfInterval);
-      this.lastDayOfInterval.setDate(this.lastDayOfInterval.getDate() - 7);
-    }
-
+    this.updateInterval(-7);
     this.loadShifts();
   }
 
+  updateInterval(days: number) {
+    if (this.firstDayOfInterval && this.lastDayOfInterval) {
+      this.firstDayOfInterval = new Date(this.firstDayOfInterval);
+      this.firstDayOfInterval.setDate(this.firstDayOfInterval.getDate() + days);
+
+      this.lastDayOfInterval = new Date(this.lastDayOfInterval);
+      this.lastDayOfInterval.setDate(this.lastDayOfInterval.getDate() + days);
+    }
+  }
+
+  // TODO: Move to service
   getFirstAndLastDayOfWeek(dateInWeek: Date) {
     const dayOfWeek = dateInWeek.getDay(); // 0 (Sunday) to 6 (Saturday)
     

@@ -2,7 +2,8 @@
 
 <h4>
     <button (click)="onPreviousInterval()"> &lt; </button>
-    {{firstDayOfInterval | date: 'shortDate'}} - {{lastDayOfInterval | date: 'shortDate'}}
+    {{ firstDayOfInterval ? (firstDayOfInterval | date: 'shortDate') : '' }} - 
+    {{ lastDayOfInterval ? (lastDayOfInterval | date: 'shortDate') : '' }}
     <button (click)="onNextInterval()"> &gt; </button>
 </h4>
 
@@ -19,6 +20,6 @@
     <app-edit-shift (close)="onFinishAddShift($event)" />
 }
 
-@if(isEditingShift) {
-    <app-edit-shift [shift]="activeShift!" (close)="onFinishEditShift($event)" />
+@if(isEditingShift && activeShift) {
+    <app-edit-shift [shift]="activeShift" (close)="onFinishEditShift($event)" />
 }
