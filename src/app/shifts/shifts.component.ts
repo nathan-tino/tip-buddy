@@ -87,6 +87,8 @@ export class ShiftsComponent implements OnInit {
         if (index !== -1) {
           this.shifts.splice(index, 1);
         }
+
+        this.updateShiftsSignal();
       },
       error: (err) => {
         console.error('Error deleting shift', err);
@@ -110,5 +112,9 @@ export class ShiftsComponent implements OnInit {
       this.firstDayOfInterval = this.dateService.addDaysToDate(this.firstDayOfInterval, days);
       this.lastDayOfInterval = this.dateService.addDaysToDate(this.lastDayOfInterval, days);
     }
+  }
+
+  updateShiftsSignal() {
+    this.shifts = [...this.shifts];
   }
 }
