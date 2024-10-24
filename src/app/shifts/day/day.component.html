@@ -1,0 +1,9 @@
+@if (shifts()) {
+    @for(shift of shifts(); track shift) {
+        {{shift.creditTips}}
+        <div id="actions">
+            <button (click)="onEditShift(shift)">Edit</button>
+            <button (click)="onDeleteShift(shift.id)">Delete</button>
+        </div>
+    }
+}

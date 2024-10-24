@@ -1,23 +1,11 @@
 <app-card>
     <article>
         <h2>{{shift().date | date}}</h2>
-        <ul id="details">
-            <li>Credit Tips: {{shift().creditTips}}</li>
-            <li>Cash Tips: {{shift().cashTips}}</li>
-            <li>Tipout: {{shift().tipout}}</li>
-            <li>Total Tips: {{shift().creditTips + shift().cashTips - shift().tipout}}</li>
-
-            @if (shift().hoursWorked !== undefined) {
-                <li>Hours worked: {{shift().hoursWorked}}</li>
-                <li>Hourly: {{
-                    (shift().creditTips + shift().cashTips - (shift().tipout !== undefined ? shift().tipout : 0)) /
-                    shift().hoursWorked!}}
-                </li>
-            }
-            <div id="actions">
-                <button (click)="onEditShift()">Edit</button>
-                <button (click)="onDeleteShift()">Delete</button>
-            </div>
-        </ul>
+        <h3>${{shift().creditTips + shift().cashTips - shift().tipout}}</h3>
+        
+        <div id="actions">
+            <button (click)="onEditShift()">Edit</button>
+            <button (click)="onDeleteShift()">Delete</button>
+        </div>
     </article>
 </app-card>

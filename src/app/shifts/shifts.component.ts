@@ -6,11 +6,13 @@ import { ShiftComponent } from './shift/shift.component';
 import { GetShiftDto } from '../dtos/get-shift.dto';
 import { AddEditShiftComponent } from "./add-edit-shift/add-edit-shift.component";
 import { DateService } from '../services/date.service';
+import { WeekComponent } from "./week/week.component";
+import { CardComponent } from "../shared/card/card.component";
 
 @Component({
   selector: 'app-shifts',
   standalone: true,
-  imports: [ShiftComponent, AddEditShiftComponent, DatePipe],
+  imports: [CardComponent, ShiftComponent, AddEditShiftComponent, DatePipe, WeekComponent, CardComponent],
   templateUrl: './shifts.component.html',
   styleUrl: './shifts.component.css'
 })

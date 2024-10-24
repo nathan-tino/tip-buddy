@@ -8,11 +8,12 @@
 </h4>
 
 <section id="shifts">
-    @for(shift of shifts; track shift.id) {
-        <app-shift
-            [shift]="shift"
+    @if (firstDayOfInterval) {
+        <app-week
+            [firstDay]="firstDayOfInterval"
+            [shifts]="shifts"
             (deleteShift)="onDeleteShift($event)"
-            (editShift)="onEditShift($event)" />
+            (editShift)="onEditShift($event)"/>
     }
 </section>
 
