@@ -13,6 +13,7 @@ import { DayComponent } from '../day/day.component';
 export class WeekComponent implements OnChanges {
   firstDay = input.required<Date>();
   shifts = input.required<GetShiftDto[]>();
+  addShift = output<Date>();
   editShift = output<GetShiftDto>();
   deleteShift = output<number>();
   
@@ -23,6 +24,10 @@ export class WeekComponent implements OnChanges {
 
   ngOnChanges(): void {
     this.populateDaysAndShifts();
+  }
+  
+  onAddShift(date: Date) {
+    this.addShift.emit(date);
   }
 
   onEditShift(shift: GetShiftDto) {

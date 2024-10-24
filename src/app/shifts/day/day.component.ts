@@ -13,8 +13,13 @@ import { GetShiftDto } from '../../dtos/get-shift.dto';
 export class DayComponent {
   date = input.required<Date>();
   shifts = input<GetShiftDto[]>();
+  addShift = output<Date>();
   editShift = output<GetShiftDto>();
   deleteShift = output<number>();
+
+  onAddShift() {
+    this.addShift.emit(this.date());
+  }
 
   onEditShift(shift: GetShiftDto) {
     if (shift) {

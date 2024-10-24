@@ -23,6 +23,7 @@ export class ShiftsComponent implements OnInit {
   activeShift: GetShiftDto | null = null;
   firstDayOfInterval: Date | undefined;
   lastDayOfInterval: Date | undefined;
+  dateToAddShift: Date | undefined;
 
   constructor(private shiftService: ShiftService, private dateService: DateService) { }
 
@@ -41,7 +42,8 @@ export class ShiftsComponent implements OnInit {
       });
   }
 
-  onAddShift() {
+  onAddShift(date: Date | undefined) {
+    this.dateToAddShift = date;
     this.isAddingShift = true;
   }
 

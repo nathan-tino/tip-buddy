@@ -1,11 +1,24 @@
-<article>
-    {{ date().getDate() }}
-</article>
 
-@if (shifts()) {
-    @for(shift of shifts(); track shift) {
-        ${{shift.creditTips + shift.cashTips - shift.tipout}}
-            <button (click)="onEditShift(shift)">Edit</button>
-            <button (click)="onDeleteShift(shift.id)">Delete</button>
+<div class="cell-content">
+    <article>
+        {{ date().getDate() }}
+    </article>
+
+    @if (shifts()) {
+        <table class="shifts">
+            @for(shift of shifts(); track shift) {
+                <tr class="shift-buttons">
+                    <td>${{shift.creditTips + shift.cashTips - shift.tipout}}</td>
+                    <td class="pull-right">
+                        <button class="shift-button" (click)="onEditShift(shift)">Edit</button>
+                        <button class="shift-button" (click)="onDeleteShift(shift.id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </table>
     }
-}
+
+    <div>
+        <button class="hover-btn" (click)="onAddShift()">Add</button>
+    </div>
+</div>

@@ -13,8 +13,9 @@
             <td>
                 <app-day
                     [date]="day.date"
-                    [shifts]="day.shifts" 
-                    (deleteShift)="onDeleteShift($event)" 
+                    [shifts]="day.shifts"
+                    (addShift)="onAddShift($event)"
+                    (deleteShift)="onDeleteShift($event)"
                     (editShift)="onEditShift($event)" />
             </td>
         }

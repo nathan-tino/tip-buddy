@@ -1,4 +1,4 @@
-<button (click)="onAddShift()">Add Shift</button>
+<button (click)="onAddShift(undefined)">Add Shift</button>
 
 <h4>
     <button (click)="onPreviousInterval()"> &lt; </button>
@@ -12,13 +12,14 @@
         <app-week
             [firstDay]="firstDayOfInterval"
             [shifts]="shifts"
+            (addShift)="onAddShift($event)"
             (deleteShift)="onDeleteShift($event)"
             (editShift)="onEditShift($event)"/>
     }
 </section>
 
 @if(isAddingShift) {
-    <app-edit-shift (close)="onFinishAddShift($event)" />
+    <app-edit-shift [date]="dateToAddShift" (close)="onFinishAddShift($event)" />
 }
 
 @if(isEditingShift && activeShift) {
