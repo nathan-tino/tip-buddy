@@ -1,9 +1,11 @@
 .hover-btn {
-    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .cell-content:hover .hover-btn {
     display: inline-block;
+    opacity: 1;
 }
 
 .cell-content {
