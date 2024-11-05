@@ -38,7 +38,10 @@ export class ShiftsComponent implements OnInit {
   loadShifts(): void {
     this.shiftService.getShifts(this.firstDayOfInterval, this.lastDayOfInterval)
       .subscribe((shifts: GetShiftDto[]) => {
-        this.shifts = shifts.sort(this.shiftService.sortByDateAscending);
+        this.shifts = shifts.map(shift => ({
+          ...shift,
+          date: this.dateService.convertUtcToLocalDate(new Date(shift.date))
+        })).sort(this.shiftService.sortByDateAscending);
       });
   }
 

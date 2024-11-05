@@ -38,4 +38,29 @@ export class DateService {
     newDate.setDate(newDate.getDate() + days);
     return newDate;
   }
+
+  /**
+   * Converts a UTC date string to a local Date object.
+   * @param utcDate - The UTC date from the backend.
+   * @returns A local Date object.
+   */
+  convertUtcToLocalDate(utcDate: Date): Date {
+    return new Date(utcDate.getTime() + utcDate.getTimezoneOffset() * 60000);
+  }
+
+  /**
+   * Converts a date string to a UTC Date object.
+   * @param dateString - The string representation of the date.
+   * @returns The corresponding UTC Date object.
+   */
+  convertStringToUtcDate(dateString: string): Date | null {
+    const date = new Date(dateString);
+
+    if (isNaN(date.getTime())) {
+        console.error('Invalid date string:', dateString);
+        return null;
+    }
+
+    return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  }
 }

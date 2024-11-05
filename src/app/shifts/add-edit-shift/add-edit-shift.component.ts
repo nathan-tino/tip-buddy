@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { GetShiftDto } from '../../dtos/get-shift.dto';
 import { ShiftService } from '../../services/shift.service';
 import { CardComponent } from "../../shared/card/card.component";
+import { DateService } from '../../services/date.service';
 
 @Component({
   selector: 'app-edit-shift',
@@ -24,7 +25,7 @@ export class AddEditShiftComponent {
   dateInput!: string;
   hoursWorkedInput?: number;
 
-  constructor(private shiftService: ShiftService) { }
+  constructor(private shiftService: ShiftService, private dateService: DateService) { }
 
   //Use ngOnInit here because we can't access this.shift() in constructor
   ngOnInit() {
@@ -44,7 +45,7 @@ export class AddEditShiftComponent {
       this.hoursWorkedInput = this.shift()!.hoursWorked;
     }
     else if (this.date()) {
-      this.dateInput = this.date()!.toISOString().slice(0, 10);
+      this.dateInput = this.date()!.toLocaleDateString('en-CA');
     }
   }
 
@@ -56,8 +57,10 @@ export class AddEditShiftComponent {
     let shift: GetShiftDto | undefined = undefined;
 
     if (this.addingShift) {
+      const dateInputWithTime = this.dateInput + 'T08:00:00';
+
       this.shiftService.addShift({
-        date: new Date(this.dateInput),
+        date: this.dateService.convertStringToUtcDate(dateInputWithTime)!,
         creditTips: this.creditTipsInput,
         cashTips: this.cashTipsInput,
         tipout: this.tipoutInput,
