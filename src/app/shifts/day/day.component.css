@@ -1,0 +1,25 @@
+.hover-btn {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.cell-content:hover .hover-btn {
+    display: inline-block;
+    opacity: 1;
+}
+
+.cell-content {
+    height: 100px;
+}
+
+.shifts {
+    width: 100%;
+}
+
+.pull-right {
+    text-align: right;
+}
+
+.shift-button {
+    margin-left: 2px;
+}

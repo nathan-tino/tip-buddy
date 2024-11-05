@@ -2,7 +2,7 @@ import { Component, input, output, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { GetShiftDto } from '../../dtos/get-shift.dto';
-import { ShiftService } from '../../shift.service';
+import { ShiftService } from '../../services/shift.service';
 import { CardComponent } from "../../shared/card/card.component";
 
 @Component({
@@ -14,6 +14,7 @@ import { CardComponent } from "../../shared/card/card.component";
 })
 export class AddEditShiftComponent {
   shift = input<GetShiftDto>();
+  date = input<Date | undefined>();
   close = output<GetShiftDto | undefined>();
   addingShift = false;
 
@@ -41,6 +42,9 @@ export class AddEditShiftComponent {
       this.tipoutInput = this.shift()!.tipout;
       this.dateInput = dateValue.toISOString().slice(0, 10);
       this.hoursWorkedInput = this.shift()!.hoursWorked;
+    }
+    else if (this.date()) {
+      this.dateInput = this.date()!.toISOString().slice(0, 10);
     }
   }
 

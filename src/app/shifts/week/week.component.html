@@ -1,0 +1,24 @@
+<table>
+    <tr>
+        <th>Sunday</th>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+        <th>Saturday</th>
+    </tr>
+    <tr>
+        @for(day of daysAndShifts; track day) {
+            <td>
+                <app-day
+                    [date]="day.date"
+                    [shifts]="day.shifts"
+                    (addShift)="onAddShift($event)"
+                    (deleteShift)="onDeleteShift($event)"
+                    (editShift)="onEditShift($event)" />
+            </td>
+        }
+    </tr>
+</table>
+

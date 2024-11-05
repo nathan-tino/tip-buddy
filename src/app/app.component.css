@@ -1,6 +1,6 @@
 main {
     width: 90%;
-    max-width: 50rem;
+    max-width: 75rem;
     margin: 0 auto 2rem auto;
     display: block;
     /* grid-auto-flow: row; */
