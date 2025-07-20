@@ -45,6 +45,7 @@ export class AddEditShiftComponent {
       this.hoursWorkedInput = this.shift()!.hoursWorked;
     }
     else if (this.date()) {
+      // TODO: get user's local time zone
       this.dateInput = this.date()!.toLocaleDateString('en-CA');
     }
   }
