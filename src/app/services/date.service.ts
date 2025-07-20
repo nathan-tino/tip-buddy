@@ -20,9 +20,11 @@ export class DateService {
     
     // First day of the week (Sunday)
     const firstDayOfWeek = this.addDaysToDate(referenceDate, -1 * dayOfWeek);
+    firstDayOfWeek.setHours(0, 0, 0, 0); // Reset time to midnight
 
     // Last day of the week (Saturday)
     const lastDayOfWeek = this.addDaysToDate(referenceDate, (this.SATURDAY - dayOfWeek));
+    lastDayOfWeek.setHours(23, 59, 59, 999); // Set time to end of the day
 
     return { firstDayOfWeek, lastDayOfWeek };
   }
@@ -37,5 +39,38 @@ export class DateService {
     const newDate = new Date(date);
     newDate.setDate(newDate.getDate() + days);
     return newDate;
+  }
+
+  /**
+   * Converts a UTC date string to a local Date object.
+   * @param utcDate - The UTC date from the backend.
+   * @returns A local Date object.
+   */
+  convertUtcToLocalDate(utcDate: Date): Date {
+    return new Date(utcDate.getTime() + utcDate.getTimezoneOffset() * 60000);
+  }
+
+  /**
+   * Converts a date string to a UTC Date object.
+   * @param dateString - The string representation of the date.
+   * @returns The corresponding UTC Date object.
+   */
+  convertStringToUtcDate(dateString: string): Date | null {
+    const date = new Date(dateString);
+
+    if (isNaN(date.getTime())) {
+        console.error('Invalid date string:', dateString);
+        return null;
+    }
+
+    return new Date(Date.UTC(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      date.getHours(),
+      date.getMinutes(),
+      date.getSeconds(),
+      date.getMilliseconds()
+    ));
   }
 }
