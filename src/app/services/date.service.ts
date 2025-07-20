@@ -20,9 +20,11 @@ export class DateService {
     
     // First day of the week (Sunday)
     const firstDayOfWeek = this.addDaysToDate(referenceDate, -1 * dayOfWeek);
+    firstDayOfWeek.setHours(0, 0, 0, 0); // Reset time to midnight
 
     // Last day of the week (Saturday)
     const lastDayOfWeek = this.addDaysToDate(referenceDate, (this.SATURDAY - dayOfWeek));
+    lastDayOfWeek.setHours(23, 59, 59, 999); // Set time to end of the day
 
     return { firstDayOfWeek, lastDayOfWeek };
   }
