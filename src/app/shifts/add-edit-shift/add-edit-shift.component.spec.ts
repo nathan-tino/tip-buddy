@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { AddEditShiftComponent } from './add-edit-shift.component';
+import { ShiftService } from '../../services/shift.service';
 
 describe('EditShiftComponent', () => {
   let component: AddEditShiftComponent;
@@ -8,7 +10,8 @@ describe('EditShiftComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddEditShiftComponent]
+      imports: [AddEditShiftComponent, HttpClientTestingModule],
+      providers: [ShiftService]
     })
     .compileComponents();
     

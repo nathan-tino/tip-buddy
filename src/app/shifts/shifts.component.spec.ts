@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShiftsComponent } from './shifts.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ShiftService } from '../services/shift.service';
 
 describe('ShiftsComponent', () => {
   let component: ShiftsComponent;
@@ -8,7 +10,8 @@ describe('ShiftsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ShiftsComponent]
+      imports: [ShiftsComponent, HttpClientTestingModule],
+      providers: [ShiftService]
     })
     .compileComponents();
     
