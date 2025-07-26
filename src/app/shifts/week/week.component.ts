@@ -1,4 +1,4 @@
-import { Component, input, OnChanges, output } from '@angular/core';
+import { Component, effect, input, output } from '@angular/core';
 import { GetShiftDto } from '../../dtos/get-shift.dto';
 import { DateService } from '../../services/date.service';
 import { DayComponent } from '../day/day.component';
@@ -10,7 +10,7 @@ import { DayComponent } from '../day/day.component';
   templateUrl: './week.component.html',
   styleUrl: './week.component.css'
 })
-export class WeekComponent implements OnChanges {
+export class WeekComponent {
   firstDay = input.required<Date>();
   shifts = input.required<GetShiftDto[]>();
   addShift = output<Date>();
@@ -20,10 +20,10 @@ export class WeekComponent implements OnChanges {
   daysOfWeek: number[] = [0, 1, 2, 3, 4, 5, 6];
   daysAndShifts: { date: Date, shifts: any }[] = [];
 
-  constructor(private dateService: DateService) { }
-
-  ngOnChanges(): void {
-    this.populateDaysAndShifts();
+  constructor(private dateService: DateService) { 
+    effect(() => {
+      this.populateDaysAndShifts();
+    });
   }
   
   onAddShift(date: Date) {
