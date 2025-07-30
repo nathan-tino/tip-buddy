@@ -58,7 +58,7 @@ export class AddEditShiftComponent {
     let shift: GetShiftDto | undefined = undefined;
 
     if (this.addingShift) {
-      const dateInputWithTime = this.dateInput + 'T08:00:00';
+      const dateInputWithTime = this.getDateInputWithTime();
 
       this.shiftService.addShift({
         date: this.dateService.convertStringToUtcDate(dateInputWithTime)!,
@@ -84,7 +84,7 @@ export class AddEditShiftComponent {
         creditTips: this.creditTipsInput,
         cashTips: this.cashTipsInput,
         tipout: this.tipoutInput,
-        date: new Date(this.dateInput),
+        date: new Date(this.getDateInputWithTime()),
         hoursWorked: this.hoursWorkedInput
       };
       this.shiftService.editShift(this.shift()!.id, updatedShift)
@@ -100,5 +100,9 @@ export class AddEditShiftComponent {
         }
       });
     }
+  }
+
+  getDateInputWithTime() : string {
+    return this.dateInput + 'T08:00:00';
   }
 }
