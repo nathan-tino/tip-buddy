@@ -58,10 +58,8 @@ export class AddEditShiftComponent {
     let shift: GetShiftDto | undefined = undefined;
 
     if (this.addingShift) {
-      const dateInputWithTime = this.getDateInputWithTime();
-
       this.shiftService.addShift({
-        date: this.dateService.convertStringToUtcDate(dateInputWithTime)!,
+        date: this.getDateInputWithTime()!,
         creditTips: this.creditTipsInput,
         cashTips: this.cashTipsInput,
         tipout: this.tipoutInput,
@@ -84,7 +82,7 @@ export class AddEditShiftComponent {
         creditTips: this.creditTipsInput,
         cashTips: this.cashTipsInput,
         tipout: this.tipoutInput,
-        date: new Date(this.getDateInputWithTime()),
+        date: this.getDateInputWithTime()!,
         hoursWorked: this.hoursWorkedInput
       };
       this.shiftService.editShift(this.shift()!.id, updatedShift)
@@ -102,9 +100,9 @@ export class AddEditShiftComponent {
     }
   }
 
-  getDateInputWithTime() : string {
-    console.log('Date input:', this.dateInput);
-    console.log('Date input with time:', this.dateInput + 'T08:00:00');
-    return this.dateInput + 'T08:00:00';
+  //TODO: this is a temporary solution to get the date input with time.
+  //Need to find a better way to handle date inputs with time.
+  getDateInputWithTime() : Date | null {
+    return this.dateService.convertStringToUtcDate(this.dateInput + 'T08:00:00');
   }
 }
