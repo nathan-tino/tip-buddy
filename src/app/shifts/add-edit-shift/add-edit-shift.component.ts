@@ -103,6 +103,8 @@ export class AddEditShiftComponent {
   }
 
   getDateInputWithTime() : string {
+    console.log('Date input:', this.dateInput);
+    console.log('Date input with time:', this.dateInput + 'T08:00:00');
     return this.dateInput + 'T08:00:00';
   }
 }

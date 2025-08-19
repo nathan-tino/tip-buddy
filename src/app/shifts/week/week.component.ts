@@ -42,14 +42,11 @@ export class WeekComponent {
 
   private populateDaysAndShifts() {
     this.daysAndShifts = [];
+    const shifts = this.shifts();
 
     for (let day of this.daysOfWeek) {
       const date = this.dateService.addDaysToDate(this.firstDay(), day);
-      let shiftsOnThisDate = this.shifts().filter(s =>
-        new Date(s.date).getFullYear() === date.getFullYear() &&
-        new Date(s.date).getMonth() === date.getMonth() &&
-        new Date(s.date).getDate() === date.getDate()
-      );
+      let shiftsOnThisDate = shifts.filter(s => s.date.toDateString() === date.toDateString());
 
       this.daysAndShifts.push({
         date: date,
