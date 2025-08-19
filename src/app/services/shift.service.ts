@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 
 import { GetShiftDto } from "../dtos/get-shift.dto";
@@ -31,11 +31,14 @@ export class ShiftService {
             url += '?' + params.join('&');
         }
     
-        return this.http.get<GetShiftDto[]>(url);
+        return this.http.get<GetShiftDto[]>(url).pipe(
+            map(shifts => shifts.map(parseShiftDate))
+        );
     }
 
     addShift(shift: CreateShiftDto): Observable<GetShiftDto> {
-        return this.http.post<GetShiftDto>(this.apiUrl, shift);
+        return this.http.post<GetShiftDto>(this.apiUrl, shift).pipe(
+            map(parseShiftDate));
     }
 
     deleteShift(id: number): Observable<any> {
@@ -49,4 +52,8 @@ export class ShiftService {
     sortByDateAscending(a: GetShiftDto, b: GetShiftDto): number {
         return new Date(a.date).getTime() - new Date(b.date).getTime();
     }
+}
+
+function parseShiftDate<T extends { date: Date }>(shift: T): T & { date: Date } {
+  return { ...shift, date: new Date(shift.date) };
 }
