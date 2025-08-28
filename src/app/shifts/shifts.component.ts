@@ -3,14 +3,15 @@ import { DatePipe } from '@angular/common';
 
 import { ShiftService } from '../services/shift.service';
 import { GetShiftDto } from '../dtos/get-shift.dto';
-import { AddEditShiftComponent } from "./add-edit-shift/add-edit-shift.component";
 import { DateService } from '../services/date.service';
 import { WeekComponent } from "./week/week.component";
+import { AddShiftComponent } from './add-shift/add-shift.component';
+import { EditShiftComponent } from './edit-shift/edit-shift.component';
 
 @Component({
   selector: 'app-shifts',
   standalone: true,
-  imports: [AddEditShiftComponent, DatePipe, WeekComponent],
+  imports: [AddShiftComponent, EditShiftComponent, DatePipe, WeekComponent],
   templateUrl: './shifts.component.html',
   styleUrl: './shifts.component.css'
 })

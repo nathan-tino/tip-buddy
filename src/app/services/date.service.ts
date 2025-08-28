@@ -52,15 +52,21 @@ export class DateService {
 
   /**
    * Converts a date string to a UTC Date object.
-   * @param dateString - The string representation of the date.
-   * @returns The corresponding UTC Date object.
+   * Overload signatures below allow callers to pass either just a date string
+   * or a date + time string. There's a single implementation that handles both.
    */
-  convertStringToUtcDate(dateString: string): Date | null {
-    const date = new Date(dateString);
+  convertStringToUtcDate(dateString: string): Date | null;
+  convertStringToUtcDate(dateString: string, timeString: string | null): Date | null;
+  convertStringToUtcDate(dateString: string, timeString: string | undefined): Date | null;
+  convertStringToUtcDate(dateString: string, timeString?: string | null): Date | null {
+    // normalize timeString (default to 08:00 if not provided or null)
+    const time = timeString ?? '08:00';
+    const combined = `${dateString}T${time}`;
+    const date = new Date(combined);
 
     if (isNaN(date.getTime())) {
-        console.error('Invalid date string:', dateString);
-        return null;
+      console.error('Invalid date string:', combined);
+      return null;
     }
 
     return new Date(Date.UTC(

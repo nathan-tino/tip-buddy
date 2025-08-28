@@ -1,108 +1,121 @@
-import { Component, input, output, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+// // ...existing code...
+// // AddShiftComponent
+// import { Component, input, output, OnInit } from '@angular/core';
+// import { FormsModule } from '@angular/forms';
+// import { GetShiftDto } from '../../dtos/get-shift.dto';
+// import { ShiftService } from '../../services/shift.service';
+// import { CardComponent } from "../../shared/card/card.component";
+// import { DateService } from '../../services/date.service';
 
-import { GetShiftDto } from '../../dtos/get-shift.dto';
-import { ShiftService } from '../../services/shift.service';
-import { CardComponent } from "../../shared/card/card.component";
-import { DateService } from '../../services/date.service';
+// @Component({
+//   selector: 'app-add-shift',
+//   standalone: true,
+//   imports: [FormsModule, CardComponent],
+//   templateUrl: './add-edit-shift.component.html',
+//   styleUrl: './add-edit-shift.component.css'
+// })
+// export class AddShiftComponent implements OnInit {
+//   date = input<Date | undefined>();
+//   close = output<GetShiftDto | undefined>();
 
-@Component({
-  selector: 'app-edit-shift',
-  standalone: true,
-  imports: [FormsModule, CardComponent],
-  templateUrl: './add-edit-shift.component.html',
-  styleUrl: './add-edit-shift.component.css'
-})
-export class AddEditShiftComponent {
-  shift = input<GetShiftDto>();
-  date = input<Date | undefined>();
-  close = output<GetShiftDto | undefined>();
-  addingShift = false;
+//   creditTipsInput!: number;
+//   cashTipsInput!: number;
+//   tipoutInput!: number;
+//   dateInput!: string;
+//   hoursWorkedInput?: number;
 
-  creditTipsInput!: number;
-  cashTipsInput!: number;
-  tipoutInput!: number;
-  dateInput!: string;
-  hoursWorkedInput?: number;
+//   constructor(private shiftService: ShiftService, private dateService: DateService) { }
 
-  constructor(private shiftService: ShiftService, private dateService: DateService) { }
+//   ngOnInit() {
+//     if (this.date()) {
+//       this.dateInput = this.date()!.toLocaleDateString('en-CA');
+//     }
+//   }
 
-  //Use ngOnInit here because we can't access this.shift() in constructor
-  ngOnInit() {
-    // we are adding a new shift if we don't get a Shift object as an input
-    this.addingShift = this.shift() === undefined;
+//   onCancel() {
+//     this.close.emit(undefined);
+//   }
 
-    if (!this.addingShift) {
-      //TODO: shift.date is not coming through correctly.
-      //need to figure out a way to receive dates automatically from the API
-      const dateValue = new Date(this.shift()!.date);
+//   onSubmit() {
+//     this.shiftService.addShift({
+//       date: this.getDateInputWithTime()!,
+//       creditTips: this.creditTipsInput,
+//       cashTips: this.cashTipsInput,
+//       tipout: this.tipoutInput,
+//       hoursWorked: this.hoursWorkedInput !== undefined && this.hoursWorkedInput > 0 ? this.hoursWorkedInput : undefined
+//     }).subscribe({
+//       next: (response) => {
+//         this.close.emit(response);
+//       },
+//       error: (e) => console.error(e)
+//     });
+//   }
 
-      // we're editing an existing shift; so, set inputs
-      this.creditTipsInput = this.shift()!.creditTips;
-      this.cashTipsInput = this.shift()!.cashTips;
-      this.tipoutInput = this.shift()!.tipout;
-      this.dateInput = dateValue.toISOString().slice(0, 10);
-      this.hoursWorkedInput = this.shift()!.hoursWorked;
-    }
-    else if (this.date()) {
-      // TODO: get user's local time zone
-      this.dateInput = this.date()!.toLocaleDateString('en-CA');
-    }
-  }
+//   getDateInputWithTime(): Date | null {
+//     return this.dateService.convertStringToUtcDate(this.dateInput + 'T08:00:00');
+//   }
+// }
 
-  onCancel() {
-    this.close.emit(undefined);
-  }
+// // EditShiftComponent
+// import { Component as ComponentEdit, Input, Output, EventEmitter, OnInit as OnInitEdit } from '@angular/core';
+// import { FormsModule as FormsModuleEdit } from '@angular/forms';
+// import { GetShiftDto as GetShiftDtoEdit } from '../../dtos/get-shift.dto';
+// import { ShiftService as ShiftServiceEdit } from '../../services/shift.service';
+// import { CardComponent as CardComponentEdit } from "../../shared/card/card.component";
+// import { DateService as DateServiceEdit } from '../../services/date.service';
 
-  onSubmit() {
-    let shift: GetShiftDto | undefined = undefined;
+// @ComponentEdit({
+//   selector: 'app-edit-shift',
+//   standalone: true,
+//   imports: [FormsModuleEdit, CardComponentEdit],
+//   templateUrl: './add-edit-shift.component.html',
+//   styleUrl: './add-edit-shift.component.css'
+// })
+//   @Input() shift!: GetShiftDtoEdit;
+//   @Output() close = new EventEmitter<GetShiftDtoEdit | undefined>();
 
-    if (this.addingShift) {
-      this.shiftService.addShift({
-        date: this.getDateInputWithTime()!,
-        creditTips: this.creditTipsInput,
-        cashTips: this.cashTipsInput,
-        tipout: this.tipoutInput,
-        hoursWorked: this.hoursWorkedInput !== undefined && this.hoursWorkedInput > 0 ? this.hoursWorkedInput : undefined
-      }).subscribe({
-        next: (response) => { 
-          shift = response;
-          console.log('Shift added successfully: ', shift)
-        },
-        error: (e) => console.error(e),
-        complete: () => {
-          this.close.emit(shift);
-          console.info('complete')
-        }
-      });
-    }
-    else {
-      const updatedShift = {
-        id: this.shift()!.id,
-        creditTips: this.creditTipsInput,
-        cashTips: this.cashTipsInput,
-        tipout: this.tipoutInput,
-        date: this.getDateInputWithTime()!,
-        hoursWorked: this.hoursWorkedInput
-      };
-      this.shiftService.editShift(this.shift()!.id, updatedShift)
-      .subscribe({
-        next: (response) => { 
-          shift = updatedShift; 
-          console.log('Shift updated successfully: ', response) 
-        },
-        error: (e) => console.error(e),
-        complete: () => {
-          this.close.emit(shift);
-          console.info('complete')
-        }
-      });
-    }
-  }
+//   creditTipsInput!: number;
+//   cashTipsInput!: number;
+//   tipoutInput!: number;
+//   dateInput!: string;
+//   hoursWorkedInput?: number;
 
-  //TODO: this is a temporary solution to get the date input with time.
-  //Need to find a better way to handle date inputs with time.
-  getDateInputWithTime() : Date | null {
-    return this.dateService.convertStringToUtcDate(this.dateInput + 'T08:00:00');
-  }
-}
+//   constructor(private shiftService: ShiftServiceEdit, private dateService: DateServiceEdit) { }
+
+//   ngOnInit() {
+//     if (this.shift) {
+//       const dateValue = new Date(this.shift.date);
+//       this.creditTipsInput = this.shift.creditTips;
+//       this.cashTipsInput = this.shift.cashTips;
+//       this.tipoutInput = this.shift.tipout;
+//       this.dateInput = dateValue.toISOString().slice(0, 10);
+//       this.hoursWorkedInput = this.shift.hoursWorked;
+//     }
+//   }
+
+//   onCancel() {
+//     this.close.emit(undefined);
+//   }
+
+//   onSubmit() {
+//     const updatedShift = {
+//       id: this.shift.id,
+//       creditTips: this.creditTipsInput,
+//       cashTips: this.cashTipsInput,
+//       tipout: this.tipoutInput,
+//       date: this.getDateInputWithTime()!,
+//       hoursWorked: this.hoursWorkedInput
+//     };
+//     this.shiftService.editShift(this.shift.id, updatedShift)
+//       .subscribe({
+//         next: (response) => {
+//           this.close.emit(updatedShift);
+//         },
+//         error: (e) => console.error(e)
+//       });
+//   }
+
+//   getDateInputWithTime(): Date | null {
+//     return this.dateService.convertStringToUtcDate(this.dateInput + 'T08:00:00');
+//   }
+// }

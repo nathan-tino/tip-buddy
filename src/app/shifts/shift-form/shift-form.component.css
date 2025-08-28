@@ -1,0 +1,40 @@
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+label {
+  font-weight: bold;
+}
+
+input {
+  padding: 4px;
+  font-size: 1rem;
+}
+
+button {
+  margin-top: 8px;
+  padding: 6px 12px;
+  font-size: 1rem;
+}
+
+.backdrop {
+  background-color: rgba(0, 0, 0, 0.9);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+}
+
+dialog {
+  width: 90%;
+  max-width: 30rem;
+  border-radius: 6px;
+  border: none;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  padding: 1rem;
+  top: 5rem;
+}
