@@ -1,7 +1,7 @@
 <app-card>
     <div class="backdrop" (click)="cancel.emit()"></div>
     <dialog open>
-        <h2>Edit Shift</h2>
+        <h2>{{ title }}</h2>
         <form #shiftForm="ngForm" (ngSubmit)="onSubmit()">
             <label for="dateInput">Date:</label>
             <input id="dateInput" type="date"

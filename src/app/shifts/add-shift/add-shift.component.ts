@@ -13,6 +13,7 @@ import { ShiftFormModel } from '../shift-form/shift-form.model';
     imports: [FormsModule, ShiftFormComponent],
     template: `
     <app-shift-form
+      [title]="'Add Shift'"
       [dateInput]="dateInput"
       [creditTipsInput]="0"
       [cashTipsInput]="0"

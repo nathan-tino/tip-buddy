@@ -17,6 +17,7 @@ export class ShiftFormComponent {
     @Input() cashTipsInput!: number;
     @Input() tipoutInput!: number;
     @Input() hoursWorkedInput?: number;
+    @Input() title!: string;
 
     @Output() submitted = new EventEmitter<ShiftFormModel>();
     @Output() cancel = new EventEmitter<void>();
