@@ -36,7 +36,7 @@ export class AddShiftComponent implements OnInit {
     ngOnInit() {
         const dateValue = this.shiftDate;
         if (dateValue) {
-            this.dateInput = dateValue!.toLocaleDateString('en-CA');
+            this.dateInput = dateValue.toLocaleDateString('en-CA');
         }
         this.hoursWorkedInput = undefined;
     }
