@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit, input } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { GetShiftDto } from '../../dtos/get-shift.dto';
 import { ShiftService } from '../../services/shift.service';
@@ -14,9 +14,9 @@ import { ShiftFormModel } from '../shift-form/shift-form.model';
     template: `
     <app-shift-form
       [dateInput]="dateInput"
-      [creditTipsInput]="creditTipsInput"
-      [cashTipsInput]="cashTipsInput"
-      [tipoutInput]="tipoutInput"
+      [creditTipsInput]="0"
+      [cashTipsInput]="0"
+      [tipoutInput]="0"
       [hoursWorkedInput]="hoursWorkedInput"
       (submitted)="onSubmit($event)"
       (cancel)="onCancel()"
@@ -26,18 +26,15 @@ import { ShiftFormModel } from '../shift-form/shift-form.model';
 })
 export class AddShiftComponent implements OnInit {
     @Output() close = new EventEmitter<GetShiftDto | undefined>();
-    shiftDate = input<Date | undefined>();
+    @Input() shiftDate: Date | undefined;
 
-    creditTipsInput = 0;
-    cashTipsInput = 0;
-    tipoutInput = 0;
     dateInput!: string;
     hoursWorkedInput?: number;
 
     constructor(private shiftService: ShiftService, private dateService: DateService) { }
 
     ngOnInit() {
-        var dateValue = this.shiftDate();
+        const dateValue = this.shiftDate;
         if (dateValue) {
             this.dateInput = dateValue!.toLocaleDateString('en-CA');
         }

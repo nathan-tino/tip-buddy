@@ -14,10 +14,10 @@ import { ShiftFormModel } from '../shift-form/shift-form.model';
     <app-shift-form
       [dateInput]="dateInput"
       [timeInput]="timeInput"
-      [creditTipsInput]="creditTipsInput"
-      [cashTipsInput]="cashTipsInput"
-      [tipoutInput]="tipoutInput"
-      [hoursWorkedInput]="hoursWorkedInput"
+      [creditTipsInput]="shift.creditTips"
+      [cashTipsInput]="shift.cashTips"
+      [tipoutInput]="shift.tipout"
+      [hoursWorkedInput]="shift.hoursWorked"
       (submitted)="onSubmit($event)"
       (cancel)="onCancel()"
     ></app-shift-form>
@@ -28,24 +28,16 @@ export class EditShiftComponent implements OnInit {
   @Input() shift!: GetShiftDto;
   @Output() close = new EventEmitter<GetShiftDto | undefined>();
 
-  creditTipsInput!: number;
-  cashTipsInput!: number;
-  tipoutInput!: number;
   dateInput!: string;
   timeInput!: string;
-  hoursWorkedInput?: number;
 
   constructor(private shiftService: ShiftService, private dateService: DateService) { }
 
   ngOnInit() {
     if (this.shift) {
       const dateValue = new Date(this.shift.date);
-      this.creditTipsInput = this.shift.creditTips;
-      this.cashTipsInput = this.shift.cashTips;
-      this.tipoutInput = this.shift.tipout;
       this.dateInput = dateValue.toISOString().slice(0, 10);
       this.timeInput = dateValue.toISOString().slice(11, 19);
-      this.hoursWorkedInput = this.shift.hoursWorked;
     }
   }
 
