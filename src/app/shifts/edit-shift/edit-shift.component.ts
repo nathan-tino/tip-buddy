@@ -4,6 +4,7 @@ import { GetShiftDto } from '../../dtos/get-shift.dto';
 import { ShiftService } from '../../services/shift.service';
 import { DateService } from '../../services/date.service';
 import { ShiftFormComponent } from '../shift-form/shift-form.component';
+import { ShiftFormModel } from '../shift-form/shift-form.model';
 
 @Component({
   selector: 'app-edit-shift',
@@ -12,11 +13,12 @@ import { ShiftFormComponent } from '../shift-form/shift-form.component';
   template: `
     <app-shift-form
       [dateInput]="dateInput"
+      [timeInput]="timeInput"
       [creditTipsInput]="creditTipsInput"
       [cashTipsInput]="cashTipsInput"
       [tipoutInput]="tipoutInput"
       [hoursWorkedInput]="hoursWorkedInput"
-      (submit)="onSubmit()"
+      (submitted)="onSubmit($event)"
       (cancel)="onCancel()"
     ></app-shift-form>
   `,
@@ -30,6 +32,7 @@ export class EditShiftComponent implements OnInit {
   cashTipsInput!: number;
   tipoutInput!: number;
   dateInput!: string;
+  timeInput!: string;
   hoursWorkedInput?: number;
 
   constructor(private shiftService: ShiftService, private dateService: DateService) { }
@@ -41,6 +44,7 @@ export class EditShiftComponent implements OnInit {
       this.cashTipsInput = this.shift.cashTips;
       this.tipoutInput = this.shift.tipout;
       this.dateInput = dateValue.toISOString().slice(0, 10);
+      this.timeInput = dateValue.toISOString().slice(11, 19);
       this.hoursWorkedInput = this.shift.hoursWorked;
     }
   }
@@ -49,15 +53,16 @@ export class EditShiftComponent implements OnInit {
     this.close.emit(undefined);
   }
 
-  onSubmit() {
+  onSubmit(shift: ShiftFormModel) {
     const updatedShift = {
       id: this.shift.id,
-      creditTips: this.creditTipsInput,
-      cashTips: this.cashTipsInput,
-      tipout: this.tipoutInput,
-      date: this.getDateInputWithTime()!,
-      hoursWorked: this.hoursWorkedInput
+      creditTips: shift.creditTips,
+      cashTips: shift.cashTips,
+      tipout: shift.tipout,
+      date: this.dateService.convertStringToUtcDate(shift.date, shift.time)!,
+      hoursWorked: shift.hoursWorked
     };
+
     this.shiftService.editShift(this.shift.id, updatedShift)
       .subscribe({
         next: (response) => {
@@ -65,9 +70,5 @@ export class EditShiftComponent implements OnInit {
         },
         error: (e) => console.error(e)
       });
-  }
-
-  getDateInputWithTime(): Date | null {
-    return this.dateService.convertStringToUtcDate(this.dateInput + 'T08:00:00');
   }
 }
