@@ -19,7 +19,7 @@
 </section>
 
 @if(isAddingShift) {
-    <app-edit-shift [date]="dateToAddShift" (close)="onFinishAddShift($event)" />
+    <app-add-shift [shiftDate]="dateToAddShift" (close)="onFinishAddShift($event)" />
 }
 
 @if(isEditingShift && activeShift) {

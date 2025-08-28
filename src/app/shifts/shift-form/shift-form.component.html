@@ -1,0 +1,61 @@
+<app-card>
+    <div class="backdrop" (click)="cancel.emit()"></div>
+    <dialog open>
+        <h2>{{ title }}</h2>
+        <form #shiftForm="ngForm" (ngSubmit)="onSubmit()">
+            <label for="dateInput">Date:</label>
+            <input id="dateInput" type="date"
+                [(ngModel)]="dateInput"
+                name="dateInput"
+                required
+                aria-required="true" />
+
+            <label for="timeInput">Time:</label>
+            <input id="timeInput" type="time"
+                [(ngModel)]="timeInput"
+                name="startTimeInput"
+                aria-label="Start time" />
+
+            <label for="creditTipsInput">Credit Tips:</label>
+            <input id="creditTipsInput" type="number"
+                [(ngModel)]="creditTipsInput"
+                name="creditTipsInput"
+                required
+                min="0"
+                step="0.01"
+                inputmode="decimal"
+                aria-required="true" />
+
+            <label for="cashTipsInput">Cash Tips:</label>
+            <input id="cashTipsInput" type="number"
+                [(ngModel)]="cashTipsInput"
+                name="cashTipsInput"
+                required
+                min="0"
+                step="0.01"
+                inputmode="decimal"
+                aria-required="true" />
+
+            <label for="tipoutInput">Tipout:</label>
+            <input id="tipoutInput" type="number"
+                [(ngModel)]="tipoutInput"
+                name="tipoutInput"
+                required
+                min="0"
+                step="0.01"
+                inputmode="decimal"
+                aria-required="true" />
+
+            <label for="hoursWorkedInput">Hours Worked:</label>
+            <input id="hoursWorkedInput" type="number"
+                [(ngModel)]="hoursWorkedInput"
+                name="hoursWorkedInput"
+                min="0"
+                step="0.01"
+                inputmode="decimal" />
+
+            <button id="saveButton" type="submit" [disabled]="shiftForm.invalid">Save</button>
+            <button id="cancelButton" type="button" (click)="cancel.emit()">Cancel</button>
+        </form>
+    </dialog>
+</app-card>
