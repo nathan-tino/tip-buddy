@@ -19,6 +19,7 @@ export class ShiftFormComponent {
     @Input() hoursWorkedInput?: number;
 
     @Output() submitted = new EventEmitter<ShiftFormModel>();
+    @Output() cancel = new EventEmitter<void>();
 
     onSubmit() {
         this.submitted.emit({
@@ -30,5 +31,4 @@ export class ShiftFormComponent {
             hoursWorked: this.hoursWorkedInput
         });
     }
-    @Output() cancel = new EventEmitter<void>();
 }

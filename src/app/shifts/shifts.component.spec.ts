@@ -39,6 +39,14 @@ describe('ShiftsComponent', () => {
       new Date(a.date).getTime() - new Date(b.date).getTime()
     );
 
+    // Reset spies
+    mockShiftService.getShifts.calls.reset();
+    mockShiftService.deleteShift.calls.reset();
+    mockShiftService.sortByDateAscending.calls.reset();
+    mockDateService.getFirstAndLastDayOfWeek.calls.reset();
+    mockDateService.convertUtcToLocalDate.calls.reset();
+    mockDateService.addDaysToDate.calls.reset();
+
     await TestBed.configureTestingModule({
       imports: [ShiftsComponent],
       providers: [
@@ -50,6 +58,13 @@ describe('ShiftsComponent', () => {
     fixture = TestBed.createComponent(ShiftsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges(); // ngOnInit runs, shifts are loaded
+  });
+
+  afterEach(() => {
+    // Restore console.error if spied on
+    if ((console.error as any).and) {
+      (console.error as any).and.callThrough();
+    }
   });
 
   it('should create the component', () => {
@@ -70,6 +85,8 @@ describe('ShiftsComponent', () => {
   });
 
   it('should add shift on onFinishAddShift', () => {
+    resetShifts();
+
     const newShift: GetShiftDto = {
       id: 2,
       date: new Date(),
@@ -85,6 +102,8 @@ describe('ShiftsComponent', () => {
   });
 
   it('should update shift on onFinishEditShift', () => {
+    resetShifts();
+
     const updatedShift = { ...mockShifts[0], cashTips: 999 };
     component.onFinishEditShift(updatedShift);
 
@@ -94,6 +113,7 @@ describe('ShiftsComponent', () => {
   });
 
   it('should delete shift on onDeleteShift', () => {
+    resetShifts();
     mockShiftService.deleteShift.and.returnValue(of(void 0));
 
     component.onDeleteShift(1);
@@ -123,4 +143,8 @@ describe('ShiftsComponent', () => {
     expect(component.activeShift).toEqual(mockShifts[0]);
     expect(component.isEditingShift).toBeTrue();
   });
+
+  function resetShifts() {
+    component.shifts = [...mockShifts.map(s => ({ ...s }))];
+  }
 });

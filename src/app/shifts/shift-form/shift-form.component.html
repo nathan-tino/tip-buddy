@@ -54,8 +54,8 @@
                 step="0.01"
                 inputmode="decimal" />
 
-            <button type="submit" [disabled]="shiftForm.invalid">Save</button>
-            <button type="button" (click)="cancel.emit()">Cancel</button>
+            <button id="saveButton" type="submit" [disabled]="shiftForm.invalid">Save</button>
+            <button id="cancelButton" type="button" (click)="cancel.emit()">Cancel</button>
         </form>
     </dialog>
 </app-card>

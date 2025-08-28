@@ -51,7 +51,7 @@ export class EditShiftComponent implements OnInit {
       creditTips: shift.creditTips,
       cashTips: shift.cashTips,
       tipout: shift.tipout,
-      date: this.dateService.convertStringToUtcDate(shift.date, shift.time)!,
+      date: this.dateService.convertStringToUtcDate(shift.date, shift.time),
       hoursWorked: shift.hoursWorked
     };
 

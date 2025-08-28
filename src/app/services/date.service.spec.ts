@@ -58,17 +58,49 @@ describe('DateService', () => {
   });
 
   describe('convertStringToUtcDate', () => {
-    it('should convert valid date string to UTC date', () => {
+    it('should convert valid full datetime string to UTC date', () => {
       const dateStr = '2024-07-29T15:30:00';
       const utcDate = service.convertStringToUtcDate(dateStr);
 
       expect(utcDate).toBeInstanceOf(Date);
-      expect(utcDate?.toISOString()).toBe('2024-07-29T15:30:00.000Z');
+      expect(utcDate.toISOString()).toBe('2024-07-29T15:30:00.000Z');
     });
 
-    it('should return null for invalid date string', () => {
-      const result = service.convertStringToUtcDate('invalid-date');
-      expect(result).toBeNull();
+    it('should convert date string and time string to UTC date', () => {
+      const dateStr = '2024-07-29';
+      const timeStr = '09:45:00';
+      const utcDate = service.convertStringToUtcDate(dateStr, timeStr);
+
+      expect(utcDate).toBeInstanceOf(Date);
+      expect(utcDate.toISOString()).toBe('2024-07-29T09:45:00.000Z');
+    });
+
+    it('should use default time if timeString is null', () => {
+      const dateStr = '2024-07-29';
+      const utcDate = service.convertStringToUtcDate(dateStr, null);
+
+      expect(utcDate).toBeInstanceOf(Date);
+      expect(utcDate.toISOString()).toBe('2024-07-29T08:00:00.000Z');
+    });
+
+    it('should use default time if timeString is undefined', () => {
+      const dateStr = '2024-07-29';
+      const utcDate = service.convertStringToUtcDate(dateStr);
+
+      expect(utcDate).toBeInstanceOf(Date);
+      expect(utcDate.toISOString()).toBe('2024-07-29T08:00:00.000Z');
+    });
+
+    it('should throw for invalid full datetime string', () => {
+      expect(() => service.convertStringToUtcDate('invalid-dateT99:99:99')).toThrowError('Invalid date string: invalid-dateT99:99:99');
+    });
+
+    it('should throw for invalid date string with time', () => {
+      expect(() => service.convertStringToUtcDate('invalid-date', '12:00:00')).toThrowError('Invalid date string: invalid-dateT12:00:00');
+    });
+
+    it('should throw for completely invalid date string', () => {
+      expect(() => service.convertStringToUtcDate('invalid-date')).toThrowError('Invalid date string: invalid-dateT08:00');
     });
   });
 });

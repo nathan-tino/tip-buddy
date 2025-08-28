@@ -55,18 +55,25 @@ export class DateService {
    * Overload signatures below allow callers to pass either just a date string
    * or a date + time string. There's a single implementation that handles both.
    */
-  convertStringToUtcDate(dateString: string): Date | null;
-  convertStringToUtcDate(dateString: string, timeString: string | null): Date | null;
-  convertStringToUtcDate(dateString: string, timeString: string | undefined): Date | null;
-  convertStringToUtcDate(dateString: string, timeString?: string | null): Date | null {
-    // normalize timeString (default to 08:00 if not provided or null)
-    const time = timeString ?? '08:00';
-    const combined = `${dateString}T${time}`;
+  convertStringToUtcDate(dateString: string): Date;
+  convertStringToUtcDate(dateString: string, timeString: string | null): Date;
+  convertStringToUtcDate(dateString: string, timeString: string | undefined): Date;
+  convertStringToUtcDate(dateString: string, timeString?: string | null): Date {
+    let combined: string;
+
+    if (dateString.includes('T')) {
+      // dateString is already a full datetime string
+      combined = dateString;
+    } else {
+      // dateString is just a date, append time
+      const time = timeString ?? '08:00';
+      combined = `${dateString}T${time}`;
+    }
+
     const date = new Date(combined);
 
     if (isNaN(date.getTime())) {
-      console.error('Invalid date string:', combined);
-      return null;
+      throw new Error(`Invalid date string: ${combined}`);
     }
 
     return new Date(Date.UTC(

@@ -1,14 +1,13 @@
 import { Component, input, output } from '@angular/core';
 
 import { GetShiftDto } from '../../dtos/get-shift.dto';
-import { AddEditShiftComponent } from '../add-edit-shift/add-edit-shift.component';
 import { CardComponent } from "../../shared/card/card.component";
 import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-shift',
   standalone: true,
-  imports: [AddEditShiftComponent, CardComponent, DatePipe],
+  imports: [CardComponent, DatePipe],
   templateUrl: './shift.component.html',
   styleUrl: './shift.component.css'
 })
