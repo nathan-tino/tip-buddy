@@ -1,11 +1,22 @@
-<button (click)="onAddShift(undefined)">Add Shift</button>
+<div class="interval-bar">
+    <div class="equal-width left">
+        <label for="weekPicker">Pick a day: &nbsp;</label>
+        <input id="weekPicker" type="date" (change)="onWeekPickerChange($event)" />
+    </div>
 
-<h4>
-    <button (click)="onPreviousInterval()"> &lt; </button>
-    {{ firstDayOfInterval ? (firstDayOfInterval | date: 'shortDate') : '' }} - 
-    {{ lastDayOfInterval ? (lastDayOfInterval | date: 'shortDate') : '' }}
-    <button (click)="onNextInterval()"> &gt; </button>
-</h4>
+    <div class="interval-controls">
+        <button (click)="onPreviousInterval()"> &lt; </button>
+        <span>
+            {{ firstDayOfInterval ? (firstDayOfInterval | date: 'shortDate') : '' }} -
+            {{ lastDayOfInterval ? (lastDayOfInterval | date: 'shortDate') : '' }}
+        </span>
+        <button (click)="onNextInterval()"> &gt; </button>
+    </div>
+
+    <div class="equal-width right">
+        <button (click)="onAddShift(undefined)">Add Shift</button>
+    </div>
+</div>
 
 <section id="shifts">
     @if (firstDayOfInterval) {
