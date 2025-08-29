@@ -113,7 +113,7 @@ export class ShiftsComponent implements OnInit {
 
   loadShiftsForDate(date: Date | null = null) {
     if (!date) {
-      date = new Date(new Date().toISOString().slice(0, 10) + 'T00:00:00');
+      date = new Date(new Date().setHours(0, 0, 0, 0));
     }
 
     const { firstDayOfWeek, lastDayOfWeek } = this.dateService.getFirstAndLastDayOfWeek(date);
