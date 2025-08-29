@@ -27,11 +27,7 @@ export class ShiftsComponent implements OnInit {
   constructor(private shiftService: ShiftService, private dateService: DateService) { }
 
   ngOnInit(): void {
-    const { firstDayOfWeek, lastDayOfWeek } = this.dateService.getFirstAndLastDayOfWeek(new Date());
-    this.firstDayOfInterval = firstDayOfWeek;
-    this.lastDayOfInterval = lastDayOfWeek;
-    
-    this.loadShifts();
+    this.loadShiftsForDate();
   }
 
   loadShifts(): void {
@@ -115,7 +111,26 @@ export class ShiftsComponent implements OnInit {
     }
   }
 
+  loadShiftsForDate(date: Date | null = null) {
+    if (!date) {
+      date = new Date(new Date().setHours(0, 0, 0, 0));
+    }
+
+    const { firstDayOfWeek, lastDayOfWeek } = this.dateService.getFirstAndLastDayOfWeek(date);
+    this.firstDayOfInterval = firstDayOfWeek;
+    this.lastDayOfInterval = lastDayOfWeek;
+
+    this.loadShifts();
+  }
+
   updateShiftsSignal() {
     this.shifts = [...this.shifts];
+  }
+
+  onWeekPickerChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.value) return;
+
+    this.loadShiftsForDate(new Date(input.value + 'T00:00:00'));
   }
 }

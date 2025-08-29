@@ -53,6 +53,34 @@ ul {
     overflow: auto;
 }
 
+.interval-bar {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.interval-controls {
+    flex: 1 1 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.equal-width.left {
+    min-width: 210px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.equal-width.right {
+    min-width: 210px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
 @media (min-width: 768px) {
     h2 {
         font-size: 1.25rem;
