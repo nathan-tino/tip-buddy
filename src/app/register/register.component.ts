@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PASSWORD_REQUIREMENTS } from './password-requirements';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../services/auth.service';
@@ -21,6 +22,14 @@ export class RegisterComponent {
   password = '';
   error: string | null = null;
   success: string | null = null;
+
+  passwordRequirements = PASSWORD_REQUIREMENTS;
+  get passwordRequirementStatus() {
+    return this.passwordRequirements.map(req => ({
+      ...req,
+      met: req.validate(this.password)
+    }));
+  }
 
   constructor(private authService: AuthService, private router: Router) {}
 

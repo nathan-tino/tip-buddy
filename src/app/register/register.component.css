@@ -1,5 +1,6 @@
+/* Make container wider */
 .register-container {
-  max-width: 400px;
+  max-width: 600px;
   margin: 40px auto;
   padding: 24px;
   border-radius: 8px;
@@ -10,13 +11,25 @@ label {
   display: block;
   margin-top: 12px;
 }
-input {
+/* All textboxes same width, with extra space for validation */
+.input-row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+.input-row .input-container {
+  flex: 1 1 0;
+}
+.input-row input {
   width: 100%;
   padding: 8px;
   margin-top: 4px;
-  margin-bottom: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+.input-row .validation-container {
+  width: 180px;
+  margin-left: 8px;
 }
 button {
   width: 100%;

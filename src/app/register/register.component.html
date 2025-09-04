@@ -1,19 +1,57 @@
 <div class="register-container">
   <h2>Register</h2>
-  <form (ngSubmit)="register()">
-    <label for="firstName">First Name</label>
-    <input id="firstName" [(ngModel)]="firstName" name="firstName" required>
-    <label for="lastName">Last Name</label>
-    <input id="lastName" [(ngModel)]="lastName" name="lastName" required>
-    <label for="phoneNumber">Phone Number</label>
-    <input id="phoneNumber" [(ngModel)]="phoneNumber" name="phoneNumber" type="number">
-    <label for="email">Email</label>
-    <input id="email" [(ngModel)]="email" name="email" required type="email">
-    <label for="userName">Username (optional)</label>
-    <input id="userName" [(ngModel)]="userName" name="userName">
-    <label for="password">Password</label>
-    <input id="password" [(ngModel)]="password" name="password" required type="password">
-    <button type="submit">Register</button>
+  <form #registerForm="ngForm" (ngSubmit)="register()">
+    <div class="input-row">
+      <div class="input-container">
+        <label for="firstName">First Name</label>
+        <input id="firstName" [(ngModel)]="firstName" name="firstName" required>
+      </div>
+      <div class="validation-container"></div>
+    </div>
+    <div class="input-row">
+      <div class="input-container">
+        <label for="lastName">Last Name</label>
+        <input id="lastName" [(ngModel)]="lastName" name="lastName" required>
+      </div>
+      <div class="validation-container"></div>
+    </div>
+    <div class="input-row">
+      <div class="input-container">
+        <label for="phoneNumber">Phone Number</label>
+        <input id="phoneNumber" [(ngModel)]="phoneNumber" name="phoneNumber" type="number">
+      </div>
+      <div class="validation-container"></div>
+    </div>
+    <div class="input-row">
+      <div class="input-container">
+        <label for="email">Email</label>
+        <input id="email" [(ngModel)]="email" name="email" required type="email">
+      </div>
+      <div class="validation-container"></div>
+    </div>
+    <div class="input-row">
+      <div class="input-container">
+        <label for="userName">Username (optional)</label>
+        <input id="userName" [(ngModel)]="userName" name="userName">
+      </div>
+      <div class="validation-container"></div>
+    </div>
+    <div class="input-row">
+      <div class="input-container">
+        <label for="password">Password</label>
+        <input id="password" [(ngModel)]="password" name="password" required type="password">
+      </div>
+      <div class="validation-container">
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          <li *ngFor="let req of passwordRequirementStatus"
+              [style.color]="req.met ? 'green' : 'red'"
+              style="font-size: 0.8em;">
+            {{ req.text }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  <button type="submit" [disabled]="!registerForm.form.valid">Register</button>
     <div *ngIf="error" class="error">{{ error }}</div>
     <div *ngIf="success" class="success">{{ success }}</div>
   </form>
