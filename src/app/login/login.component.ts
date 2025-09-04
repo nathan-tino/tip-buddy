@@ -1,15 +1,15 @@
-
-
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+
 import { AuthService } from '../services/auth.service';
 import { LoginDto } from '../dtos/login.dto';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -18,14 +18,17 @@ export class LoginComponent {
   password = '';
   error: string | null = null;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   login() {
     const dto: LoginDto = { userName: this.userName, password: this.password };
     this.authService.login(dto).subscribe({
       next: (res) => {
-        // Handle successful login (e.g., save token, redirect)
         this.error = null;
+        if (res && res.token) {
+          localStorage.setItem('jwt', res.token);
+        }
+        this.router.navigate(['/shifts']);
       },
       error: (err) => {
         this.error = 'Login failed';

@@ -1,0 +1,20 @@
+<div class="register-container">
+  <h2>Register</h2>
+  <form (ngSubmit)="register()">
+    <label for="firstName">First Name</label>
+    <input id="firstName" [(ngModel)]="firstName" name="firstName" required>
+    <label for="lastName">Last Name</label>
+    <input id="lastName" [(ngModel)]="lastName" name="lastName" required>
+    <label for="phoneNumber">Phone Number</label>
+    <input id="phoneNumber" [(ngModel)]="phoneNumber" name="phoneNumber" type="number">
+    <label for="email">Email</label>
+    <input id="email" [(ngModel)]="email" name="email" required type="email">
+    <label for="userName">Username (optional)</label>
+    <input id="userName" [(ngModel)]="userName" name="userName">
+    <label for="password">Password</label>
+    <input id="password" [(ngModel)]="password" name="password" required type="password">
+    <button type="submit">Register</button>
+    <div *ngIf="error" class="error">{{ error }}</div>
+    <div *ngIf="success" class="success">{{ success }}</div>
+  </form>
+</div>

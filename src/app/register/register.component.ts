@@ -1,0 +1,49 @@
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../services/auth.service';
+import { RegisterDto } from '../dtos/register.dto';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-register',
+  standalone: true,
+  imports: [FormsModule, CommonModule],
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.css'
+})
+export class RegisterComponent {
+  firstName = '';
+  lastName = '';
+  phoneNumber?: number;
+  userName = '';
+  email = '';
+  password = '';
+  error: string | null = null;
+  success: string | null = null;
+
+  constructor(private authService: AuthService, private router: Router) {}
+
+  register() {
+    const dto: RegisterDto = {
+      firstName: this.firstName,
+      lastName: this.lastName,
+      phoneNumber: this.phoneNumber,
+      userName: this.userName || this.email,
+      email: this.email,
+      password: this.password
+    };
+
+    this.authService.register(dto).subscribe({
+      next: (res) => {
+        this.success = 'Registration successful!';
+        this.error = null;
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        this.error = 'Registration failed';
+        this.success = null;
+      }
+    });
+  }
+}
