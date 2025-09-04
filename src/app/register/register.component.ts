@@ -22,6 +22,7 @@ export class RegisterComponent {
   password = '';
   error: string | null = null;
   success: string | null = null;
+  submitted = false;
 
   passwordRequirements = PASSWORD_REQUIREMENTS;
   get passwordRequirementStatus() {
@@ -33,7 +34,11 @@ export class RegisterComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  register() {
+  onSubmit(form: any) {
+    this.submitted = true;
+    if (!form.valid) {
+      return;
+    }
     const dto: RegisterDto = {
       firstName: this.firstName,
       lastName: this.lastName,
@@ -42,7 +47,6 @@ export class RegisterComponent {
       email: this.email,
       password: this.password
     };
-
     this.authService.register(dto).subscribe({
       next: (res) => {
         this.success = 'Registration successful!';

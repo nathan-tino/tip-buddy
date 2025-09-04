@@ -1,38 +1,49 @@
 <div class="register-container">
   <h2>Register</h2>
-  <form #registerForm="ngForm" (ngSubmit)="register()">
+  <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
     <div class="name-row">
       <div class="name-input">
-        <label for="firstName">First name on ID</label>
-        <input id="firstName" [(ngModel)]="firstName" name="firstName" required>
+        <label for="firstName">First name</label>
+        <input id="firstName" [(ngModel)]="firstName" name="firstName" required
+          [class.invalid-input]="submitted && !firstName">
+        <div *ngIf="submitted && !firstName" class="error-message message">First name is required.</div>
       </div>
       <div class="name-input">
-        <label for="lastName">Last name on ID</label>
-        <input id="lastName" [(ngModel)]="lastName" name="lastName" required>
+        <label for="lastName">Last name</label>
+        <input id="lastName" [(ngModel)]="lastName" name="lastName" required
+          [class.invalid-input]="submitted && !lastName">
+        <div *ngIf="submitted && !lastName" class="error-message message">Last name is required.</div>
       </div>
     </div>
     <div class="input-row">
       <div class="input-container">
         <label for="phoneNumber">Phone Number</label>
-        <input id="phoneNumber" [(ngModel)]="phoneNumber" name="phoneNumber" type="number">
+        <input id="phoneNumber" [(ngModel)]="phoneNumber" name="phoneNumber" type="tel"
+          [class.invalid-input]="submitted && !phoneNumber">
+        <div *ngIf="submitted && !phoneNumber" class="error-message message">Phone number is required.</div>
       </div>
     </div>
     <div class="input-row">
       <div class="input-container">
         <label for="email">Email</label>
-        <input id="email" [(ngModel)]="email" name="email" required type="email">
+        <input id="email" [(ngModel)]="email" name="email" required type="email"
+          [class.invalid-input]="submitted && !email">
+        <div *ngIf="submitted && !email" class="error-message message">Email is required.</div>
       </div>
     </div>
     <div class="input-row">
       <div class="input-container">
         <label for="userName">Username (optional)</label>
         <input id="userName" [(ngModel)]="userName" name="userName">
+        <div class="message">If no username is provided, your email will be used.</div>
       </div>
     </div>
     <div class="input-row">
       <div class="input-container">
         <label for="password">Password</label>
-        <input id="password" [(ngModel)]="password" name="password" required type="password">
+        <input id="password" [(ngModel)]="password" name="password" required type="password"
+          [class.invalid-input]="submitted && !password">
+        <div *ngIf="submitted && !password" class="error-message message">Password is required.</div>
         <ul class="password-validation-list">
           <li *ngFor="let req of passwordRequirementStatus"
               [class.met]="req.met"
@@ -52,7 +63,7 @@
         </ul>
       </div>
     </div>
-  <button type="submit" [disabled]="!registerForm.form.valid">Register</button>
+  <button type="submit">Register</button>
     <div *ngIf="error" class="error">{{ error }}</div>
     <div *ngIf="success" class="success">{{ success }}</div>
   </form>
