@@ -1,52 +1,53 @@
 <div class="register-container">
   <h2>Register</h2>
   <form #registerForm="ngForm" (ngSubmit)="register()">
-    <div class="input-row">
-      <div class="input-container">
-        <label for="firstName">First Name</label>
+    <div class="name-row">
+      <div class="name-input">
+        <label for="firstName">First name on ID</label>
         <input id="firstName" [(ngModel)]="firstName" name="firstName" required>
       </div>
-      <div class="validation-container"></div>
-    </div>
-    <div class="input-row">
-      <div class="input-container">
-        <label for="lastName">Last Name</label>
+      <div class="name-input">
+        <label for="lastName">Last name on ID</label>
         <input id="lastName" [(ngModel)]="lastName" name="lastName" required>
       </div>
-      <div class="validation-container"></div>
     </div>
     <div class="input-row">
       <div class="input-container">
         <label for="phoneNumber">Phone Number</label>
         <input id="phoneNumber" [(ngModel)]="phoneNumber" name="phoneNumber" type="number">
       </div>
-      <div class="validation-container"></div>
     </div>
     <div class="input-row">
       <div class="input-container">
         <label for="email">Email</label>
         <input id="email" [(ngModel)]="email" name="email" required type="email">
       </div>
-      <div class="validation-container"></div>
     </div>
     <div class="input-row">
       <div class="input-container">
         <label for="userName">Username (optional)</label>
         <input id="userName" [(ngModel)]="userName" name="userName">
       </div>
-      <div class="validation-container"></div>
     </div>
     <div class="input-row">
       <div class="input-container">
         <label for="password">Password</label>
         <input id="password" [(ngModel)]="password" name="password" required type="password">
-      </div>
-      <div class="validation-container">
-        <ul style="list-style: none; padding: 0; margin: 0;">
+        <ul class="password-validation-list">
           <li *ngFor="let req of passwordRequirementStatus"
-              [style.color]="req.met ? 'green' : 'red'"
-              style="font-size: 0.8em;">
-            {{ req.text }}
+              [class.met]="req.met"
+              [class.unmet]="!req.met">
+            <span class="icon">
+              <svg *ngIf="!req.met" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="7" cy="7" r="7" fill="#d9534f"/>
+                <path d="M4.5 4.5L9.5 9.5M9.5 4.5L4.5 9.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <svg *ngIf="req.met" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="7" cy="7" r="7" fill="#28a745"/>
+                <path d="M4 7.5L6.5 10L10 5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="requirement-text">{{ req.text }}</span>
           </li>
         </ul>
       </div>

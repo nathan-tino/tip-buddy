@@ -1,4 +1,29 @@
-/* Make container wider */
+.password-validation-list .icon {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+.password-validation-list svg {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+}
+.password-validation-list .requirement-text {
+  vertical-align: middle;
+  font-size: 0.8em;
+}
+/* Group first and last name side by side */
+.name-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.name-input {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .register-container {
   max-width: 600px;
   margin: 40px auto;
@@ -11,7 +36,7 @@ label {
   display: block;
   margin-top: 12px;
 }
-/* All textboxes same width, with extra space for validation */
+
 .input-row {
   display: flex;
   align-items: flex-start;
@@ -20,16 +45,33 @@ label {
 .input-row .input-container {
   flex: 1 1 0;
 }
-.input-row input {
+.input-row input,
+.name-input input {
   width: 100%;
-  padding: 8px;
+  padding: 12px;
   margin-top: 4px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid #b0b0b0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fafafa;
+  box-sizing: border-box;
 }
-.input-row .validation-container {
-  width: 180px;
-  margin-left: 8px;
+
+.password-validation-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0 0;
+}
+.password-validation-list li {
+  font-size: 0.95em;
+  color: #d9534f;
+  margin-bottom: 0px;
+}
+.password-validation-list li.met {
+  color: #28a745;
+}
+.password-validation-list li.unmet {
+  color: #d9534f;
 }
 button {
   width: 100%;
