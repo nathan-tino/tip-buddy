@@ -25,13 +25,11 @@ export class LoginComponent {
     this.authService.login(dto).subscribe({
       next: (res) => {
         this.error = null;
-        if (res && res.token) {
-          localStorage.setItem('jwt', res.token);
-        }
+        
         this.router.navigate(['/shifts']);
       },
       error: (err) => {
-        this.error = 'Login failed';
+        this.error = err.error?.message || 'Login failed. Please try again.';
       }
     });
   }

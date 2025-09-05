@@ -1,23 +1,17 @@
 import { Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 
 import { GetShiftDto } from "../dtos/get-shift.dto";
 import { CreateShiftDto } from "../dtos/create-shift.dto";
 import { UpdateShiftDto } from "../dtos/update-shift.dto";
+import { environment } from "../../environments/environment";
 
 @Injectable({ providedIn: 'root' })
 export class ShiftService {
-    private apiUrl = 'https://localhost:7001/api/shifts';
+    private apiUrl = `${environment.apiBaseUrl}/api/shifts`;
 
     constructor(private http: HttpClient) { }
-
-    private getAuthHeaders(): HttpHeaders {
-        const token = localStorage.getItem('jwt');
-        return new HttpHeaders({
-            Authorization: token ? `Bearer ${token}` : ''
-        });
-    }
 
     getShifts(startDate?: Date, endDate?: Date): Observable<GetShiftDto[]> {
         console.log('Fetching shifts from API...');
@@ -38,22 +32,22 @@ export class ShiftService {
             url += '?' + params.join('&');
         }
 
-        return this.http.get<GetShiftDto[]>(url, { headers: this.getAuthHeaders() }).pipe(
+        return this.http.get<GetShiftDto[]>(url, { withCredentials: true }).pipe(
             map(shifts => shifts.map(parseShiftDate))
         );
     }
 
     addShift(shift: CreateShiftDto): Observable<GetShiftDto> {
-        return this.http.post<GetShiftDto>(this.apiUrl, shift, { headers: this.getAuthHeaders() }).pipe(
+        return this.http.post<GetShiftDto>(this.apiUrl, shift, { withCredentials: true }).pipe(
             map(parseShiftDate));
     }
 
     deleteShift(id: number): Observable<any> {
-        return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
+        return this.http.delete(`${this.apiUrl}/${id}`, { withCredentials: true });
     }
 
     editShift(id: number, shift: UpdateShiftDto): Observable<any> {
-        return this.http.put(`${this.apiUrl}/${id}`, shift, { headers: this.getAuthHeaders() });
+        return this.http.put(`${this.apiUrl}/${id}`, shift, { withCredentials: true });
     }
 
     sortByDateAscending(a: GetShiftDto, b: GetShiftDto): number {
