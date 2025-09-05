@@ -14,9 +14,13 @@ export class ShiftService {
 
     private getAuthHeaders(): HttpHeaders {
         const token = localStorage.getItem('jwt');
-        return new HttpHeaders({
-            Authorization: token ? `Bearer ${token}` : ''
-        });
+        if (token) {
+            return new HttpHeaders({
+                Authorization: `Bearer ${token}`
+            });
+        } else {
+            return new HttpHeaders();
+        }
     }
 
     getShifts(startDate?: Date, endDate?: Date): Observable<GetShiftDto[]> {

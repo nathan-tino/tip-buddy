@@ -18,9 +18,8 @@
     <div class="input-row">
       <div class="input-container">
         <label for="phoneNumber">Phone Number</label>
-        <input id="phoneNumber" [(ngModel)]="phoneNumber" name="phoneNumber" type="tel"
-          [class.invalid-input]="submitted && !phoneNumber">
-        <div *ngIf="submitted && !phoneNumber" class="error-message message">Phone number is required.</div>
+        <input id="phoneNumber" [(ngModel)]="phoneNumber" name="phoneNumber" type="tel">
+        <div class="message">Phone number is optional.</div>
       </div>
     </div>
     <div class="input-row">
