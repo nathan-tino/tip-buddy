@@ -49,12 +49,18 @@ export class RegisterComponent {
     };
     this.authService.register(dto).subscribe({
       next: (res) => {
-        this.success = 'Registration successful!';
+        this.success = 'Registration successful! Redirecting to login...';
         this.error = null;
-        this.router.navigate(['/login']);
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 3000);
       },
       error: (err) => {
-        this.error = 'Registration failed';
+        if (Array.isArray(err.error)) {
+          this.error = err.error.map((e: any) => e.description).join(', ');
+        } else {
+          this.error = 'Registration failed';
+        }
         this.success = null;
       }
     });

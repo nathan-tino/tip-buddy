@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LoginDto } from '../dtos/login.dto';
 import { RegisterDto } from '../dtos/register.dto';
+import { AuthResponse, RegisterResponse } from '../dtos/auth-response.dto';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -13,11 +14,11 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(dto: LoginDto): Observable<any> {
-    return this.http.post<any>(this.loginUrl, dto);
+  login(dto: LoginDto): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(this.loginUrl, dto);
   }
   
-  register(dto: RegisterDto): Observable<any> {
-    return this.http.post<any>(this.registerUrl, dto);
+  register(dto: RegisterDto): Observable<RegisterResponse> {
+    return this.http.post<RegisterResponse>(this.registerUrl, dto);
   }
 }
