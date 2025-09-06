@@ -15,10 +15,10 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(dto: LoginDto): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(this.loginUrl, dto);
+    return this.http.post<AuthResponse>(this.loginUrl, dto, { withCredentials: true });
   }
   
   register(dto: RegisterDto): Observable<RegisterResponse> {
-    return this.http.post<RegisterResponse>(this.registerUrl, dto);
+    return this.http.post<RegisterResponse>(this.registerUrl, dto, { withCredentials: true });
   }
 }
