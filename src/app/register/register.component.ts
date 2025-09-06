@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 export class RegisterComponent {
   firstName = '';
   lastName = '';
-  phoneNumber?: number;
+  phoneNumber?: string;
   userName = '';
   email = '';
   password = '';
