@@ -5,10 +5,11 @@ import { HttpClient } from "@angular/common/http";
 import { GetShiftDto } from "../dtos/get-shift.dto";
 import { CreateShiftDto } from "../dtos/create-shift.dto";
 import { UpdateShiftDto } from "../dtos/update-shift.dto";
+import { environment } from "../../environments/environment";
 
 @Injectable({ providedIn: 'root' })
 export class ShiftService {
-    private apiUrl = 'https://localhost:7001/api/shifts';
+    private apiUrl = `${environment.apiBaseUrl}/api/shifts`;
 
     constructor(private http: HttpClient) { }
 
@@ -30,23 +31,23 @@ export class ShiftService {
         if (params.length > 0) {
             url += '?' + params.join('&');
         }
-    
-        return this.http.get<GetShiftDto[]>(url).pipe(
+
+        return this.http.get<GetShiftDto[]>(url, { withCredentials: true }).pipe(
             map(shifts => shifts.map(parseShiftDate))
         );
     }
 
     addShift(shift: CreateShiftDto): Observable<GetShiftDto> {
-        return this.http.post<GetShiftDto>(this.apiUrl, shift).pipe(
+        return this.http.post<GetShiftDto>(this.apiUrl, shift, { withCredentials: true }).pipe(
             map(parseShiftDate));
     }
 
     deleteShift(id: number): Observable<any> {
-        return this.http.delete(`${this.apiUrl}/${id}`);
+        return this.http.delete(`${this.apiUrl}/${id}`, { withCredentials: true });
     }
 
     editShift(id: number, shift: UpdateShiftDto): Observable<any> {
-        return this.http.put(`${this.apiUrl}/${id}`, shift);
+        return this.http.put(`${this.apiUrl}/${id}`, shift, { withCredentials: true });
     }
 
     sortByDateAscending(a: GetShiftDto, b: GetShiftDto): number {
