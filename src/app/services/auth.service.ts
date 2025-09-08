@@ -1,9 +1,8 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
 import { LoginDto } from '../dtos/login.dto';
 import { RegisterDto } from '../dtos/register.dto';
 import { AuthResponse, RegisterResponse } from '../dtos/auth-response.dto';
@@ -26,7 +25,7 @@ export class AuthService {
       tap(() => this._isLoggedIn.next(true)),
       catchError(err => {
         this._isLoggedIn.next(false);
-        throw err;
+        return throwError(() => err);
       })
     );
   }
