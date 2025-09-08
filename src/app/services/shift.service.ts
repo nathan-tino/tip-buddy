@@ -1,3 +1,4 @@
+import { ShiftsSummaryDto } from '../dtos/shifts-summary.dto';
 import { Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
@@ -14,8 +15,6 @@ export class ShiftService {
     constructor(private http: HttpClient) { }
 
     getShifts(startDate?: Date, endDate?: Date): Observable<GetShiftDto[]> {
-        console.log('Fetching shifts from API...');
-    
         let url = this.apiUrl;
     
         const params: string[] = [];
@@ -34,6 +33,25 @@ export class ShiftService {
 
         return this.http.get<GetShiftDto[]>(url, { withCredentials: true }).pipe(
             map(shifts => shifts.map(parseShiftDate))
+        );
+    }
+
+    getShiftsSummary(startDate: Date, endDate: Date): Observable<ShiftsSummaryDto> {
+        let url = this.apiUrl + '/summary';
+
+        const params: string[] = [];
+
+        params.push(`startDate=${startDate.toISOString()}`);
+        params.push(`endDate=${endDate.toISOString()}`);
+        url += '?' + params.join('&');
+
+        return this.http.get<ShiftsSummaryDto>(url, { withCredentials: true }).pipe(
+            map(summary => ({
+                    ...summary,
+                    shifts: Array.isArray(summary.shifts)
+                        ? summary.shifts.map(parseShiftDate)
+                        : []
+            }))
         );
     }
 
@@ -56,5 +74,5 @@ export class ShiftService {
 }
 
 function parseShiftDate<T extends { date: Date }>(shift: T): T & { date: Date } {
-  return { ...shift, date: new Date(shift.date) };
+    return { ...shift, date: new Date(shift.date) };
 }

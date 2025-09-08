@@ -1,3 +1,17 @@
+@if (summaryData) {
+    <div class="summary-bar">
+        <div>Total Tips: {{ summaryData.totalTips | currency:'USD':'symbol':'1.0-0' }}</div>
+        <div>Average Tips Per Shift: {{ summaryData.averageTipsPerShift | currency:'USD':'symbol':'1.0-0' }}</div>
+        <div>Cash Tips Total: {{ summaryData.cashTipsTotal | currency:'USD':'symbol':'1.0-0' }}</div>
+        <div>Credit Tips Total: {{ summaryData.creditTipsTotal | currency:'USD':'symbol':'1.0-0' }}</div>
+        <div>Cash Tips Percentage: {{ summaryData.cashTipsPercentage | number:'1.0-0' }}%</div>
+        <div>Credit Tips Percentage: {{ summaryData.creditTipsPercentage | number:'1.0-0' }}%</div>
+        <div>Tips Per Hour: {{ summaryData.tipsPerHour | currency:'USD':'symbol':'1.0-0' }}</div>
+        <div>Total Shifts: {{ summaryData.totalShifts }}</div>
+        <div>Total Hours Worked: {{ summaryData.totalHoursWorked }}</div>
+    </div>
+}
+
 <div class="interval-bar">
     <div class="equal-width left">
         <label for="weekPicker">Pick a day: &nbsp;</label>

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe, CurrencyPipe } from '@angular/common';
 
 import { ShiftService } from '../services/shift.service';
 import { GetShiftDto } from '../dtos/get-shift.dto';
+import { ShiftsSummaryDto } from '../dtos/shifts-summary.dto';
 import { DateService } from '../services/date.service';
 import { WeekComponent } from "./week/week.component";
 import { AddShiftComponent } from './add-shift/add-shift.component';
@@ -11,18 +12,19 @@ import { EditShiftComponent } from './edit-shift/edit-shift.component';
 @Component({
   selector: 'app-shifts',
   standalone: true,
-  imports: [AddShiftComponent, EditShiftComponent, DatePipe, WeekComponent],
+  imports: [AddShiftComponent, EditShiftComponent, DatePipe, DecimalPipe, CurrencyPipe, WeekComponent],
   templateUrl: './shifts.component.html',
   styleUrl: './shifts.component.css'
 })
 export class ShiftsComponent implements OnInit {
-  isAddingShift = false;
-  isEditingShift = false;
-  shifts: GetShiftDto[] = [];
-  activeShift: GetShiftDto | null = null;
-  firstDayOfInterval: Date | undefined;
-  lastDayOfInterval: Date | undefined;
-  dateToAddShift: Date | undefined;
+    isAddingShift = false;
+    isEditingShift = false;
+    shifts: GetShiftDto[] = [];
+    activeShift: GetShiftDto | null = null;
+    firstDayOfInterval: Date | undefined;
+    lastDayOfInterval: Date | undefined;
+    dateToAddShift: Date | undefined;
+    summaryData: Omit<ShiftsSummaryDto, 'shifts'> | null = null;
 
   constructor(private shiftService: ShiftService, private dateService: DateService) { }
 
@@ -31,9 +33,13 @@ export class ShiftsComponent implements OnInit {
   }
 
   loadShifts(): void {
-    this.shiftService.getShifts(this.firstDayOfInterval, this.lastDayOfInterval)
-      .subscribe((shifts: GetShiftDto[]) => {
-        this.shifts = shifts.sort(this.shiftService.sortByDateAscending)
+    this.shiftService.getShiftsSummary(this.firstDayOfInterval!, this.lastDayOfInterval!)
+      .subscribe((summary: ShiftsSummaryDto) => {
+        this.shifts = Array.isArray(summary.shifts)
+          ? summary.shifts.sort(this.shiftService.sortByDateAscending)
+          : [];
+
+        this.summaryData = summary;
       });
   }
 
