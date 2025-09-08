@@ -2,5 +2,6 @@
     <div>
         <h1>Tip Buddy!</h1>
         <p>Get them tips put in there and do it right</p>
+    <button *ngIf="isLoggedIn" (click)="logout()" class="logout-btn">Logout</button>
     </div>
 </header>
