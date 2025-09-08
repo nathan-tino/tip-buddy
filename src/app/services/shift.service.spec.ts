@@ -1,10 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { ShiftService } from './shift.service';
 import { GetShiftDto } from '../dtos/get-shift.dto';
 import { CreateShiftDto } from '../dtos/create-shift.dto';
 import { UpdateShiftDto } from '../dtos/update-shift.dto';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ShiftService', () => {
   let service: ShiftService;
@@ -14,9 +15,9 @@ describe('ShiftService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [ShiftService]
-    });
+    imports: [],
+    providers: [ShiftService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     service = TestBed.inject(ShiftService);
     httpMock = TestBed.inject(HttpTestingController);
