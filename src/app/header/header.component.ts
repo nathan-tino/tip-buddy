@@ -24,20 +24,22 @@ export class HeaderComponent implements OnDestroy {
         this.isLoggedIn = val;
       });
   }
-  
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
   logout() {
-    this.authService.logout().subscribe({
-      next: () => {
-        this.router.navigate(['/login']);
-      },
-      error: (err) => {
-        this.router.navigate(['/login']);
-      }
-    });
+    this.authService.logout()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/login']);
+        },
+        error: (err) => {
+          this.router.navigate(['/login']);
+        }
+      });
   }
 }
