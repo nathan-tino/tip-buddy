@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { LoginDto } from '../dtos/login.dto';
 import { RegisterDto } from '../dtos/register.dto';
@@ -22,8 +23,11 @@ export class AuthService {
 
   login(dto: LoginDto): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(this.loginUrl, dto, { withCredentials: true }).pipe(
-      // Set login state to true on successful login
-      tap(() => this._isLoggedIn.next(true))
+      tap(() => this._isLoggedIn.next(true)),
+      catchError(err => {
+        this._isLoggedIn.next(false);
+        throw err;
+      })
     );
   }
   
@@ -33,7 +37,6 @@ export class AuthService {
 
   logout(): Observable<any> {
     return this.http.post<any>(this.logoutUrl, {}, { withCredentials: true }).pipe(
-      // Set login state to false on logout
       tap(() => this._isLoggedIn.next(false))
     );
   }
