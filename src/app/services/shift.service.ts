@@ -9,7 +9,7 @@ import { environment } from "../../environments/environment";
 
 @Injectable({ providedIn: 'root' })
 export class ShiftService {
-    private apiUrl = `${environment.apiBaseUrl}/api/shifts`;
+    private apiUrl = `${environment.apiBaseUrl}/shifts`;
 
     constructor(private http: HttpClient) { }
 
