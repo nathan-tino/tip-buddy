@@ -12,6 +12,7 @@ import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  // TODO: Implement verify authentication by calling a protected backend endpoint (e.g., /api/Auth/me)
   private loginUrl = `${environment.apiBaseUrl}/api/Auth/login`;
   private registerUrl = `${environment.apiBaseUrl}/api/Auth/register`;
   private logoutUrl = `${environment.apiBaseUrl}/api/Auth/logout`;
