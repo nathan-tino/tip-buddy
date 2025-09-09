@@ -1,17 +1,3 @@
-@if (summaryData) {
-    <div class="summary-bar">
-        <div>Total Tips: {{ summaryData.totalTips | currency:'USD':'symbol':'1.0-0' }}</div>
-        <div>Average Tips Per Shift: {{ summaryData.averageTipsPerShift | currency:'USD':'symbol':'1.0-0' }}</div>
-        <div>Cash Tips Total: {{ summaryData.cashTipsTotal | currency:'USD':'symbol':'1.0-0' }}</div>
-        <div>Credit Tips Total: {{ summaryData.creditTipsTotal | currency:'USD':'symbol':'1.0-0' }}</div>
-        <div>Cash Tips Percentage: {{ summaryData.cashTipsPercentage | number:'1.0-0' }}%</div>
-        <div>Credit Tips Percentage: {{ summaryData.creditTipsPercentage | number:'1.0-0' }}%</div>
-        <div>Tips Per Hour: {{ summaryData.tipsPerHour | currency:'USD':'symbol':'1.0-0' }}</div>
-        <div>Total Shifts: {{ summaryData.totalShifts }}</div>
-        <div>Total Hours Worked: {{ summaryData.totalHoursWorked }}</div>
-    </div>
-}
-
 <div class="interval-bar">
     <div class="equal-width left">
         <label for="weekPicker">Pick a day: &nbsp;</label>
@@ -32,16 +18,41 @@
     </div>
 </div>
 
+
 <section id="shifts">
     @if (firstDayOfInterval) {
         <app-week
-            [firstDay]="firstDayOfInterval"
-            [shifts]="shifts"
-            (addShift)="onAddShift($event)"
-            (deleteShift)="onDeleteShift($event)"
-            (editShift)="onEditShift($event)"/>
+        [firstDay]="firstDayOfInterval"
+        [shifts]="shifts"
+        (addShift)="onAddShift($event)"
+        (deleteShift)="onDeleteShift($event)"
+        (editShift)="onEditShift($event)"/>
     }
 </section>
+
+@if (shifts && shifts.length > 0 && summaryData) {
+    <div class="summary-bar">
+        <div class="summary-data">
+            <div class="emphasis">Total Tips: {{ summaryData.totalTips | currency:'USD':'symbol':'1.0-0' }}</div>
+            <div>Cash Tips: {{ summaryData.cashTipsTotal | currency:'USD':'symbol':'1.0-0' }}</div>
+            <div>Credit Tips: {{ summaryData.creditTipsTotal | currency:'USD':'symbol':'1.0-0' }}</div>
+            <br />
+            <div class="emphasis">Total Shifts: {{ summaryData.totalShifts }}</div>
+            <div>Hours Worked: {{ summaryData.totalHoursWorked }}</div>
+            <div>Average Tips Per Shift: {{ summaryData.averageTipsPerShift | currency:'USD':'symbol':'1.0-0' }}</div>
+            <div>Tips Per Hour: {{ summaryData.tipsPerHour | currency:'USD':'symbol':'1.0-0' }}</div>
+        </div>
+        <div class="summary-chart">
+            <canvas baseChart
+                [data]="doughnutChartData"
+                [type]="'doughnut'"
+                [options]="doughnutChartOptions"
+                [plugins]="[]"
+                width="300" height="300">
+            </canvas>
+        </div>
+    </div>
+}
 
 @if(isAddingShift) {
     <app-add-shift [shiftDate]="dateToAddShift" (close)="onFinishAddShift($event)" />
