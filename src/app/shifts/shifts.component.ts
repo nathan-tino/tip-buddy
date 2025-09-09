@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { DatePipe, DecimalPipe, CurrencyPipe } from '@angular/common';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { DatePipe, CurrencyPipe } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { ShiftService } from '../services/shift.service';
 import { GetShiftDto } from '../dtos/get-shift.dto';
@@ -10,7 +12,7 @@ import { WeekComponent } from "./week/week.component";
 import { AddShiftComponent } from './add-shift/add-shift.component';
 import { EditShiftComponent } from './edit-shift/edit-shift.component';
 
-import { Chart, ChartTypeRegistry } from 'chart.js';
+import { ChartTypeRegistry } from 'chart.js';
 
 // Extend Chart.js types to include custom doughnutCenterText plugin
 declare module 'chart.js' {
@@ -24,36 +26,20 @@ declare module 'chart.js' {
   }
 }
 
-Chart.register({
-  id: 'doughnutCenterText',
-  afterDraw: function(chart) {
-    if (chart.config && chart.config.options && chart.config.options.plugins && chart.config.options.plugins.doughnutCenterText?.display) {
-      const { ctx, chartArea } = chart;
-      const centerConfig = chart.config.options.plugins.doughnutCenterText;
-      ctx.save();
-      const fontConfig = centerConfig.font ?? { size: 16, weight: 'normal' };
-      ctx.font = `${fontConfig.weight} ${fontConfig.size}px sans-serif`;
-      ctx.fillStyle = centerConfig.color ?? '#000';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(
-        centerConfig.text ?? '',
-        (chartArea.left + chartArea.right) / 2,
-        (chartArea.top + chartArea.bottom) / 2
-      );
-      ctx.restore();
-    }
-  }
-});
+// NOTE: The doughnut center-text plugin is registered in
+// `src/app/charts/doughnut-plugin.ts` and imported for its side-effect from
+// `src/app/app.config.ts`. That keeps plugin registration centralized and
+// prevents duplicate registrations during hot module reloads (HMR) or
+// repeated imports.
 
 @Component({
   selector: 'app-shifts',
   standalone: true,
-  imports: [AddShiftComponent, BaseChartDirective, EditShiftComponent, DatePipe, DecimalPipe, CurrencyPipe, WeekComponent],
+  imports: [AddShiftComponent, BaseChartDirective, EditShiftComponent, DatePipe, CurrencyPipe, WeekComponent],
   templateUrl: './shifts.component.html',
   styleUrl: './shifts.component.css'
 })
-export class ShiftsComponent implements OnInit {
+export class ShiftsComponent implements OnInit, OnDestroy {
     isAddingShift = false;
     isEditingShift = false;
     shifts: GetShiftDto[] = [];
@@ -107,6 +93,8 @@ export class ShiftsComponent implements OnInit {
         }
       };
 
+    private destroy$ = new Subject<void>();
+
   constructor(private shiftService: ShiftService, private dateService: DateService) { }
 
   ngOnInit(): void {
@@ -115,28 +103,34 @@ export class ShiftsComponent implements OnInit {
 
   loadShifts(): void {
     this.shiftService.getShiftsSummary(this.firstDayOfInterval!, this.lastDayOfInterval!)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((summary: ShiftsSummaryDto) => {
         this.shifts = Array.isArray(summary.shifts)
           ? summary.shifts.sort(this.shiftService.sortByDateAscending)
           : [];
 
         this.summaryData = summary;
-        // Update chart data
-        this.doughnutChartData = {
-          labels: [
-            `Cash Tips (${this.summaryData.cashTipsPercentage.toFixed(1)}%)`,
-            `Credit Tips (${this.summaryData.creditTipsPercentage.toFixed(1)}%)`
-          ],
-          datasets: [
-            {
-              data: [summary.cashTipsTotal, summary.creditTipsTotal],
-              backgroundColor: ['#4caf50', '#2196f3']
-            }
-          ]
-        };
-        // Dynamically update center text value
-        this.doughnutChartOptions.plugins.doughnutCenterText.text = `$${summary.totalTips?.toLocaleString() || '0'}`;
+        this.updateChart(summary);
       });
+  }
+
+  private updateChart(summary: ShiftsSummaryDto) {
+    this.doughnutChartData = {
+      labels: [
+        `Cash Tips (${summary.cashTipsPercentage.toFixed(1)}%)`,
+        `Credit Tips (${summary.creditTipsPercentage.toFixed(1)}%)`
+      ],
+      datasets: [
+        {
+          data: [summary.cashTipsTotal, summary.creditTipsTotal],
+          backgroundColor: ['#4caf50', '#2196f3']
+        }
+      ]
+    };
+
+    if (this.doughnutChartOptions && this.doughnutChartOptions.plugins && this.doughnutChartOptions.plugins.doughnutCenterText) {
+      this.doughnutChartOptions.plugins.doughnutCenterText.text = `$${summary.totalTips?.toLocaleString() || '0'}`;
+    }
   }
 
   onAddShift(date: Date | undefined) {
@@ -182,18 +176,22 @@ export class ShiftsComponent implements OnInit {
       next: () => {
         console.log('Shift deleted successfully');
         // TODO: show a dialog on success
-        const index = this.shifts.findIndex(shift => shift.id === id);
-        if (index !== -1) {
-          this.shifts.splice(index, 1);
-        }
-
+        // Use immutable update to avoid accidental in-place mutations
+        this.shifts = this.shifts.filter(shift => shift.id !== id);
         this.updateShiftsSignal();
+        // Refresh summary/chart to keep UI consistent with backend
+        this.loadShifts();
       },
       error: (err) => {
         console.error('Error deleting shift', err);
         // TODO: Handle error scenario, like showing an error message
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onNextInterval() {
