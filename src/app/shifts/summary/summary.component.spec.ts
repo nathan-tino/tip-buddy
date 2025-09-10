@@ -24,6 +24,8 @@ describe('SummaryComponent', () => {
 
   it('should create the component', () => {
     expect(component).toBeTruthy();
+    // Test initial center text when summaryData is null
+    expect(component.doughnutChartOptions.plugins.doughnutCenterText.text).toBe('$0');
   });
 
   it('updateChart updates doughnut data and center text', () => {
@@ -55,5 +57,15 @@ describe('SummaryComponent', () => {
     expect(component.doughnutChartData.datasets[0].data[0]).toBe(200);
     expect(component.doughnutChartData.datasets[0].data[1]).toBe(100);
     expect(component.doughnutChartOptions.plugins.doughnutCenterText.text).toContain('300');
+
+    // Test tooltip callback
+    const mockContext = { label: 'Cash Tips', parsed: 200 };
+    const tooltipLabel = component.doughnutChartOptions.plugins.tooltip.callbacks.label(mockContext);
+    expect(tooltipLabel).toBe('Cash Tips: $200');
+
+    // Test tooltip callback with empty label
+    const mockContextEmpty = { label: '', parsed: 100 };
+    const tooltipLabelEmpty = component.doughnutChartOptions.plugins.tooltip.callbacks.label(mockContextEmpty);
+    expect(tooltipLabelEmpty).toBe(': $100');
   });
 });
