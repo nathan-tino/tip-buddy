@@ -1,46 +1,9 @@
-.emphasis {
-    font-weight: bold;
-    color: #3a2c54;
-    font-size: 1.15rem;
-    letter-spacing: 0.5px;
-}
-
 #shifts {
     padding: 1rem;
     border-radius: 8px;
     overflow: auto;
     background-color: #3a2c54;
     display: grid;
-}
-
-.summary-bar {
-    margin-top: 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #f7f6fa;
-    border-radius: 8px;
-    padding: 1.5rem 2rem 1.5rem 0;
-    margin-bottom: 2rem;
-    box-shadow: 0 2px 8px rgba(60,40,90,0.08);
-}
-
-.summary-data {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    font-size: 1.05rem;
-    color: #2d1c3a;
-    align-items: flex-end;
-    flex: 1;
-}
-
-.summary-chart {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    min-width: 180px;
-    flex: 1;
 }
 
 header {

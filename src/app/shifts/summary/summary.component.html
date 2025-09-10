@@ -1,0 +1,23 @@
+@if (summaryData) {
+    <div class="summary-bar">
+        <div class="summary-data">
+            <div class="emphasis">Total Tips: {{ summaryData.totalTips | currency:'USD':'symbol':'1.0-0' }}</div>
+            <div>Cash Tips: {{ summaryData.cashTipsTotal | currency:'USD':'symbol':'1.0-0' }}</div>
+            <div>Credit Tips: {{ summaryData.creditTipsTotal | currency:'USD':'symbol':'1.0-0' }}</div>
+            <br />
+            <div class="emphasis">Hours Worked: {{ summaryData.totalHoursWorked }}</div>
+            <div>Total Shifts: {{ summaryData.totalShifts }}</div>
+            <div>Average Tips Per Shift: {{ summaryData.averageTipsPerShift | currency:'USD':'symbol':'1.0-0' }}</div>
+            <div>Tips Per Hour: {{ summaryData.tipsPerHour | currency:'USD':'symbol':'1.0-0' }}</div>
+        </div>
+        <div class="summary-chart">
+            <canvas baseChart
+                [data]="doughnutChartData"
+                [type]="'doughnut'"
+                [options]="doughnutChartOptions"
+                [plugins]="[]"
+                width="300" height="300">
+            </canvas>
+        </div>
+    </div>
+}

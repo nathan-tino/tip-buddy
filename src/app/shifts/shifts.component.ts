@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DatePipe, CurrencyPipe } from '@angular/common';
-import { BaseChartDirective } from 'ng2-charts';
+import { DatePipe } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -11,31 +10,12 @@ import { DateService } from '../services/date.service';
 import { WeekComponent } from "./week/week.component";
 import { AddShiftComponent } from './add-shift/add-shift.component';
 import { EditShiftComponent } from './edit-shift/edit-shift.component';
-
-import { ChartTypeRegistry } from 'chart.js';
-
-// Extend Chart.js types to include custom doughnutCenterText plugin
-declare module 'chart.js' {
-  interface PluginOptionsByType<TType extends keyof ChartTypeRegistry> {
-    doughnutCenterText?: {
-      display: boolean;
-      text: string;
-      color: string;
-      font: { size: number; weight: string };
-    };
-  }
-}
-
-// NOTE: The doughnut center-text plugin is registered in
-// `src/app/charts/doughnut-plugin.ts` and imported for its side-effect from
-// `src/app/app.config.ts`. That keeps plugin registration centralized and
-// prevents duplicate registrations during hot module reloads (HMR) or
-// repeated imports.
+import { SummaryComponent } from './summary/summary.component';
 
 @Component({
   selector: 'app-shifts',
   standalone: true,
-  imports: [AddShiftComponent, BaseChartDirective, EditShiftComponent, DatePipe, CurrencyPipe, WeekComponent],
+  imports: [AddShiftComponent, EditShiftComponent, DatePipe, WeekComponent, SummaryComponent],
   templateUrl: './shifts.component.html',
   styleUrl: './shifts.component.css'
 })
@@ -48,50 +28,6 @@ export class ShiftsComponent implements OnInit, OnDestroy {
     lastDayOfInterval: Date | undefined;
     dateToAddShift: Date | undefined;
     summaryData: Omit<ShiftsSummaryDto, 'shifts'> | null = null;
-
-    doughnutChartData = {
-      labels: ['Cash Tips', 'Credit Tips'],
-      datasets: [
-        { data: [0, 0], backgroundColor: ['#4caf50', '#2196f3'] }
-      ]
-    };
-
-    doughnutChartOptions = {
-        responsive: false,
-        plugins: {
-          legend: {
-            position: 'bottom' as 'bottom'
-          },
-          title: {
-            display: true,
-            text: 'Tips Breakdown'
-          },
-          tooltip: {
-            callbacks: {
-              label: (context: any) => {
-                const label = context.label || '';
-                const value = context.parsed;
-                let percent = '';
-                if (this.summaryData) {
-                  if (label === 'Cash Tips') {
-                    percent = ` (${this.summaryData.cashTipsPercentage.toFixed(1)}%)`;
-                  } else if (label === 'Credit Tips') {
-                    percent = ` (${this.summaryData.creditTipsPercentage.toFixed(1)}%)`;
-                  }
-                }
-                return `${label}: $${value.toLocaleString()}${percent}`;
-              }
-            }
-          },
-          // Custom plugin for center text
-          doughnutCenterText: {
-            display: true,
-            text: `$${this.summaryData?.totalTips?.toLocaleString() || '0'}`,
-            color: '#222',
-            font: { size: 22, weight: 'bold' }
-          }
-        }
-      };
 
     private destroy$ = new Subject<void>();
 
@@ -110,27 +46,7 @@ export class ShiftsComponent implements OnInit, OnDestroy {
           : [];
 
         this.summaryData = summary;
-        this.updateChart(summary);
       });
-  }
-
-  private updateChart(summary: ShiftsSummaryDto) {
-    this.doughnutChartData = {
-      labels: [
-        `Cash Tips (${summary.cashTipsPercentage.toFixed(1)}%)`,
-        `Credit Tips (${summary.creditTipsPercentage.toFixed(1)}%)`
-      ],
-      datasets: [
-        {
-          data: [summary.cashTipsTotal, summary.creditTipsTotal],
-          backgroundColor: ['#4caf50', '#2196f3']
-        }
-      ]
-    };
-
-    if (this.doughnutChartOptions && this.doughnutChartOptions.plugins && this.doughnutChartOptions.plugins.doughnutCenterText) {
-      this.doughnutChartOptions.plugins.doughnutCenterText.text = `$${summary.totalTips?.toLocaleString() || '0'}`;
-    }
   }
 
   onAddShift(date: Date | undefined) {

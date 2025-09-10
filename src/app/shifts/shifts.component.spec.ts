@@ -6,6 +6,7 @@ Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { AddShiftComponent } from './add-shift/add-shift.component';
 import { EditShiftComponent } from './edit-shift/edit-shift.component';
+import { SummaryComponent } from './summary/summary.component';
 import { BaseChartDirective } from 'ng2-charts';
 import { DatePipe, CurrencyPipe } from '@angular/common';
 import { of, throwError } from 'rxjs';
@@ -86,7 +87,7 @@ describe('ShiftsComponent', () => {
     // Explicitly override ShiftsComponent imports to use only the stub
     TestBed.overrideComponent(ShiftsComponent, {
       set: {
-        imports: [AddShiftComponent, BaseChartDirective, EditShiftComponent, DatePipe, CurrencyPipe, StubWeekComponent]
+        imports: [AddShiftComponent, BaseChartDirective, EditShiftComponent, DatePipe, CurrencyPipe, StubWeekComponent, SummaryComponent]
       }
     });
 
@@ -96,7 +97,8 @@ describe('ShiftsComponent', () => {
         AddShiftComponent,
         EditShiftComponent,
         BaseChartDirective,
-        StubWeekComponent
+        StubWeekComponent,
+        SummaryComponent
       ],
       providers: [
         { provide: ShiftService, useValue: mockShiftService },
@@ -208,23 +210,6 @@ describe('ShiftsComponent', () => {
     component.onEditShift(mockShifts[0]);
     expect(component.activeShift).toEqual(mockShifts[0]);
     expect(component.isEditingShift).toBeTrue();
-  });
-
-  it('updateChart updates doughnut data and center text', () => {
-    const summary: any = {
-      cashTipsTotal: 200,
-      creditTipsTotal: 100,
-      cashTipsPercentage: 66.6667,
-      creditTipsPercentage: 33.3333,
-      totalTips: 300
-    };
-
-    // call private method via bracket syntax
-    (component as any).updateChart(summary);
-
-    expect(component.doughnutChartData.datasets[0].data[0]).toBe(200);
-    expect(component.doughnutChartData.datasets[0].data[1]).toBe(100);
-    expect(component.doughnutChartOptions.plugins.doughnutCenterText.text).toContain('300');
   });
 
   function resetShifts() {
