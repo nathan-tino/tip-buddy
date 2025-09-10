@@ -30,8 +30,8 @@
     }
 </section>
 
-@if (shifts && shifts.length > 0 && summaryData) {
-    <app-summary [summaryData]="summaryData"></app-summary>
+@if (shifts && shifts.length > 0) {
+    <app-summary [shifts]="shifts"></app-summary>
 }
 
 @if(isAddingShift) {

@@ -3,6 +3,8 @@ import { CurrencyPipe } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
 
 import { ShiftsSummaryDto } from '../../dtos/shifts-summary.dto';
+import { GetShiftDto } from '../../dtos/get-shift.dto';
+import { ShiftService } from '../../services/shift.service';
 import { ChartTypeRegistry } from 'chart.js';
 
 // NOTE: The doughnut center-text plugin is registered in
@@ -31,7 +33,10 @@ declare module 'chart.js' {
   styleUrl: './summary.component.css'
 })
 export class SummaryComponent implements OnChanges {
-  @Input() summaryData: Omit<ShiftsSummaryDto, 'shifts'> | null = null;
+  @Input() shifts: GetShiftDto[] = [];
+  summaryData: Omit<ShiftsSummaryDto, 'shifts'> | null = null;
+
+  constructor(private shiftService: ShiftService) {}
 
   doughnutChartData = {
     labels: ['Cash Tips', 'Credit Tips'],
@@ -62,7 +67,7 @@ export class SummaryComponent implements OnChanges {
         // Custom plugin for center text
         doughnutCenterText: {
           display: true,
-          text: `$${this.summaryData?.totalTips?.toLocaleString() || '0'}`,
+          text: '$0',
           color: '#222',
           font: { size: 22, weight: 'bold' }
         }
@@ -70,12 +75,25 @@ export class SummaryComponent implements OnChanges {
     };
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['summaryData'] && this.summaryData) {
+    if (changes['shifts']) {
+      const summary = this.shiftService.calculateShiftsSummary(this.shifts);
+      this.summaryData = summary;
       this.updateChart(this.summaryData);
     }
   }
 
-  private updateChart(summary: Omit<ShiftsSummaryDto, 'shifts'>) {
+  private updateChart(summary: Omit<ShiftsSummaryDto, 'shifts'> | null) {
+    if (!summary) {
+      this.doughnutChartData = {
+        labels: ['Cash Tips', 'Credit Tips'],
+        datasets: [{ data: [0, 0], backgroundColor: ['#4caf50', '#2196f3'] }]
+      };
+      if (this.doughnutChartOptions && this.doughnutChartOptions.plugins && this.doughnutChartOptions.plugins.doughnutCenterText) {
+        this.doughnutChartOptions.plugins.doughnutCenterText.text = '$0';
+      }
+      return;
+    }
+
     this.doughnutChartData = {
       labels: [
         `Cash Tips (${summary.cashTipsPercentage.toFixed(1)}%)`,

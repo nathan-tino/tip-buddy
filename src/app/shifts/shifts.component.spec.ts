@@ -35,7 +35,7 @@ describe('ShiftsComponent', () => {
   const localDate = new Date('2023-01-01T00:00:00Z');
 
   beforeEach(async () => {
-    mockShiftService = jasmine.createSpyObj('ShiftService', ['getShiftsSummary', 'deleteShift', 'sortByDateAscending']);
+    mockShiftService = jasmine.createSpyObj('ShiftService', ['getShifts', 'deleteShift', 'sortByDateAscending', 'calculateShiftsSummary']);
     mockDateService = jasmine.createSpyObj('DateService', ['getFirstAndLastDayOfWeek', 'convertUtcToLocalDate', 'addDaysToDate']);
 
     mockDateService.getFirstAndLastDayOfWeek.and.returnValue({
@@ -44,26 +44,14 @@ describe('ShiftsComponent', () => {
     });
 
     mockDateService.convertUtcToLocalDate.and.returnValue(localDate);
-    const mockSummary: any = {
-      shifts: mockShifts,
-      cashTipsTotal: 50,
-      creditTipsTotal: 100,
-      cashTipsPercentage: 33.3333,
-      creditTipsPercentage: 66.6667,
-      totalTips: 150,
-      totalShifts: mockShifts.length,
-      totalHoursWorked: mockShifts.reduce((s, m) => s + (m.hoursWorked!), 0),
-      averageTipsPerShift: 150 / mockShifts.length,
-      tipsPerHour: 150 / mockShifts.reduce((s, m) => s + (m.hoursWorked!), 0),
-      // keep shifts array
-    };
-    mockShiftService.getShiftsSummary.and.returnValue(of(mockSummary));
+    
+    mockShiftService.getShifts.and.returnValue(of(mockShifts));
     mockShiftService.sortByDateAscending.and.callFake((a: GetShiftDto, b: GetShiftDto) =>
       new Date(a.date).getTime() - new Date(b.date).getTime()
     );
 
     // Reset spies
-    mockShiftService.getShiftsSummary.calls.reset();
+    mockShiftService.getShifts.calls.reset();
     mockShiftService.deleteShift.calls.reset();
     mockShiftService.sortByDateAscending.calls.reset();
     mockDateService.getFirstAndLastDayOfWeek.calls.reset();
@@ -127,7 +115,7 @@ describe('ShiftsComponent', () => {
   });
 
   it('should load shifts on init', () => {
-    expect(mockShiftService.getShiftsSummary).toHaveBeenCalled();
+    expect(mockShiftService.getShifts).toHaveBeenCalled();
     expect(component.shifts.length).toBe(1);
     expect(component.shifts[0].date).toEqual(localDate);
   });
@@ -170,19 +158,6 @@ describe('ShiftsComponent', () => {
   it('should delete shift on onDeleteShift', () => {
     resetShifts();
     mockShiftService.deleteShift.and.returnValue(of(void 0));
-    // After deletion, mock getShiftsSummary to return empty shifts
-    mockShiftService.getShiftsSummary.and.returnValue(of({
-      shifts: [],
-      cashTipsTotal: 0,
-      creditTipsTotal: 0,
-      cashTipsPercentage: 0,
-      creditTipsPercentage: 0,
-      totalTips: 0,
-      totalShifts: 0,
-      totalHoursWorked: 0,
-      averageTipsPerShift: 0,
-      tipsPerHour: 0
-    }));
 
     component.onDeleteShift(1);
     expect(mockShiftService.deleteShift).toHaveBeenCalledWith(1);
@@ -198,12 +173,12 @@ describe('ShiftsComponent', () => {
 
   it('should shift interval forward and reload', () => {
     component.onNextInterval();
-    expect(mockShiftService.getShiftsSummary).toHaveBeenCalledTimes(2);
+    expect(mockShiftService.getShifts).toHaveBeenCalledTimes(2);
   });
 
   it('should shift interval backward and reload', () => {
     component.onPreviousInterval();
-    expect(mockShiftService.getShiftsSummary).toHaveBeenCalledTimes(2);
+    expect(mockShiftService.getShifts).toHaveBeenCalledTimes(2);
   });
 
   it('should toggle editing state when onEditShift is called', () => {

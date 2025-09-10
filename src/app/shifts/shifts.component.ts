@@ -5,7 +5,6 @@ import { takeUntil } from 'rxjs/operators';
 
 import { ShiftService } from '../services/shift.service';
 import { GetShiftDto } from '../dtos/get-shift.dto';
-import { ShiftsSummaryDto } from '../dtos/shifts-summary.dto';
 import { DateService } from '../services/date.service';
 import { WeekComponent } from "./week/week.component";
 import { AddShiftComponent } from './add-shift/add-shift.component';
@@ -27,7 +26,6 @@ export class ShiftsComponent implements OnInit, OnDestroy {
     firstDayOfInterval: Date | undefined;
     lastDayOfInterval: Date | undefined;
     dateToAddShift: Date | undefined;
-    summaryData: Omit<ShiftsSummaryDto, 'shifts'> | null = null;
 
     private destroy$ = new Subject<void>();
 
@@ -38,14 +36,12 @@ export class ShiftsComponent implements OnInit, OnDestroy {
   }
 
   loadShifts(): void {
-    this.shiftService.getShiftsSummary(this.firstDayOfInterval!, this.lastDayOfInterval!)
+    this.shiftService.getShifts(this.firstDayOfInterval!, this.lastDayOfInterval!)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((summary: ShiftsSummaryDto) => {
-        this.shifts = Array.isArray(summary.shifts)
-          ? summary.shifts.sort(this.shiftService.sortByDateAscending)
+      .subscribe((shifts: GetShiftDto[]) => {
+        this.shifts = Array.isArray(shifts)
+          ? shifts.sort(this.shiftService.sortByDateAscending)
           : [];
-
-        this.summaryData = summary;
       });
   }
 
@@ -95,8 +91,6 @@ export class ShiftsComponent implements OnInit, OnDestroy {
         // Use immutable update to avoid accidental in-place mutations
         this.shifts = this.shifts.filter(shift => shift.id !== id);
         this.updateShiftsSignal();
-        // Refresh summary/chart to keep UI consistent with backend
-        this.loadShifts();
       },
       error: (err) => {
         console.error('Error deleting shift', err);

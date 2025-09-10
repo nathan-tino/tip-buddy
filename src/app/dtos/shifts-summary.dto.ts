@@ -5,6 +5,7 @@ export interface ShiftsSummaryDto {
   averageTipsPerShift: number;
   cashTipsTotal: number;
   creditTipsTotal: number;
+  totalTipout: number;
   cashTipsPercentage: number;
   creditTipsPercentage: number;
   tipsPerHour: number;

@@ -2,19 +2,25 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SimpleChanges } from '@angular/core';
 import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js';
 
+import { SummaryComponent } from './summary.component';
+import { ShiftService } from '../../services/shift.service';
+
 // Register Chart.js controllers and elements for tests
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
-
-import { SummaryComponent } from './summary.component';
-import { ShiftsSummaryDto } from '../../dtos/shifts-summary.dto';
 
 describe('SummaryComponent', () => {
   let component: SummaryComponent;
   let fixture: ComponentFixture<SummaryComponent>;
+  let mockShiftService: jasmine.SpyObj<ShiftService>;
 
   beforeEach(async () => {
+    mockShiftService = jasmine.createSpyObj('ShiftService', ['calculateShiftsSummary']);
+
     await TestBed.configureTestingModule({
-      imports: [SummaryComponent]
+      imports: [SummaryComponent],
+      providers: [
+        { provide: ShiftService, useValue: mockShiftService }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(SummaryComponent);
@@ -29,23 +35,34 @@ describe('SummaryComponent', () => {
   });
 
   it('updateChart updates doughnut data and center text', () => {
-    const summary: Omit<ShiftsSummaryDto, 'shifts'> = {
+    const mockShifts = [{
+      id: 1,
+      date: new Date(),
+      cashTips: 200,
+      creditTips: 100,
+      tipout: 0,
+      hoursWorked: 5
+    }];
+
+    mockShiftService.calculateShiftsSummary.and.returnValue({
       cashTipsTotal: 200,
       creditTipsTotal: 100,
+      totalTipout: 0,
       cashTipsPercentage: 66.6667,
       creditTipsPercentage: 33.3333,
       totalTips: 300,
       totalShifts: 1,
       totalHoursWorked: 5,
       averageTipsPerShift: 300,
-      tipsPerHour: 60
-    };
+      tipsPerHour: 60,
+      shifts: mockShifts
+    });
 
     // Set the input and trigger ngOnChanges
-    component.summaryData = summary;
+    component.shifts = mockShifts;
     const changes: SimpleChanges = {
-      summaryData: {
-        currentValue: summary,
+      shifts: {
+        currentValue: mockShifts,
         previousValue: null,
         firstChange: true,
         isFirstChange: () => true

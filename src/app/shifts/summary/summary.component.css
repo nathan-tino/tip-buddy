@@ -34,3 +34,8 @@
     min-width: 180px;
     flex: 1;
 }
+
+.tipout-note {
+    font-size: 0.7em;
+    color: #888;
+}
