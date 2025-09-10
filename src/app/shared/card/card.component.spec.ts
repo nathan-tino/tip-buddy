@@ -3,7 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CardComponent } from './card.component';
 
 @Component({
-  template: `<app-card><p class="test-content">Hello from inside card</p></app-card>`
+  template: `<app-card><p class="test-content">Hello from inside card</p></app-card>`,
+  imports: [CardComponent]
 })
 class TestHostComponent {}
 
@@ -12,8 +13,7 @@ describe('CardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CardComponent],
-      declarations: [TestHostComponent],
+      imports: [CardComponent, TestHostComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);

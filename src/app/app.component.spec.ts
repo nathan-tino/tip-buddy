@@ -24,10 +24,10 @@ describe('AppComponent', () => {
     expect(compiled.querySelector('app-header')).toBeTruthy();
   });
 
-  it('should render the shifts component', () => {
+  it('should render the router outlet', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('app-shifts')).toBeTruthy();
+    expect(compiled.querySelector('router-outlet')).toBeTruthy();
   });
 });
