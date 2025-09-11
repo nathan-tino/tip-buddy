@@ -12,7 +12,7 @@ Run `ng serve --ssl true` for a dev server - this will run without local certifi
 
 --OR--
 
-You can generate a self-trusted cert by following these steps:
+You can generate a self-trusted certificate by following these steps:
 
 1. Run cmd as administrator
 
@@ -34,6 +34,6 @@ Now, whenever you want to run the site, use:
 --OR--
     `npm start` --already configured to use the above command
 
-DO NOT check your generated *.pem files. They are already added to the .gitignore but double check that they don't accidentally get checked in.
+DO NOT check-in your generated *.pem files. They are already added to the .gitignore but double check that they don't accidentally get checked in.
 
 Navigate to `https://localhost:4200/`. The application will automatically reload if you change any of the source files.
