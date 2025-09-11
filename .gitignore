@@ -44,3 +44,7 @@ Thumbs.db
 
 #Ignore vscode AI rules
 .github\instructions\codacy.instructions.md
+
+# Ignore SSL cert and key files
+localhost.pem
+localhost-key.pem
