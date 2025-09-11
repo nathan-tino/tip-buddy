@@ -1,4 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js';
+
+// Register Chart.js controllers and elements for tests
+Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { AddShiftComponent } from './add-shift/add-shift.component';
+import { EditShiftComponent } from './edit-shift/edit-shift.component';
+import { SummaryComponent } from './summary/summary.component';
+import { BaseChartDirective } from 'ng2-charts';
+import { DatePipe, CurrencyPipe } from '@angular/common';
 import { of, throwError } from 'rxjs';
 import { ShiftsComponent } from './shifts.component';
 import { ShiftService } from '../services/shift.service';
@@ -25,7 +35,7 @@ describe('ShiftsComponent', () => {
   const localDate = new Date('2023-01-01T00:00:00Z');
 
   beforeEach(async () => {
-    mockShiftService = jasmine.createSpyObj('ShiftService', ['getShifts', 'deleteShift', 'sortByDateAscending']);
+    mockShiftService = jasmine.createSpyObj('ShiftService', ['getShifts', 'deleteShift', 'sortByDateAscending', 'calculateShiftsSummary']);
     mockDateService = jasmine.createSpyObj('DateService', ['getFirstAndLastDayOfWeek', 'convertUtcToLocalDate', 'addDaysToDate']);
 
     mockDateService.getFirstAndLastDayOfWeek.and.returnValue({
@@ -34,6 +44,7 @@ describe('ShiftsComponent', () => {
     });
 
     mockDateService.convertUtcToLocalDate.and.returnValue(localDate);
+    
     mockShiftService.getShifts.and.returnValue(of(mockShifts));
     mockShiftService.sortByDateAscending.and.callFake((a: GetShiftDto, b: GetShiftDto) =>
       new Date(a.date).getTime() - new Date(b.date).getTime()
@@ -47,8 +58,36 @@ describe('ShiftsComponent', () => {
     mockDateService.convertUtcToLocalDate.calls.reset();
     mockDateService.addDaysToDate.calls.reset();
 
+    // Create a lightweight stub for the child WeekComponent as a standalone component
+    @Component({
+      selector: 'app-week',
+      template: '',
+      standalone: true
+    })
+    class StubWeekComponent {
+      @Input() firstDay: unknown;
+      @Input() shifts: unknown;
+      @Output() addShift = new EventEmitter<Date>();
+      @Output() editShift = new EventEmitter<unknown>();
+      @Output() deleteShift = new EventEmitter<number>();
+    }
+
+    // Explicitly override ShiftsComponent imports to use only the stub
+    TestBed.overrideComponent(ShiftsComponent, {
+      set: {
+        imports: [AddShiftComponent, BaseChartDirective, EditShiftComponent, DatePipe, CurrencyPipe, StubWeekComponent, SummaryComponent]
+      }
+    });
+
     await TestBed.configureTestingModule({
-      imports: [ShiftsComponent],
+      imports: [
+        ShiftsComponent,
+        AddShiftComponent,
+        EditShiftComponent,
+        BaseChartDirective,
+        StubWeekComponent,
+        SummaryComponent
+      ],
       providers: [
         { provide: ShiftService, useValue: mockShiftService },
         { provide: DateService, useValue: mockDateService }
@@ -57,6 +96,10 @@ describe('ShiftsComponent', () => {
 
     fixture = TestBed.createComponent(ShiftsComponent);
     component = fixture.componentInstance;
+    // Initialize inputs that child components (like WeekComponent) expect
+    component.firstDayOfInterval = new Date(2023, 0, 1);
+    component.lastDayOfInterval = new Date(2023, 0, 7);
+    component.shifts = [...mockShifts.map(s => ({ ...s }))];
     fixture.detectChanges(); // ngOnInit runs, shifts are loaded
   });
 

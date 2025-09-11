@@ -1,14 +1,12 @@
 import { Component, OnDestroy } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
-import { NgIf } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [NgIf],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })

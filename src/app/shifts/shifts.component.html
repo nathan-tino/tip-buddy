@@ -18,16 +18,21 @@
     </div>
 </div>
 
+
 <section id="shifts">
     @if (firstDayOfInterval) {
         <app-week
-            [firstDay]="firstDayOfInterval"
-            [shifts]="shifts"
-            (addShift)="onAddShift($event)"
-            (deleteShift)="onDeleteShift($event)"
-            (editShift)="onEditShift($event)"/>
+        [firstDay]="firstDayOfInterval"
+        [shifts]="shifts"
+        (addShift)="onAddShift($event)"
+        (deleteShift)="onDeleteShift($event)"
+        (editShift)="onEditShift($event)"/>
     }
 </section>
+
+@if (shifts && shifts.length > 0) {
+    <app-summary [shifts]="shifts"></app-summary>
+}
 
 @if(isAddingShift) {
     <app-add-shift [shiftDate]="dateToAddShift" (close)="onFinishAddShift($event)" />

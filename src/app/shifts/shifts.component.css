@@ -1,7 +1,6 @@
 #shifts {
     padding: 1rem;
     border-radius: 8px;
-    /* max-height: 60vh; */
     overflow: auto;
     background-color: #3a2c54;
     display: grid;
@@ -49,7 +48,6 @@ ul {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    /* max-height: 50vh; */
     overflow: auto;
 }
 

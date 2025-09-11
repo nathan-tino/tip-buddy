@@ -1,12 +1,9 @@
 import { Component, input, output } from '@angular/core';
-import { DatePipe } from '@angular/common';
-
 import { GetShiftDto } from '../../dtos/get-shift.dto';
 
 @Component({
   selector: 'app-day',
   standalone: true,
-  imports: [DatePipe],
   templateUrl: './day.component.html',
   styleUrl: './day.component.css'
 })
