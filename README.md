@@ -13,6 +13,7 @@ Run `ng serve --ssl true` for a dev server - this will run without local certifi
 --OR--
 
 You can generate a self-trusted cert by following these steps:
+
 1. Run cmd as administrator
 
 2. Install mkcert: (`https://github.com/FiloSottile/mkcert`)
