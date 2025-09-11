@@ -13,7 +13,7 @@ declare global {
 if (!window.__tipbuddy_doughnut_registered) {
   Chart.register({
     id: 'doughnutCenterText',
-    afterDraw: function(chart: any) {
+    afterDraw: function(chart: Chart) {
       if (chart.config && chart.config.options && chart.config.options.plugins && chart.config.options.plugins.doughnutCenterText?.display) {
         const { ctx, chartArea } = chart;
         const centerConfig = chart.config.options.plugins.doughnutCenterText;

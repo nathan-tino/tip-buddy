@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SimpleChanges } from '@angular/core';
-import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Chart, DoughnutController, ArcElement, Tooltip, Legend, TooltipItem } from 'chart.js';
 
 import { SummaryComponent } from './summary.component';
 import { ShiftService } from '../../services/shift.service';
@@ -76,12 +76,36 @@ describe('SummaryComponent', () => {
     expect(component.doughnutChartOptions.plugins.doughnutCenterText.text).toContain('300');
 
     // Test tooltip callback
-    const mockContext = { label: 'Cash Tips', parsed: 200 };
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const chart = new Chart(ctx!, { type: 'doughnut', data: { datasets: [] } });
+  const mockElement = {} as import('chart.js').Element<any, any>;
+    const mockContext: TooltipItem<'doughnut'> = {
+      chart,
+      label: 'Cash Tips',
+      parsed: 200,
+      raw: 200,
+      formattedValue: '200',
+      dataset: { data: [] },
+      dataIndex: 0,
+      datasetIndex: 0,
+      element: mockElement
+    };
     const tooltipLabel = component.doughnutChartOptions.plugins.tooltip.callbacks.label(mockContext);
     expect(tooltipLabel).toBe('Cash Tips: $200');
 
     // Test tooltip callback with empty label
-    const mockContextEmpty = { label: '', parsed: 100 };
+    const mockContextEmpty: TooltipItem<'doughnut'> = {
+      chart,
+      label: '',
+      parsed: 100,
+      raw: 100,
+      formattedValue: '100',
+      dataset: { data: [] },
+      dataIndex: 0,
+      datasetIndex: 0,
+      element: mockElement
+    };
     const tooltipLabelEmpty = component.doughnutChartOptions.plugins.tooltip.callbacks.label(mockContextEmpty);
     expect(tooltipLabelEmpty).toBe(': $100');
   });

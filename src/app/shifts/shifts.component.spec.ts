@@ -65,10 +65,10 @@ describe('ShiftsComponent', () => {
       standalone: true
     })
     class StubWeekComponent {
-      @Input() firstDay: any;
-      @Input() shifts: any;
+      @Input() firstDay: unknown;
+      @Input() shifts: unknown;
       @Output() addShift = new EventEmitter<Date>();
-      @Output() editShift = new EventEmitter<any>();
+      @Output() editShift = new EventEmitter<unknown>();
       @Output() deleteShift = new EventEmitter<number>();
     }
 
