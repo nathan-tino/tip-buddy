@@ -59,7 +59,11 @@ export class ShiftService {
         return this.http.put(`${this.apiUrl}/${id}`, shift, { withCredentials: true });
     }
 
-    sortByDateAscending(a: GetShiftDto, b: GetShiftDto): number {
+    /**
+     * 'this: void' ensures this function does not use or depend on the class instance.
+     * This allows it to be safely passed as a callback without losing context.
+     */
+    sortByDateAscending(this: void, a: GetShiftDto, b: GetShiftDto): number {
         return new Date(a.date).getTime() - new Date(b.date).getTime();
     }
 
@@ -86,9 +90,13 @@ export class ShiftService {
         const creditTipsTotal = rawCreditTipsTotal - totalTipout;
         const totalTips = cashTipsTotal + creditTipsTotal;
         const totalShifts = shifts.length;
+
+        // "s is GetShiftDto & { hoursWorked: number }" is a type guard to ensure hoursWorked is defined and a number
+        // Allows the use of s.hoursWorked in the reduce function without the need for non-null assertion
         const totalHoursWorked = shifts
-            .filter(s => s.hoursWorked !== undefined && s.hoursWorked !== null)
-            .reduce((sum, s) => sum + s.hoursWorked!, 0);
+            .filter((s): s is GetShiftDto & { hoursWorked: number } => typeof s.hoursWorked === 'number')
+            .reduce((sum, s) => sum + s.hoursWorked, 0);
+
         const averageTipsPerShift = totalShifts > 0 ? totalTips / totalShifts : 0;
         const cashTipsPercentage = totalTips > 0 ? (cashTipsTotal / totalTips) * 100 : 0;
         const creditTipsPercentage = totalTips > 0 ? (creditTipsTotal / totalTips) * 100 : 0;

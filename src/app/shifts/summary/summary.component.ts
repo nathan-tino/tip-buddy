@@ -84,42 +84,30 @@ export class SummaryComponent implements OnChanges {
 		}
 	}
 
-	/**
-	 * Uses optional chaining (?.) to safely access nested properties.
-	 * The && operator checks if the property exists before setting the text.
-	 * If any part is missing, nothing happens and no error is thrown.
-	 */
-	private setCenterText(text: string) {
-		this.doughnutChartOptions?.plugins?.doughnutCenterText &&
-		(this.doughnutChartOptions.plugins.doughnutCenterText.text = text);
-	}
-
 	private updateChart(summary: Omit<ShiftsSummaryDto, 'shifts'> | null) {
 		if (!summary) {
-		this.doughnutChartData = {
-			labels: [this.CASH_TIPS_LABEL, this.CREDIT_TIPS_LABEL],
-			datasets: [{ data: [0, 0], backgroundColor: ['#4caf50', '#2196f3'] }]
-		};
-		this.setCenterText('$0');
-		return;
+			this.doughnutChartData = {
+				labels: [this.CASH_TIPS_LABEL, this.CREDIT_TIPS_LABEL],
+				datasets: [{ data: [0, 0], backgroundColor: ['#4caf50', '#2196f3'] }]
+			};
+			this.doughnutChartOptions.plugins.doughnutCenterText.text = '$0';
+			return;
 		}
 
 		this.doughnutChartData = {
-		labels: [
-			`${this.CASH_TIPS_LABEL} (${summary.cashTipsPercentage.toFixed(1)}%)`,
-			`${this.CREDIT_TIPS_LABEL} (${summary.creditTipsPercentage.toFixed(1)}%)`
-		],
-		datasets: [
-			{
-			data: [summary.cashTipsTotal, summary.creditTipsTotal],
-			backgroundColor: ['#4caf50', '#2196f3']
-			}
-		]
+			labels: [
+				`${this.CASH_TIPS_LABEL} (${summary.cashTipsPercentage.toFixed(1)}%)`,
+				`${this.CREDIT_TIPS_LABEL} (${summary.creditTipsPercentage.toFixed(1)}%)`
+			],
+			datasets: [
+				{
+				data: [summary.cashTipsTotal, summary.creditTipsTotal],
+				backgroundColor: ['#4caf50', '#2196f3']
+				}
+			]
 		};
 
-		let totalTipsText = summary.totalTips != null
-			? `$${summary.totalTips.toLocaleString()}`
-			: '$0';
-		this.setCenterText(totalTipsText);
+		let totalTipsText = `$${summary.totalTips.toLocaleString()}`;
+		this.doughnutChartOptions.plugins.doughnutCenterText.text = totalTipsText;
 	}
 }
