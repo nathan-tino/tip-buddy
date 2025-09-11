@@ -9,7 +9,7 @@
         <th>Saturday</th>
     </tr>
     <tr>
-        @for(day of daysAndShifts; track day) {
+        @for(day of daysAndShifts; track trackByDate(day)) {
             <td>
                 <app-day
                     [date]="day.date"
@@ -21,4 +21,3 @@
         }
     </tr>
 </table>
-

@@ -4,54 +4,58 @@ import { DateService } from '../../services/date.service';
 import { DayComponent } from '../day/day.component';
 
 @Component({
-  selector: 'app-week',
-  standalone: true,
-  imports: [DayComponent],
-  templateUrl: './week.component.html',
-  styleUrl: './week.component.css'
+	selector: 'app-week',
+	standalone: true,
+	imports: [DayComponent],
+	templateUrl: './week.component.html',
+	styleUrl: './week.component.css'
 })
 export class WeekComponent {
-  firstDay = input.required<Date>();
-  shifts = input.required<GetShiftDto[]>();
-  addShift = output<Date>();
-  editShift = output<GetShiftDto>();
-  deleteShift = output<number>();
-  
-  daysOfWeek: number[] = [0, 1, 2, 3, 4, 5, 6];
-  daysAndShifts: { date: Date, shifts: any }[] = [];
+	firstDay = input.required<Date>();
+	shifts = input.required<GetShiftDto[]>();
+	addShift = output<Date>();
+	editShift = output<GetShiftDto>();
+	deleteShift = output<number>();
 
-  constructor(private dateService: DateService) { 
-    effect(() => {
-      this.populateDaysAndShifts();
-    });
-  }
-  
-  onAddShift(date: Date) {
-    this.addShift.emit(date);
-  }
+	daysOfWeek: number[] = [0, 1, 2, 3, 4, 5, 6];
+	daysAndShifts: { date: Date, shifts: GetShiftDto[] }[] = [];
 
-  onEditShift(shift: GetShiftDto) {
-    if (shift) {
-      this.editShift.emit(shift);
-    }
-  }
+	constructor(private dateService: DateService) {
+		effect(() => {
+			this.populateDaysAndShifts();
+		});
+	}
 
-  onDeleteShift(id: number) {
-    this.deleteShift.emit(id);
-  }
+	onAddShift(date: Date) {
+		this.addShift.emit(date);
+	}
 
-  private populateDaysAndShifts() {
-    this.daysAndShifts = [];
-    const shifts = this.shifts();
+	onEditShift(shift: GetShiftDto) {
+		if (shift) {
+			this.editShift.emit(shift);
+		}
+	}
 
-    for (let day of this.daysOfWeek) {
-      const date = this.dateService.addDaysToDate(this.firstDay(), day);
-      let shiftsOnThisDate = shifts.filter(s => s.date.toDateString() === date.toDateString());
+	onDeleteShift(id: number) {
+		this.deleteShift.emit(id);
+	}
 
-      this.daysAndShifts.push({
-        date: date,
-        shifts: shiftsOnThisDate
-      });
-    }
-  }
+	trackByDate(item: { date: Date, shifts: GetShiftDto[] }): string {
+		return item.date.toISOString();
+	}
+
+	private populateDaysAndShifts() {
+		this.daysAndShifts = [];
+		const shifts = this.shifts();
+
+		for (let day of this.daysOfWeek) {
+			const date = this.dateService.addDaysToDate(this.firstDay(), day);
+			let shiftsOnThisDate = shifts.filter(s => s.date.toDateString() === date.toDateString());
+
+			this.daysAndShifts.push({
+				date: date,
+				shifts: shiftsOnThisDate
+			});
+		}
+	}
 }
