@@ -4,7 +4,13 @@
 
 import { Chart } from 'chart.js';
 
-if (!(window as any).__tb_doughnut_registered) {
+declare global {
+  interface Window {
+    __tipbuddy_doughnut_registered?: boolean;
+  }
+}
+
+if (!window.__tipbuddy_doughnut_registered) {
   Chart.register({
     id: 'doughnutCenterText',
     afterDraw: function(chart: any) {
@@ -27,5 +33,5 @@ if (!(window as any).__tb_doughnut_registered) {
     }
   });
 
-  (window as any).__tb_doughnut_registered = true;
+  window.__tipbuddy_doughnut_registered = true;
 }
