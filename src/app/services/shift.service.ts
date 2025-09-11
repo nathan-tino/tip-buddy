@@ -88,14 +88,11 @@ export class ShiftService {
         const cashTipsTotal = shifts.reduce((sum, s) => sum + s.cashTips, 0);
         const rawCreditTipsTotal = shifts.reduce((sum, s) => sum + s.creditTips, 0);
         const creditTipsTotal = rawCreditTipsTotal - totalTipout;
+        
         const totalTips = cashTipsTotal + creditTipsTotal;
         const totalShifts = shifts.length;
-
-        // "s is GetShiftDto & { hoursWorked: number }" is a type guard to ensure hoursWorked is defined and a number
-        // Allows the use of s.hoursWorked in the reduce function without the need for non-null assertion
         const totalHoursWorked = shifts
-            .filter((s): s is GetShiftDto & { hoursWorked: number } => typeof s.hoursWorked === 'number')
-            .reduce((sum, s) => sum + s.hoursWorked, 0);
+            .reduce((sum, s) => sum + (typeof s.hoursWorked === 'number' ? s.hoursWorked : 0), 0);
 
         const averageTipsPerShift = totalShifts > 0 ? totalTips / totalShifts : 0;
         const cashTipsPercentage = totalTips > 0 ? (cashTipsTotal / totalTips) * 100 : 0;
