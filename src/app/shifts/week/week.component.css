@@ -1,11 +1,20 @@
 table {
-    width: 100%;
+    /* width: 100%;
     table-layout: fixed; /* Ensure all columns have equal width */
+    /* border-collapse: collapse; */
+    width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
+    margin-bottom: 0;
+    background: transparent;
 }
 
 th, td {
-    border: 1px solid;
+    /* border: 1px solid;
+    text-align: center;
+    vertical-align: top; */
+    border: 1px solid var(--p-surface-200);
     text-align: center;
     vertical-align: top;
+    background: transparent;
 }

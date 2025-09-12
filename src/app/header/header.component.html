@@ -1,9 +1,31 @@
-<header>
-  <div>
-    <h1>Tip Buddy!</h1>
-    <p>Get them tips put in there and do it right</p>
-    @if (isLoggedIn) {
-      <button (click)="logout()" class="logout-btn">Logout</button>
-    }
-  </div>
-</header>
+<div class="app-header">
+	<div class="header-content">
+		<div class="header-brand">
+			<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35" role="img"
+				aria-label="mint green lion emblem">
+				<!-- mane -->
+				<polygon points="17.5,3 32,12 28,30 7,30 3,12" fill="#2DD4BF" />
+
+				<!-- face base (matches previous background color) -->
+				<polygon points="17.5,9 26,16 22,28 13,28 9,16" fill="#99F6E4" />
+
+				<!-- eyes -->
+				<rect x="13" y="17" width="2" height="2" fill="#0F172A" />
+				<rect x="20" y="17" width="2" height="2" fill="#0F172A" />
+
+				<!-- nose -->
+				<polygon points="17.5,21 19,23 16,23" fill="#115E59" />
+			</svg>
+
+			<span class="header-brand-text">
+				<span class="header-title">Tip Buddy!</span>
+			</span>
+			<p>Get them tips put in there and do it right</p>
+		</div>
+		<div class="header-actions">
+			@if (isLoggedIn) {
+			<p-button (click)="logout()" label="Logout"></p-button>
+			}
+		</div>
+	</div>
+</div>

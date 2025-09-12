@@ -5,16 +5,17 @@
     letter-spacing: 0.5px;
 }
 
-.summary-bar {
-    margin-top: 1rem;
+.summary-content {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #f7f6fa;
-    border-radius: 8px;
-    padding: 1.5rem 2rem 1.5rem 0;
-    margin-bottom: 2rem;
-    box-shadow: 0 2px 8px rgba(60,40,90,0.08);
+    background-color: var(--p-surface-0);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    max-width: 1400px;
+    margin: 1.5rem auto 0 auto;
+    border: 1px solid var(--p-surface-200);
+    width: 100%;
 }
 
 .summary-data {
@@ -25,6 +26,7 @@
     color: #2d1c3a;
     align-items: flex-end;
     flex: 1;
+    padding-right: 45px;
 }
 
 .summary-chart {
@@ -33,6 +35,7 @@
     justify-content: flex-start;
     min-width: 180px;
     flex: 1;
+    padding-right: 45px;
 }
 
 .tipout-note {
