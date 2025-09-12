@@ -4,21 +4,6 @@ main {
     gap: 2rem;
 }
 
-#shifts {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 0.5rem;
-    overflow: auto;
-}
-
-@media (min-width: 768px) {
-    #shifts {
-        flex-direction: column;
-    }
-}
-
 .app-container {
     background-color: var(--p-surface-50);
     color: var(--p-surface-950);
