@@ -10,8 +10,8 @@
                 <tr class="shift-buttons">
                     <td>${{shift.creditTips + shift.cashTips - shift.tipout}}</td>
                     <td class="pull-right">
-                        <button class="shift-button" (click)="onEditShift(shift)">Edit</button>
-                        <button class="shift-button" (click)="onDeleteShift(shift.id)">Delete</button>
+                        <i class="pi pi-pencil edit-btn" (click)="onEditShift(shift)"></i>
+                        <i class="pi pi-trash delete-btn" (click)="onDeleteShift(shift.id)"></i>
                     </td>
                 </tr>
             }
@@ -19,6 +19,6 @@
     }
 
     <div>
-        <button class="hover-btn" (click)="onAddShift()">Add</button>
+        <i class="pi pi-plus add-btn" (click)="onAddShift()"></i>
     </div>
 </div>

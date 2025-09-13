@@ -1,13 +1,3 @@
-.hover-btn {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.cell-content:hover .hover-btn {
-    display: inline-block;
-    opacity: 1;
-}
-
 .cell-content {
     min-height: 100px;
 }
@@ -20,6 +10,33 @@
     text-align: right;
 }
 
-.shift-button {
-    margin-left: 2px;
+.edit-btn {
+    margin-right: 8px;
+}
+
+.edit-btn:hover {
+    color: var(--p-amber-400);
+}
+
+.delete-btn {
+    margin-right: 5px;
+}
+
+.delete-btn:hover {
+    color: var(--p-red-600);
+}
+
+.cell-content:hover .add-btn {
+    display: inline-block;
+    opacity: 1;
+}
+
+.add-btn {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: inline-block;
+}
+
+.add-btn:hover {
+    color: var(--p-primary-color);
 }
