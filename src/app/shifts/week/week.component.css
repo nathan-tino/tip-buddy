@@ -1,20 +1,138 @@
+/* Modern Week Table with Enhanced Visual Design */
 table {
-    /* width: 100%;
-    table-layout: fixed; /* Ensure all columns have equal width */
-    /* border-collapse: collapse; */
     width: 100%;
     table-layout: fixed;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     margin-bottom: 0;
-    background: transparent;
+    background: var(--p-surface-0);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--p-surface-100);
 }
 
-th, td {
-    /* border: 1px solid;
+/* Enhanced Header Styling */
+th {
+    background: linear-gradient(135deg, var(--p-surface-100) 0%, var(--p-surface-150) 100%);
+    color: var(--p-surface-900);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--text-sm);
+    padding: var(--spacing-lg);
     text-align: center;
-    vertical-align: top; */
-    border: 1px solid var(--p-surface-200);
+    vertical-align: middle;
+    border-bottom: 2px solid var(--p-surface-200);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+/* First and last header cells get rounded corners */
+th:first-child {
+    border-top-left-radius: var(--border-radius-lg);
+}
+
+th:last-child {
+    border-top-right-radius: var(--border-radius-lg);
+}
+
+/* Modern Cell Styling with Fixed Height */
+td {
+    background: var(--p-surface-0);
+    border-right: 1px solid var(--p-surface-100);
     text-align: center;
     vertical-align: top;
-    background: transparent;
+    padding: 0; /* Remove padding since day component handles its own */
+    height: 150px; /* Increased fixed height for better readability */
+    min-height: 150px;
+    max-height: 150px; /* Prevent cells from growing */
+    width: 14.28%; /* Equal width for all 7 days */
+    position: relative;
+    transition: background-color 0.2s ease-in-out;
+    overflow: hidden; /* Ensure content doesn't overflow */
+}
+
+/* Remove border from last column */
+td:last-child {
+    border-right: none;
+}
+
+/* Hover Effects for Better Interactivity */
+td:hover {
+    background: var(--p-surface-50);
+}
+
+/* Add subtle alternating pattern for better readability */
+tr:nth-child(even) td {
+    background: rgba(var(--p-surface-100), 0.3);
+}
+
+tr:nth-child(even) td:hover {
+    background: var(--p-surface-100);
+}
+
+/* Weekend Styling (Saturday and Sunday) */
+th:nth-child(1),
+th:nth-child(7),
+td:nth-child(1),
+td:nth-child(7) {
+    background: rgba(var(--brand-secondary), 0.1);
+}
+
+th:nth-child(1),
+th:nth-child(7) {
+    background: linear-gradient(135deg, rgba(var(--brand-secondary), 0.2) 0%, rgba(var(--brand-primary), 0.1) 100%);
+}
+
+/* Today Highlight */
+.today {
+    background: rgba(var(--brand-primary), 0.1) !important;
+    border: 2px solid var(--brand-primary);
+    border-radius: var(--border-radius-sm);
+}
+
+.today:hover {
+    background: rgba(var(--brand-primary), 0.15) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    th {
+        padding: var(--spacing-md) var(--spacing-sm);
+        font-size: var(--text-xs);
+    }
+    
+    td {
+        height: 120px; /* Slightly smaller on tablet */
+        min-height: 120px;
+        max-height: 120px;
+    }
+}
+
+@media (max-width: 640px) {
+    th {
+        padding: var(--spacing-sm) var(--spacing-xs);
+        font-size: 10px;
+    }
+    
+    td {
+        height: 100px; /* Smaller on mobile */
+        min-height: 100px;
+        max-height: 100px;
+    }
+}
+
+/* Loading State */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Focus Management for Accessibility */
+td:focus {
+    outline: 2px solid var(--p-primary-500);
+    outline-offset: -2px;
+    z-index: 5;
 }

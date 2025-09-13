@@ -1,5 +1,6 @@
-@if (summaryData) {
-    <div class="summary-content">
+<div class="summary-content">
+    @if (summaryData) {
+        <!-- Data State -->
         <div class="summary-data">
             <div class="emphasis">Total Tips: {{ summaryData.totalTips | currency:'USD':'symbol':'1.0-0' }}</div>
             <div>Cash Tips: {{ summaryData.cashTipsTotal | currency:'USD':'symbol':'1.0-0' }}</div>
@@ -22,5 +23,26 @@
                 width="300" height="300">
             </canvas>
         </div>
-    </div>
-}
+    } @else {
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="pi pi-chart-pie"></i>
+            </div>
+            <div class="empty-state-content">
+                <h3 class="empty-state-title">No Data to Display</h3>
+                <p class="empty-state-description">
+                    Add some shifts to see your earnings summary and analytics here.
+                </p>
+            </div>
+            <div class="empty-state-chart">
+                <div class="placeholder-chart">
+                    <div class="placeholder-ring"></div>
+                    <div class="placeholder-center">
+                        <span class="placeholder-text">$0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

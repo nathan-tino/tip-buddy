@@ -1,39 +1,94 @@
-<section class="shifts" id="shifts">
-    <div class="interval-bar">
-        <div class="equal-width left">
-            <label for="weekPicker">Pick a day: &nbsp;</label>
-            <input id="weekPicker" type="date" (change)="onWeekPickerChange($event)" />
-        </div>
-
-        <div class="interval-controls">
-            <button (click)="onPreviousInterval()"> &lt; </button>
-            <span>
-                {{ firstDayOfInterval ? (firstDayOfInterval | date: 'shortDate') : '' }} -
-                {{ lastDayOfInterval ? (lastDayOfInterval | date: 'shortDate') : '' }}
-            </span>
-            <button (click)="onNextInterval()"> &gt; </button>
-        </div>
-
-        <div class="equal-width right">
-            <button (click)="onAddShift(undefined)">Add Shift</button>
-        </div>
-    </div>
-
-
-    @if (firstDayOfInterval) {
-        <app-week [firstDay]="firstDayOfInterval" [shifts]="shifts" (addShift)="onAddShift($event)"
-            (deleteShift)="onDeleteShift($event)" (editShift)="onEditShift($event)" />
-    }
-</section>
-
-@if (shifts && shifts.length > 0) {
+<div class="shifts-container">
+    <!-- Summary Section - Always visible -->
     <app-summary [shifts]="shifts"></app-summary>
-}
+    
+    <!-- Enhanced Shifts Card -->
+    <p-card class="shifts-card">
+        <ng-template pTemplate="header">
+            <div class="shifts-header">
+                <h2 class="shifts-title">
+                    <i class="pi pi-calendar text-2xl"></i>
+                    Shift Management
+                </h2>
+                <p class="shifts-subtitle">Track and manage your shifts</p>
+            </div>
+        </ng-template>
 
-@if(isAddingShift) {
-    <app-add-shift [shiftDate]="dateToAddShift" (close)="onFinishAddShift($event)" />
-}
+        <ng-template pTemplate="content">
+            <!-- Modern Toolbar -->
+            <p-toolbar class="shifts-toolbar">
+                <ng-template pTemplate="start">
+                    <div class="date-picker-section">
+                        <label for="weekPicker" class="date-picker-label">Pick a date:</label>
+                        <input 
+                            id="weekPicker" 
+                            type="date" 
+                            (change)="onWeekPickerChange($event)"
+                            class="modern-date-input" />
+                    </div>
+                </ng-template>
 
-@if(isEditingShift && activeShift) {
-    <app-edit-shift [shift]="activeShift" (close)="onFinishEditShift($event)" />
-}
+                <ng-template pTemplate="center">
+                    <div class="interval-controls">
+                        <p-button 
+                            (click)="onPreviousInterval()" 
+                            icon="pi pi-chevron-left"
+                            [text]="true"
+                            size="small"
+                            severity="secondary"
+                            class="interval-nav-button">
+                        </p-button>
+                        
+                        <span class="interval-display">
+                            {{ firstDayOfInterval ? (firstDayOfInterval | date: 'mediumDate') : '' }} - 
+                            {{ lastDayOfInterval ? (lastDayOfInterval | date: 'mediumDate') : '' }}
+                        </span>
+                        
+                        <p-button 
+                            (click)="onNextInterval()" 
+                            icon="pi pi-chevron-right"
+                            [text]="true"
+                            size="small"
+                            severity="secondary"
+                            class="interval-nav-button">
+                        </p-button>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="end">
+                    <p-button 
+                        (click)="onAddShift(undefined)"
+                        label="Add Shift"
+                        icon="pi pi-plus"
+                        severity="success"
+                        size="small"
+                        class="add-shift-button">
+                    </p-button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-divider></p-divider>
+
+            <!-- Week Component -->
+            @if (firstDayOfInterval) {
+                <div class="week-container">
+                    <app-week 
+                        [firstDay]="firstDayOfInterval" 
+                        [shifts]="shifts" 
+                        (addShift)="onAddShift($event)"
+                        (deleteShift)="onDeleteShift($event)" 
+                        (editShift)="onEditShift($event)" />
+                </div>
+            }
+        </ng-template>
+    </p-card>
+
+    <!-- Modals -->
+    @if(isAddingShift) {
+        <app-add-shift [shiftDate]="dateToAddShift" (close)="onFinishAddShift($event)" />
+    }
+
+    @if(isEditingShift && activeShift) {
+        <app-edit-shift [shift]="activeShift" (close)="onFinishEditShift($event)" />
+    }
+</div>

@@ -11,10 +11,28 @@ import { AddShiftComponent } from './add-shift/add-shift.component';
 import { EditShiftComponent } from './edit-shift/edit-shift.component';
 import { SummaryComponent } from './summary/summary.component';
 
+// PrimeNG imports
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { DatePickerModule } from 'primeng/datepicker';
+import { ToolbarModule } from 'primeng/toolbar';
+import { DividerModule } from 'primeng/divider';
+
 @Component({
 	selector: 'app-shifts',
 	standalone: true,
-	imports: [AddShiftComponent, EditShiftComponent, DatePipe, WeekComponent, SummaryComponent],
+	imports: [
+		AddShiftComponent, 
+		EditShiftComponent, 
+		DatePipe, 
+		WeekComponent, 
+		SummaryComponent,
+		ButtonModule,
+		CardModule,
+		DatePickerModule,
+		ToolbarModule,
+		DividerModule
+	],
 	templateUrl: './shifts.component.html',
 	styleUrl: './shifts.component.css'
 })

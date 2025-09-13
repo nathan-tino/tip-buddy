@@ -1,5 +1,39 @@
+/* Modern Card Component with Enhanced Design */
 div {
-    border-radius: 6px;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+    background: var(--p-surface-0);
+    border: 1px solid var(--p-surface-100);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
     overflow: hidden;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+
+/* Hover Effects for Interactive Cards */
+div:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+    border-color: var(--p-surface-200);
+}
+
+/* Focus Within for Accessibility */
+div:focus-within {
+    outline: 2px solid var(--p-primary-500);
+    outline-offset: 2px;
+}
+
+/* Subtle Background Pattern */
+div::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg, 
+        rgba(255, 255, 255, 0.1) 0%, 
+        transparent 50%
+    );
+    pointer-events: none;
 }

@@ -1,61 +1,124 @@
-<app-card>
-    <div class="backdrop" (click)="cancel.emit()"></div>
-    <dialog open>
-        <h2>{{ title }}</h2>
-        <form #shiftForm="ngForm" (ngSubmit)="onSubmit()">
-            <label for="dateInput">Date:</label>
-            <input id="dateInput" type="date"
-                [(ngModel)]="dateInput"
-                name="dateInput"
-                required
-                aria-required="true" />
+<p-dialog 
+    [(visible)]="visible" 
+    [modal]="true" 
+    [header]="title"
+    [draggable]="false"
+    [resizable]="false"
+    [closable]="true"
+    [closeOnEscape]="true"
+    [style]="{width: '450px'}"
+    styleClass="shift-dialog"
+    (onHide)="onCancel()">
+    
+    <div class="form-container">
+        <form #shiftForm="ngForm" (ngSubmit)="onSubmit()" class="shift-form">
+            <!-- Date Input -->
+            <p-floatlabel>
+                <input 
+                    id="dateInput" 
+                    type="date"
+                    pInputText
+                    [(ngModel)]="dateInput"
+                    name="dateInput"
+                    required
+                    aria-required="true" 
+                    class="form-input" />
+                <label for="dateInput">Date</label>
+            </p-floatlabel>
 
-            <label for="timeInput">Time:</label>
-            <input id="timeInput" type="time"
-                [(ngModel)]="timeInput"
-                name="startTimeInput"
-                aria-label="Start time" />
+            <!-- Time Input -->
+            <p-floatlabel>
+                <input 
+                    id="timeInput" 
+                    type="time"
+                    pInputText
+                    [(ngModel)]="timeInput"
+                    name="startTimeInput"
+                    aria-label="Start time"
+                    class="form-input" />
+                <label for="timeInput">Time</label>
+            </p-floatlabel>
 
-            <label for="creditTipsInput">Credit Tips:</label>
-            <input id="creditTipsInput" type="number"
-                [(ngModel)]="creditTipsInput"
-                name="creditTipsInput"
-                required
-                min="0"
-                step="0.01"
-                inputmode="decimal"
-                aria-required="true" />
+            <!-- Credit Tips -->
+            <p-floatlabel>
+                <p-inputNumber
+                    id="creditTipsInput"
+                    [(ngModel)]="creditTipsInput"
+                    name="creditTipsInput"
+                    mode="currency"
+                    currency="USD"
+                    [min]="0"
+                    [step]="0.01"
+                    [required]="true"
+                    styleClass="form-input">
+                </p-inputNumber>
+                <label for="creditTipsInput">Credit Tips</label>
+            </p-floatlabel>
 
-            <label for="cashTipsInput">Cash Tips:</label>
-            <input id="cashTipsInput" type="number"
-                [(ngModel)]="cashTipsInput"
-                name="cashTipsInput"
-                required
-                min="0"
-                step="0.01"
-                inputmode="decimal"
-                aria-required="true" />
+            <!-- Cash Tips -->
+            <p-floatlabel>
+                <p-inputNumber
+                    id="cashTipsInput"
+                    [(ngModel)]="cashTipsInput"
+                    name="cashTipsInput"
+                    mode="currency"
+                    currency="USD"
+                    [min]="0"
+                    [step]="0.01"
+                    [required]="true"
+                    styleClass="form-input">
+                </p-inputNumber>
+                <label for="cashTipsInput">Cash Tips</label>
+            </p-floatlabel>
 
-            <label for="tipoutInput">Tipout:</label>
-            <input id="tipoutInput" type="number"
-                [(ngModel)]="tipoutInput"
-                name="tipoutInput"
-                required
-                min="0"
-                step="0.01"
-                inputmode="decimal"
-                aria-required="true" />
+            <!-- Tipout -->
+            <p-floatlabel>
+                <p-inputNumber
+                    id="tipoutInput"
+                    [(ngModel)]="tipoutInput"
+                    name="tipoutInput"
+                    mode="currency"
+                    currency="USD"
+                    [min]="0"
+                    [step]="0.01"
+                    [required]="true"
+                    styleClass="form-input">
+                </p-inputNumber>
+                <label for="tipoutInput">Tipout</label>
+            </p-floatlabel>
 
-            <label for="hoursWorkedInput">Hours Worked:</label>
-            <input id="hoursWorkedInput" type="number"
-                [(ngModel)]="hoursWorkedInput"
-                name="hoursWorkedInput"
-                min="0"
-                step="0.01"
-                inputmode="decimal" />
-
-            <button id="saveButton" type="submit" [disabled]="shiftForm.invalid">Save</button>
-            <button id="cancelButton" type="button" (click)="cancel.emit()">Cancel</button>
+            <!-- Hours Worked -->
+            <p-floatlabel>
+                <p-inputNumber
+                    id="hoursWorkedInput"
+                    [(ngModel)]="hoursWorkedInput"
+                    name="hoursWorkedInput"
+                    [min]="0"
+                    [step]="0.25"
+                    suffix=" hrs"
+                    styleClass="form-input">
+                </p-inputNumber>
+                <label for="hoursWorkedInput">Hours Worked</label>
+            </p-floatlabel>
         </form>
-    </dialog>
-</app-card>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <div class="dialog-footer">
+            <p-button 
+                label="Cancel" 
+                severity="secondary" 
+                [outlined]="true"
+                (onClick)="onCancel()"
+                class="cancel-button">
+            </p-button>
+            <p-button 
+                label="Save" 
+                severity="success"
+                [disabled]="shiftForm.invalid"
+                (onClick)="onSubmit()"
+                class="save-button">
+            </p-button>
+        </div>
+    </ng-template>
+</p-dialog>

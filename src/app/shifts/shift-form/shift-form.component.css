@@ -1,40 +1,90 @@
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* Modern Dialog Form Styling */
+.form-container {
+    padding: var(--spacing-lg) 0;
 }
 
-label {
-  font-weight: bold;
+.shift-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
 }
 
-input {
-  padding: 4px;
-  font-size: 1rem;
+/* Enhanced Form Input Styling */
+.form-input {
+    width: 100%;
+    border-radius: var(--border-radius-md);
+    transition: all 0.2s ease-in-out;
 }
 
-button {
-  margin-top: 8px;
-  padding: 6px 12px;
-  font-size: 1rem;
+.form-input:focus {
+    outline: none;
+    border-color: var(--p-primary-500);
+    box-shadow: 0 0 0 2px rgba(var(--p-primary-500), 0.2);
 }
 
-.backdrop {
-  background-color: rgba(0, 0, 0, 0.9);
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
+/* Dialog Footer Styling */
+.dialog-footer {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: var(--spacing-md);
 }
 
-dialog {
-  width: 90%;
-  max-width: 30rem;
-  border-radius: 6px;
-  border: none;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
-  overflow: hidden;
-  padding: 1rem;
-  top: 5rem;
+.save-button {
+    min-width: 80px;
+}
+
+.cancel-button {
+    min-width: 80px;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+    :host ::ng-deep .shift-dialog .p-dialog {
+        width: 95vw !important;
+        margin: var(--spacing-lg);
+    }
+    
+    .dialog-footer {
+        flex-direction: column-reverse;
+        gap: var(--spacing-sm);
+    }
+    
+    .save-button,
+    .cancel-button {
+        width: 100%;
+    }
+}
+
+/* Enhanced Dialog Header */
+:host ::ng-deep .shift-dialog .p-dialog-header {
+    background: linear-gradient(135deg, var(--p-surface-50) 0%, var(--p-surface-100) 100%);
+    border-bottom: 1px solid var(--p-surface-200);
+}
+
+:host ::ng-deep .shift-dialog .p-dialog-title {
+    font-weight: var(--font-weight-semibold);
+    color: var(--p-surface-950);
+}
+
+/* Form Input Number Styling */
+:host ::ng-deep .p-inputnumber {
+    width: 100%;
+}
+
+:host ::ng-deep .p-inputnumber-input {
+    width: 100%;
+    border-radius: var(--border-radius-md);
+}
+
+/* Float Label Styling */
+:host ::ng-deep .p-float-label label {
+    font-weight: var(--font-weight-medium);
+    color: var(--p-surface-600);
+    transition: all 0.2s ease-in-out;
+}
+
+:host ::ng-deep .p-float-label label.p-focus {
+    color: var(--p-primary-500);
 }
