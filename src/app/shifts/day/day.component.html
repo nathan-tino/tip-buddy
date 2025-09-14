@@ -9,7 +9,7 @@
     <div class="shifts-container">
         @if (shifts()) {
             <div class="shifts-list">
-                @for(shift of shifts(); track shift) {
+                @for(shift of shifts(); track shift.id) {
                     <div class="shift-item">
                         <span class="shift-amount">${{shift.creditTips + shift.cashTips - shift.tipout}}</span>
                         <div class="shift-actions">
