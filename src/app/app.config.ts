@@ -23,7 +23,10 @@ export const appConfig: ApplicationConfig = {
 		provideCharts(withDefaultRegisterables()),
 		providePrimeNG({
 			theme: {
-				preset: Aura
+				preset: Aura,
+				options: {
+					darkModeSelector: false || 'none',
+				}
 			}
 		}),
 		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
