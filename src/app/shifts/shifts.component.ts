@@ -104,7 +104,7 @@ export class ShiftsComponent implements OnInit, OnDestroy {
 		this.isEditingShift = false;
 	}
 
-	onDeleteShift(id: number) {
+	onDeleteShift(id: string) {
 		this.shiftService.deleteShift(id).subscribe({
 			next: () => {
 				console.log('Shift deleted successfully');
