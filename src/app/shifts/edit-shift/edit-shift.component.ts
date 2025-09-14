@@ -29,18 +29,20 @@ export class EditShiftComponent implements OnInit {
 	@Input() shift!: GetShiftDto;
 	@Output() close = new EventEmitter<GetShiftDto | undefined>();
 
-	dateInput!: string;
-	timeInput!: string;
+	dateInput!: Date;
+	timeInput!: Date;
 
 	constructor(private shiftService: ShiftService, private dateService: DateService) { }
 
 	ngOnInit() {
-		if (this.shift) {
-			const dateValue = new Date(this.shift.date);
-			this.dateInput = dateValue.toISOString().slice(0, 10);
-			this.timeInput = dateValue.toISOString().slice(11, 19);
-	    }
-	}
+        if (this.shift) {
+            // Convert UTC date to local date for display (date part only)
+            this.dateInput = new Date(this.shift.date.getUTCFullYear(), this.shift.date.getUTCMonth(), this.shift.date.getUTCDate());
+            // Create a time object using UTC time components from the shift
+            this.timeInput = new Date();
+            this.timeInput.setHours(this.shift.date.getUTCHours(), this.shift.date.getUTCMinutes(), 0, 0);
+        }
+    }
 
 	onCancel() {
 		this.close.emit(undefined);
@@ -52,7 +54,7 @@ export class EditShiftComponent implements OnInit {
 			creditTips: shift.creditTips ?? 0,
 			cashTips: shift.cashTips ?? 0,
 			tipout: shift.tipout ?? 0,
-			date: this.dateService.convertStringToUtcDate(shift.date, shift.time),
+			date: this.dateService.convertDateObjectsToUtcDate(shift.date, shift.time),
 			hoursWorked: shift.hoursWorked
 		};
 

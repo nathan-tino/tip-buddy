@@ -29,8 +29,8 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     styleUrl: './shift-form.component.css'
 })
 export class ShiftFormComponent {
-    @Input() dateInput!: string;
-    @Input() timeInput?: string | undefined;
+    @Input() dateInput!: Date;
+    @Input() timeInput?: Date | undefined;
     @Input() creditTipsInput: number | undefined = undefined;
     @Input() cashTipsInput: number | undefined = undefined;
     @Input() tipoutInput: number | undefined = undefined;
