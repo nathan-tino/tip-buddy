@@ -61,11 +61,36 @@
 :host ::ng-deep .shift-dialog .p-dialog-header {
     background: linear-gradient(135deg, var(--p-surface-50) 0%, var(--p-surface-100) 100%);
     border-bottom: 1px solid var(--p-surface-200);
+    border-top-left-radius: var(--p-dialog-border-radius);
+    border-top-right-radius: var(--p-dialog-border-radius);
 }
 
 :host ::ng-deep .shift-dialog .p-dialog-title {
     font-weight: var(--font-weight-semibold);
     color: var(--p-surface-950);
+}
+
+/* Match dialog background and corners to site theme */
+:host ::ng-deep .shift-dialog .p-dialog {
+    background: var(--p-surface-0) !important;
+    color: var(--p-surface-900) !important;
+    /* border-radius: var(--p-dialog-border-radius) !important; */
+    box-shadow: var(--shadow-lg) !important;
+    border: 3px solid var(--p-surface-100) !important;
+    overflow: hidden !important;
+}
+
+/* Keep content and footer on the light surface but don't reapply corner radii */
+:host ::ng-deep .shift-dialog .p-dialog-content,
+:host ::ng-deep .shift-dialog .p-dialog-footer {
+    background: var(--p-surface-0) !important;
+    color: var(--p-surface-900) !important;
+}
+
+:host ::ng-deep .shift-dialog .p-dialog-footer {
+    border-top: 1px solid var(--p-surface-100) !important;
+    border-bottom-left-radius: var(--p-dialog-border-radius);
+    border-bottom-right-radius: var(--p-dialog-border-radius);
 }
 
 /* Form Input Number Styling */

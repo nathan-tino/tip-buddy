@@ -1,10 +1,13 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ShiftFormModel } from './shift-form.model';
+import { DateService } from '../../services/date.service';
 
 // PrimeNG imports
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { DatePickerModule } from 'primeng/datepicker';
+import { InputMaskModule } from 'primeng/inputmask';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -16,6 +19,8 @@ import { FloatLabelModule } from 'primeng/floatlabel';
         FormsModule, 
         DialogModule,
         ButtonModule,
+        DatePickerModule,
+        InputMaskModule,
         InputTextModule,
         InputNumberModule,
         FloatLabelModule
@@ -26,18 +31,25 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 export class ShiftFormComponent {
     @Input() dateInput!: string;
     @Input() timeInput?: string | undefined;
-    @Input() creditTipsInput!: number;
-    @Input() cashTipsInput!: number;
-    @Input() tipoutInput!: number;
-    @Input() hoursWorkedInput?: number;
-    @Input() title!: string;
+    @Input() creditTipsInput: number | undefined = undefined;
+    @Input() cashTipsInput: number | undefined = undefined;
+    @Input() tipoutInput: number | undefined = undefined;
+    @Input() hoursWorkedInput: number | undefined = undefined;
+    @Input() title: string = '';
 
     @Output() submitted = new EventEmitter<ShiftFormModel>();
     @Output() cancel = new EventEmitter<void>();
     
     visible = true; // Dialog visibility
 
+    constructor(private dateService: DateService) { }
+
     onSubmit() {
+        if (!this.dateInput) {
+            // Date is required; you might want to show an error message here
+            return;
+        }
+
         this.submitted.emit({
             date: this.dateInput,
             time: this.timeInput,

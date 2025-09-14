@@ -7,31 +7,28 @@
     [closable]="true"
     [closeOnEscape]="true"
     [style]="{width: '450px'}"
-    styleClass="shift-dialog"
+    class="shift-dialog"
     (onHide)="onCancel()">
     
     <div class="form-container">
         <form #shiftForm="ngForm" (ngSubmit)="onSubmit()" class="shift-form">
             <!-- Date Input -->
-            <p-floatlabel>
-                <input 
-                    id="dateInput" 
-                    type="date"
-                    pInputText
-                    [(ngModel)]="dateInput"
+            <p-floatlabel variant="on">
+                <p-datepicker
+                    inputId="dateInput"
                     name="dateInput"
+                    [(ngModel)]="dateInput"
                     required
-                    aria-required="true" 
+                    aria-required="true"
                     class="form-input" />
                 <label for="dateInput">Date</label>
             </p-floatlabel>
 
             <!-- Time Input -->
-            <p-floatlabel>
-                <input 
-                    id="timeInput" 
-                    type="time"
-                    pInputText
+            <p-floatlabel variant="on">
+                <p-datepicker
+                    inputId="timeInput"
+                    [timeOnly]="true"
                     [(ngModel)]="timeInput"
                     name="startTimeInput"
                     aria-label="Start time"
@@ -40,63 +37,66 @@
             </p-floatlabel>
 
             <!-- Credit Tips -->
-            <p-floatlabel>
+            <p-floatlabel variant="on">
                 <p-inputNumber
-                    id="creditTipsInput"
+                    inputId="creditTipsInput"
                     [(ngModel)]="creditTipsInput"
                     name="creditTipsInput"
                     mode="currency"
                     currency="USD"
+                    locale="en-US"
                     [min]="0"
                     [step]="0.01"
                     [required]="true"
-                    styleClass="form-input">
+                    class="form-input">
                 </p-inputNumber>
                 <label for="creditTipsInput">Credit Tips</label>
             </p-floatlabel>
 
             <!-- Cash Tips -->
-            <p-floatlabel>
+            <p-floatlabel variant="on">
                 <p-inputNumber
-                    id="cashTipsInput"
+                    inputId="cashTipsInput"
                     [(ngModel)]="cashTipsInput"
                     name="cashTipsInput"
                     mode="currency"
                     currency="USD"
+                    locale="en-US"
                     [min]="0"
                     [step]="0.01"
                     [required]="true"
-                    styleClass="form-input">
+                    class="form-input">
                 </p-inputNumber>
                 <label for="cashTipsInput">Cash Tips</label>
             </p-floatlabel>
 
             <!-- Tipout -->
-            <p-floatlabel>
+            <p-floatlabel variant="on">
                 <p-inputNumber
-                    id="tipoutInput"
+                    inputId="tipoutInput"
                     [(ngModel)]="tipoutInput"
                     name="tipoutInput"
                     mode="currency"
                     currency="USD"
+                    locale="en-US"
                     [min]="0"
                     [step]="0.01"
                     [required]="true"
-                    styleClass="form-input">
+                    class="form-input">
                 </p-inputNumber>
                 <label for="tipoutInput">Tipout</label>
             </p-floatlabel>
 
             <!-- Hours Worked -->
-            <p-floatlabel>
+            <p-floatlabel variant="on">
                 <p-inputNumber
-                    id="hoursWorkedInput"
+                    inputId="hoursWorkedInput"
                     [(ngModel)]="hoursWorkedInput"
                     name="hoursWorkedInput"
                     [min]="0"
                     [step]="0.25"
                     suffix=" hrs"
-                    styleClass="form-input">
+                    class="form-input">
                 </p-inputNumber>
                 <label for="hoursWorkedInput">Hours Worked</label>
             </p-floatlabel>

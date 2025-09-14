@@ -48,9 +48,9 @@ export class AddShiftComponent implements OnInit {
 
     onSubmit(shift: ShiftFormModel) {
         const newShift: CreateShiftDto = {
-            creditTips: shift.creditTips,
-            cashTips: shift.cashTips,
-            tipout: shift.tipout,
+            creditTips: shift.creditTips ?? 0,
+            cashTips: shift.cashTips ?? 0,
+            tipout: shift.tipout ?? 0,
             date: this.dateService.convertStringToUtcDate(shift.date, shift.time)!,
             hoursWorked: shift.hoursWorked
         };

@@ -6,9 +6,9 @@ export interface ShiftFormModel {
     time?: string | undefined;
 
     // monetary and numeric fields
-    creditTips: number;
-    cashTips: number;
-    tipout: number;
+    creditTips?: number;
+    cashTips?: number;
+    tipout?: number;
 
     // optional numeric hours worked
     hoursWorked?: number;
