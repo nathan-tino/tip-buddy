@@ -15,8 +15,8 @@ describe('AddShiftComponent', () => {
 	let dateServiceSpy: jasmine.SpyObj<DateService>;
 
 	beforeEach(async () => {
-		const shiftServiceMock = jasmine.createSpyObj('ShiftService', ['addShift']);
-		const dateServiceMock = jasmine.createSpyObj('DateService', ['convertStringToUtcDate']);
+	const shiftServiceMock = jasmine.createSpyObj('ShiftService', ['addShift']);
+	const dateServiceMock = jasmine.createSpyObj('DateService', ['convertStringToUtcDate', 'convertDateObjectsToUtcDate']);
 
 		await TestBed.configureTestingModule({
 			imports: [AddShiftComponent],
@@ -40,7 +40,7 @@ describe('AddShiftComponent', () => {
 		const testDate = new Date('2023-08-28');
 		component.shiftDate = testDate;
 		component.ngOnInit();
-		expect(component.dateInput).toBe(testDate.toLocaleDateString('en-CA'));
+		expect(component.dateInput.toLocaleDateString('en-CA')).toBe('2023-08-28');
 	});
 
 	it('should set hoursWorkedInput to undefined on init', () => {
@@ -59,8 +59,8 @@ describe('AddShiftComponent', () => {
 			creditTips: 100,
 			cashTips: 50,
 			tipout: 20,
-			date: '2023-08-28',
-			time: '14:30:00',
+			date: new Date('2023-08-28'),
+			time: new Date('1970-01-01T14:30:00Z'),
 			hoursWorked: 8
 		};
 		const createdShift: GetShiftDto = {
