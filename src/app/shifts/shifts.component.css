@@ -17,7 +17,7 @@
 
 /* Modern Header */
 .shifts-header {
-    padding: var(--spacing-2xl);
+    padding: var(--spacing-xl);
     background: linear-gradient(135deg, var(--p-surface-50) 0%, var(--p-surface-100) 100%);
     border-bottom: 1px solid var(--p-surface-200);
 }
@@ -29,14 +29,7 @@
     font-size: var(--text-2xl);
     font-weight: var(--font-weight-bold);
     color: var(--p-surface-950);
-    margin: 0 0 var(--spacing-sm) 0;
-}
-
-.shifts-subtitle {
-    font-size: var(--text-sm);
-    color: var(--p-surface-600);
     margin: 0;
-    font-weight: var(--font-weight-normal);
 }
 
 /* Enhanced Toolbar */
@@ -44,12 +37,41 @@
     background: transparent;
     border: none;
     padding: var(--spacing-xl) 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* PrimeNG toolbar sections: equal width for start/end, center perfectly centered */
+:host ::ng-deep .shifts-toolbar .p-toolbar-start,
+:host ::ng-deep .shifts-toolbar .p-toolbar-end {
+    width: 250px;
+    display: flex;
+    align-items: center;
+}
+
+:host ::ng-deep .shifts-toolbar .p-toolbar-start {
+    justify-content: flex-start;
+}
+
+:host ::ng-deep .shifts-toolbar .p-toolbar-end {
+    justify-content: flex-end;
+}
+
+:host ::ng-deep .shifts-toolbar .p-toolbar-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .date-picker-section {
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm);
+    width: 100%;
+    max-width: 250px;
+    overflow: hidden;
 }
 
 .date-picker-label {
@@ -57,6 +79,7 @@
     font-weight: var(--font-weight-medium);
     color: var(--p-surface-700);
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .modern-date-input {
@@ -67,7 +90,9 @@
     background: var(--p-surface-0);
     color: var(--p-surface-900);
     transition: all 0.2s ease-in-out;
-    min-width: 140px;
+    min-width: 120px;
+    max-width: 140px;
+    flex-shrink: 1;
 }
 
 .modern-date-input:focus {
@@ -82,19 +107,39 @@
     align-items: center;
     gap: var(--spacing-lg);
     justify-content: center;
-    flex: 1;
 }
 
 .interval-display {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
     font-size: var(--text-sm);
     font-weight: var(--font-weight-medium);
     color: var(--p-surface-900);
-    text-align: center;
-    min-width: 200px;
+    min-width: 280px;
+    width: 280px;
     padding: var(--spacing-sm) var(--spacing-md);
     background: var(--p-surface-100);
     border-radius: var(--border-radius-md);
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.interval-date-left, .interval-date-right {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.interval-date-left {
+    text-align: right;
+}
+
+.interval-date-dash {
+    text-align: center;
+    font-weight: var(--font-weight-bold);
+    padding: 0 8px;
 }
 
 .interval-nav-button {
@@ -105,6 +150,9 @@
 /* Add Shift Button */
 .add-shift-button {
     font-weight: var(--font-weight-semibold);
+    max-width: 120px !important;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 /* Week Container */
@@ -116,7 +164,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
     .shifts-header {
-        padding: var(--spacing-xl);
+        padding: var(--spacing-lg);
     }
     
     .shifts-title {
@@ -128,7 +176,8 @@
     }
     
     .interval-display {
-        min-width: 160px;
+        min-width: 240px;
+        width: 240px;
         font-size: var(--text-xs);
     }
     
@@ -148,6 +197,11 @@
         flex-direction: column;
         gap: var(--spacing-lg);
         align-items: stretch;
+    }
+    
+    .shifts-toolbar .p-toolbar-start,
+    .shifts-toolbar .p-toolbar-end {
+        width: 100%;
     }
     
     .interval-controls {

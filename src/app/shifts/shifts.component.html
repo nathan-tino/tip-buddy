@@ -10,12 +10,10 @@
                     <i class="pi pi-calendar text-2xl"></i>
                     Shift Management
                 </h2>
-                <p class="shifts-subtitle">Track and manage your shifts</p>
             </div>
         </ng-template>
 
         <ng-template pTemplate="content">
-            <!-- Modern Toolbar -->
             <p-toolbar class="shifts-toolbar">
                 <ng-template pTemplate="start">
                     <div class="date-picker-section">
@@ -40,8 +38,13 @@
                         </p-button>
                         
                         <span class="interval-display">
-                            {{ firstDayOfInterval ? (firstDayOfInterval | date: 'mediumDate') : '' }} - 
-                            {{ lastDayOfInterval ? (lastDayOfInterval | date: 'mediumDate') : '' }}
+                                <span class="interval-date-left">
+                                    {{ firstDayOfInterval ? (firstDayOfInterval | date: 'mediumDate') : '' }}
+                                </span>
+                                <span class="interval-date-dash">-</span>
+                                <span class="interval-date-right">
+                                    {{ lastDayOfInterval ? (lastDayOfInterval | date: 'mediumDate') : '' }}
+                                </span>
                         </span>
                         
                         <p-button 
