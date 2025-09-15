@@ -37,7 +37,7 @@ describe('EditShiftComponent', () => {
 
   it('should initialize dateInput and timeInput from shift.date', () => {
     const testShift: GetShiftDto = {
-      id: 1,
+    id: '1',
       creditTips: 100,
       cashTips: 50,
       tipout: 20,
@@ -58,7 +58,7 @@ describe('EditShiftComponent', () => {
 
   it('should call editShift and emit updated shift on submit', () => {
     const testShift: GetShiftDto = {
-      id: 1,
+    id: '1',
       creditTips: 100,
       cashTips: 50,
       tipout: 20,
@@ -76,7 +76,7 @@ describe('EditShiftComponent', () => {
       hoursWorked: 9
     };
     const updatedShift: GetShiftDto = {
-      id: 1,
+    id: '1',
       creditTips: 150,
       cashTips: 75,
       tipout: 30,
@@ -92,8 +92,8 @@ describe('EditShiftComponent', () => {
     component.onSubmit(shiftModel);
 
     expect(dateServiceSpy.convertStringToUtcDate).toHaveBeenCalledWith('2023-08-29', '15:00:00');
-    expect(shiftServiceSpy.editShift).toHaveBeenCalledWith(1, {
-      id: 1,
+      expect(shiftServiceSpy.editShift).toHaveBeenCalledWith('1', {
+        id: '1',
       creditTips: 150,
       cashTips: 75,
       tipout: 30,

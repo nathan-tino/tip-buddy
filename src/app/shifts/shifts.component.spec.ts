@@ -23,7 +23,7 @@ describe('ShiftsComponent', () => {
 
 	const mockShifts: GetShiftDto[] = [
 		{
-			id: 1,
+			id: '1',
 			date: new Date('2023-01-01T00:00:00Z'),
 			hoursWorked: 5,
 			cashTips: 50,
@@ -137,7 +137,7 @@ describe('ShiftsComponent', () => {
 		resetShifts();
 
 		const newShift: GetShiftDto = {
-			id: 2,
+			id: '2',
 			date: new Date(),
 			hoursWorked: 4,
 			cashTips: 40,
@@ -165,15 +165,15 @@ describe('ShiftsComponent', () => {
 		resetShifts();
 		mockShiftService.deleteShift.and.returnValue(of(void 0));
 
-		component.onDeleteShift(1);
-		expect(mockShiftService.deleteShift).toHaveBeenCalledWith(1);
+	component.onDeleteShift('1');
+		expect(mockShiftService.deleteShift).toHaveBeenCalledWith('1');
 		expect(component.shifts.length).toBe(0);
 	});
 
 	it('should handle delete error gracefully', () => {
 		spyOn(console, 'error');
 		mockShiftService.deleteShift.and.returnValue(throwError(() => new Error('Delete failed')));
-		component.onDeleteShift(1);
+	component.onDeleteShift('1');
 		expect(console.error).toHaveBeenCalled();
 	});
 

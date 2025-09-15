@@ -9,84 +9,84 @@ import { GetShiftDto } from '../../dtos/get-shift.dto';
 import { CreateShiftDto } from '../../dtos/create-shift.dto';
 
 describe('AddShiftComponent', () => {
-  let component: AddShiftComponent;
-  let fixture: ComponentFixture<AddShiftComponent>;
-  let shiftServiceSpy: jasmine.SpyObj<ShiftService>;
-  let dateServiceSpy: jasmine.SpyObj<DateService>;
+	let component: AddShiftComponent;
+	let fixture: ComponentFixture<AddShiftComponent>;
+	let shiftServiceSpy: jasmine.SpyObj<ShiftService>;
+	let dateServiceSpy: jasmine.SpyObj<DateService>;
 
-  beforeEach(async () => {
-    const shiftServiceMock = jasmine.createSpyObj('ShiftService', ['addShift']);
-    const dateServiceMock = jasmine.createSpyObj('DateService', ['convertStringToUtcDate']);
+	beforeEach(async () => {
+		const shiftServiceMock = jasmine.createSpyObj('ShiftService', ['addShift']);
+		const dateServiceMock = jasmine.createSpyObj('DateService', ['convertStringToUtcDate']);
 
-    await TestBed.configureTestingModule({
-      imports: [AddShiftComponent],
-      providers: [
-        { provide: ShiftService, useValue: shiftServiceMock },
-        { provide: DateService, useValue: dateServiceMock }
-      ]
-    }).compileComponents();
+		await TestBed.configureTestingModule({
+			imports: [AddShiftComponent],
+			providers: [
+				{ provide: ShiftService, useValue: shiftServiceMock },
+				{ provide: DateService, useValue: dateServiceMock }
+			]
+		}).compileComponents();
 
-    fixture = TestBed.createComponent(AddShiftComponent);
-    component = fixture.componentInstance;
-    shiftServiceSpy = TestBed.inject(ShiftService) as jasmine.SpyObj<ShiftService>;
-    dateServiceSpy = TestBed.inject(DateService) as jasmine.SpyObj<DateService>;
-  });
+		fixture = TestBed.createComponent(AddShiftComponent);
+		component = fixture.componentInstance;
+		shiftServiceSpy = TestBed.inject(ShiftService) as jasmine.SpyObj<ShiftService>;
+		dateServiceSpy = TestBed.inject(DateService) as jasmine.SpyObj<DateService>;
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 
-  it('should initialize dateInput when shiftDate is provided', () => {
-    const testDate = new Date('2023-08-28');
-    component.shiftDate = testDate;
-    component.ngOnInit();
-    expect(component.dateInput).toBe(testDate.toLocaleDateString('en-CA'));
-  });
+	it('should initialize dateInput when shiftDate is provided', () => {
+		const testDate = new Date('2023-08-28');
+		component.shiftDate = testDate;
+		component.ngOnInit();
+		expect(component.dateInput).toBe(testDate.toLocaleDateString('en-CA'));
+	});
 
-  it('should set hoursWorkedInput to undefined on init', () => {
-    component.ngOnInit();
-    expect(component.hoursWorkedInput).toBeUndefined();
-  });
+	it('should set hoursWorkedInput to undefined on init', () => {
+		component.ngOnInit();
+		expect(component.hoursWorkedInput).toBeUndefined();
+	});
 
-  it('should emit undefined on cancel', () => {
-    spyOn(component.close, 'emit');
-    component.onCancel();
-    expect(component.close.emit).toHaveBeenCalledWith(undefined);
-  });
+	it('should emit undefined on cancel', () => {
+		spyOn(component.close, 'emit');
+		component.onCancel();
+		expect(component.close.emit).toHaveBeenCalledWith(undefined);
+	});
 
-  it('should call addShift and emit created shift on submit', () => {
-    const shiftModel: ShiftFormModel = {
-      creditTips: 100,
-      cashTips: 50,
-      tipout: 20,
-      date: '2023-08-28',
-      time: '14:30:00',
-      hoursWorked: 8
-    };
-    const createdShift: GetShiftDto = {
-      id: 1,
-      creditTips: 100,
-      cashTips: 50,
-      tipout: 20,
-      date: new Date('2023-08-28T14:30:00Z'),
-      hoursWorked: 8
-    };
-    const convertedDate = new Date('2023-08-28T14:30:00Z');
+	it('should call addShift and emit created shift on submit', () => {
+		const shiftModel: ShiftFormModel = {
+			creditTips: 100,
+			cashTips: 50,
+			tipout: 20,
+			date: '2023-08-28',
+			time: '14:30:00',
+			hoursWorked: 8
+		};
+		const createdShift: GetShiftDto = {
+			id: '1',
+			creditTips: 100,
+			cashTips: 50,
+			tipout: 20,
+			date: new Date('2023-08-28T14:30:00Z'),
+			hoursWorked: 8
+		};
+		const convertedDate = new Date('2023-08-28T14:30:00Z');
 
-    dateServiceSpy.convertStringToUtcDate.and.returnValue(convertedDate);
-    shiftServiceSpy.addShift.and.returnValue(of(createdShift));
-    spyOn(component.close, 'emit');
+		dateServiceSpy.convertStringToUtcDate.and.returnValue(convertedDate);
+		shiftServiceSpy.addShift.and.returnValue(of(createdShift));
+		spyOn(component.close, 'emit');
 
-    component.onSubmit(shiftModel);
+		component.onSubmit(shiftModel);
 
-    expect(dateServiceSpy.convertStringToUtcDate).toHaveBeenCalledWith('2023-08-28', '14:30:00');
-    expect(shiftServiceSpy.addShift).toHaveBeenCalledWith({
-      creditTips: 100,
-      cashTips: 50,
-      tipout: 20,
-      date: convertedDate,
-      hoursWorked: 8
-    } as CreateShiftDto);
-    expect(component.close.emit).toHaveBeenCalledWith(createdShift);
-  });
+		expect(dateServiceSpy.convertStringToUtcDate).toHaveBeenCalledWith('2023-08-28', '14:30:00');
+		expect(shiftServiceSpy.addShift).toHaveBeenCalledWith({
+			creditTips: 100,
+			cashTips: 50,
+			tipout: 20,
+			date: convertedDate,
+			hoursWorked: 8
+		} as CreateShiftDto);
+		expect(component.close.emit).toHaveBeenCalledWith(createdShift);
+	});
 });
