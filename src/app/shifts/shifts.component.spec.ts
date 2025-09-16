@@ -1,4 +1,8 @@
+import { ButtonModule } from 'primeng/button';
+import { ToolbarModule } from 'primeng/toolbar';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CardModule } from 'primeng/card';
+import { DividerModule } from 'primeng/divider';
 import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js';
 
 // Register Chart.js controllers and elements for tests
@@ -81,7 +85,7 @@ describe('ShiftsComponent', () => {
 		// Explicitly override ShiftsComponent imports to use only the stub
 		TestBed.overrideComponent(ShiftsComponent, {
 			set: {
-				imports: [AddShiftComponent, BaseChartDirective, EditShiftComponent, DatePipe, CurrencyPipe, StubWeekComponent, SummaryComponent]
+				imports: [AddShiftComponent, BaseChartDirective, EditShiftComponent, DatePipe, CurrencyPipe, StubWeekComponent, SummaryComponent, CardModule, ToolbarModule, DividerModule, ButtonModule]
 			}
 		});
 
@@ -92,7 +96,11 @@ describe('ShiftsComponent', () => {
 				EditShiftComponent,
 				BaseChartDirective,
 				StubWeekComponent,
-				SummaryComponent
+				SummaryComponent,
+				CardModule,
+				ToolbarModule,
+				DividerModule,
+				ButtonModule
 			],
 			providers: [
 				{ provide: ShiftService, useValue: mockShiftService },

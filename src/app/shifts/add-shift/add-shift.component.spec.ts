@@ -37,10 +37,10 @@ describe('AddShiftComponent', () => {
 	});
 
 	it('should initialize dateInput when shiftDate is provided', () => {
-		const testDate = new Date('2023-08-28');
+		const testDate = new Date('2023-08-28T00:00:00Z');
 		component.shiftDate = testDate;
 		component.ngOnInit();
-		expect(component.dateInput.toLocaleDateString('en-CA')).toBe('2023-08-28');
+		expect(component.dateInput.toISOString().slice(0, 10)).toBe('2023-08-28');
 	});
 
 	it('should set hoursWorkedInput to undefined on init', () => {
@@ -73,13 +73,13 @@ describe('AddShiftComponent', () => {
 		};
 		const convertedDate = new Date('2023-08-28T14:30:00Z');
 
-		dateServiceSpy.convertStringToUtcDate.and.returnValue(convertedDate);
+	dateServiceSpy.convertDateObjectsToUtcDate.and.returnValue(convertedDate);
 		shiftServiceSpy.addShift.and.returnValue(of(createdShift));
 		spyOn(component.close, 'emit');
 
 		component.onSubmit(shiftModel);
 
-		expect(dateServiceSpy.convertStringToUtcDate).toHaveBeenCalledWith('2023-08-28', '14:30:00');
+		expect(dateServiceSpy.convertDateObjectsToUtcDate).toHaveBeenCalledWith(shiftModel.date, shiftModel.time);
 		expect(shiftServiceSpy.addShift).toHaveBeenCalledWith({
 			creditTips: 100,
 			cashTips: 50,
