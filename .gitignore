@@ -46,5 +46,6 @@ Thumbs.db
 .github\instructions\codacy.instructions.md
 
 # Ignore SSL cert and key files
+cert/
 localhost.pem
 localhost-key.pem
