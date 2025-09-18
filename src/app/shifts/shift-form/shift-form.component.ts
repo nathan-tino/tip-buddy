@@ -29,8 +29,8 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     styleUrl: './shift-form.component.css'
 })
 export class ShiftFormComponent {
-    @Input() dateInput!: Date;
-    @Input() timeInput?: Date | undefined;
+    @Input() dateInput?: Date | undefined = undefined;
+    @Input() timeInput?: Date | undefined = undefined;
     @Input() creditTipsInput: number | undefined = undefined;
     @Input() cashTipsInput: number | undefined = undefined;
     @Input() tipoutInput: number | undefined = undefined;
@@ -45,9 +45,9 @@ export class ShiftFormComponent {
     constructor(private dateService: DateService) { }
 
     onSubmit() {
-        // Check if the date is valid and present
-        if (!this.dateInput || this.dateInput === null) {
-            // Mark the form as submitted to trigger validation display
+        // Type guard to ensure dateInput exists before emitting
+        if (!this.dateInput) {
+            console.error('Form submitted without valid date');
             return;
         }
 
