@@ -18,9 +18,11 @@
                     inputId="dateInput"
                     name="dateInput"
                     [(ngModel)]="dateInput"
+                    #dateModel="ngModel"
                     required
                     aria-required="true"
-                    class="form-input" />
+                    class="form-input"
+                    [invalid]="dateModel.invalid && (dateModel.touched || shiftForm.submitted)" />
                 <label for="dateInput">Date</label>
             </p-floatlabel>
 

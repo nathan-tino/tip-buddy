@@ -45,8 +45,9 @@ export class ShiftFormComponent {
     constructor(private dateService: DateService) { }
 
     onSubmit() {
-        if (!this.dateInput) {
-            // Date is required; you might want to show an error message here
+        // Check if the date is valid and present
+        if (!this.dateInput || this.dateInput === null) {
+            // Mark the form as submitted to trigger validation display
             return;
         }
 
