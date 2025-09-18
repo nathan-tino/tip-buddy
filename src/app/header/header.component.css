@@ -18,7 +18,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle at 20% 50%, var(--brand-primary)08 0%, transparent 50%);
+    background: radial-gradient(circle at 20% 50%, color-mix(in srgb, var(--brand-primary) 8%, transparent) 0%, transparent 50%);
     pointer-events: none;
 }
 

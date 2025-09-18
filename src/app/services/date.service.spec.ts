@@ -1,4 +1,4 @@
-
+import { DateService } from './date.service';
 
 describe('DateService', () => {
 	let service: DateService;
@@ -29,15 +29,6 @@ describe('DateService', () => {
 			const result = service.convertDateObjectsToUtcDate(date);
 			expect(result.getUTCHours()).toBe(8);
 			expect(result.getUTCMinutes()).toBe(0);
-		});
-	});
-
-	describe('getFirstAndLastDayOfWeek', () => {
-		it('should return correct first and last day of week', () => {
-			const date = new Date('2025-09-17T12:00:00Z'); // Wednesday
-			const { firstDayOfWeek, lastDayOfWeek } = service.getFirstAndLastDayOfWeek(date);
-			expect(firstDayOfWeek.getDay()).toBe(0); // Sunday
-			expect(lastDayOfWeek.getDay()).toBe(6); // Saturday
 		});
 	});
 
@@ -89,15 +80,6 @@ describe('DateService', () => {
 			expect(result.getUTCHours()).toBe(10);
 			expect(result.getUTCMinutes()).toBe(30);
 		});
-	});
-});
-import { DateService } from './date.service';
-
-describe('DateService', () => {
-	let service: DateService;
-
-	beforeEach(() => {
-		service = new DateService();
 	});
 
 	describe('getFirstAndLastDayOfWeek', () => {

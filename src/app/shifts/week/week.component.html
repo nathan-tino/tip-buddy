@@ -10,7 +10,7 @@
     </tr>
     <tr>
         @for(day of daysAndShifts; track trackByDate(day)) {
-            <td>
+            <td [class.today]="isToday(day.date)">
                 <app-day
                     [date]="day.date"
                     [shifts]="day.shifts"

@@ -63,14 +63,14 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 var(--spacing-sm) var(--spacing-xs);
-    background: rgba(var(--p-surface-100), 0.5);
+    background: color-mix(in srgb, var(--p-surface-100) 50%, transparent);
     border-radius: var(--border-radius-sm);
-    min-height: 24px; /* Slightly smaller consistent item height */
+    min-height: 24px;
     transition: background-color 0.2s ease-in-out;
 }
 
 .shift-item:hover {
-    background: rgba(var(--p-surface-200), 0.7);
+    background: color-mix(in srgb, var(--p-surface-200) 70%, transparent);
 }
 
 .shift-amount {
@@ -105,7 +105,7 @@
 
 .edit-btn:hover {
     color: var(--p-orange-500);
-    background: rgba(var(--p-orange-500), 0.1);
+    background: color-mix(in srgb, var(--p-orange-500) 10%, transparent);
     transform: scale(1.1);
 }
 
@@ -115,7 +115,7 @@
 
 .delete-btn:hover {
     color: var(--p-red-500);
-    background: rgba(var(--p-red-500), 0.1);
+    background: color-mix(in srgb, var(--p-red-500) 10%, transparent);
     transform: scale(1.1);
 }
 

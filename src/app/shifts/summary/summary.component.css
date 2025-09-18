@@ -1,5 +1,3 @@
-
-/* Enhanced Summary Component Styles */
 .emphasis {
     font-weight: var(--font-weight-bold);
     color: var(--brand-accent);
@@ -30,7 +28,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle at 80% 20%, rgba(var(--brand-primary), 0.05) 0%, transparent 50%);
+    background: radial-gradient(circle at 80% 20%, color-mix(in srgb, var(--brand-primary) 5%, transparent) 0%, transparent 50%);
     pointer-events: none;
 }
 
