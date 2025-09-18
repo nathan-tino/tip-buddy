@@ -18,12 +18,12 @@
           <p-floatlabel>
             <input 
               pInputText 
-              id="username" 
+              id="username"
               [(ngModel)]="userName" 
               name="userName" 
               required 
               autocomplete="username"
-              class="w-full"
+              fluid
               [disabled]="isLoading" />
             <label for="username">Username</label>
           </p-floatlabel>
@@ -33,7 +33,7 @@
         <div class="field">
           <p-floatlabel>
             <p-password 
-              id="password"
+              inputId="password"
               [(ngModel)]="password" 
               name="password" 
               required 
@@ -41,6 +41,7 @@
               [toggleMask]="true"
               [feedback]="false"
               styleClass="w-full"
+              fluid
               [disabled]="isLoading">
             </p-password>
             <label for="password">Password</label>
