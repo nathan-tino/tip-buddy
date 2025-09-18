@@ -17,10 +17,10 @@ import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 declare module 'chart.js' {
 	interface PluginOptionsByType<TType extends keyof ChartTypeRegistry> {
 		doughnutCenterText?: {
-		display: boolean;
-		text: string;
-		color: string;
-		font: { size: number; weight: string };
+			display: boolean;
+			text: string;
+			color: string;
+			font: { size: number; weight: string };
 		};
 	}
 }
@@ -34,53 +34,53 @@ declare module 'chart.js' {
 })
 export class SummaryComponent implements OnChanges {
 	@Input() shifts: GetShiftDto[] = [];
-  	summaryData: Omit<ShiftsSummaryDto, 'shifts'> | null = null;
-  	private readonly CASH_TIPS_LABEL = 'Cash Tips';
-  	private readonly CREDIT_TIPS_LABEL = 'Credit Tips';
+	summaryData: Omit<ShiftsSummaryDto, 'shifts'> | null = null;
+	private readonly CASH_TIPS_LABEL = 'Cash Tips';
+	private readonly CREDIT_TIPS_LABEL = 'Credit Tips';
 
-  	constructor(private shiftService: ShiftService) {}
+	constructor(private shiftService: ShiftService) { }
 
-  	doughnutChartData = {
+	doughnutChartData = {
 		labels: [this.CASH_TIPS_LABEL, this.CREDIT_TIPS_LABEL],
 		datasets: [
-		{ data: [0, 0], backgroundColor: ['#4caf50', '#2196f3'] }
+			{ data: [0, 0], backgroundColor: ['#4caf50', '#2196f3'] }
 		]
 	};
 
-  	doughnutChartOptions = {
+	doughnutChartOptions = {
 		responsive: false,
 		plugins: {
 			legend: {
-			position: 'bottom' as 'bottom'
+				position: 'bottom' as  'bottom'
 			},
 			title: {
-			display: true,
-			text: 'Tips Breakdown'
+				display: true,
+				text: 'Tips Breakdown'
 			},
 			tooltip: {
-			callbacks: {
-				label: (context: TooltipItem<'doughnut'>) => {
-				const label = context.label || '';
-				const value = context.parsed;
-				return `${label}: $${value.toLocaleString()}`;
+				callbacks: {
+					label: (context: TooltipItem<'doughnut'>) => {
+						const label = context.label || '';
+						const value = context.parsed;
+						return `${label}: $${value.toLocaleString()}`;
+					}
 				}
-			}
 			},
 			// Custom plugin for center text
 			doughnutCenterText: {
-			display: true,
-			text: '$0',
-			color: '#222',
-			font: { size: 22, weight: 'bold' }
+				display: true,
+				text: '$0',
+				color: '#222',
+				font: { size: 22, weight: 'bold' }
 			}
 		}
-    };
+	};
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['shifts']) {
-		const summary = this.shiftService.calculateShiftsSummary(this.shifts);
-		this.summaryData = summary;
-		this.updateChart(this.summaryData);
+			const summary = this.shiftService.calculateShiftsSummary(this.shifts);
+			this.summaryData = summary;
+			this.updateChart(this.summaryData);
 		}
 	}
 
@@ -101,8 +101,8 @@ export class SummaryComponent implements OnChanges {
 			],
 			datasets: [
 				{
-				data: [summary.cashTipsTotal, summary.creditTipsTotal],
-				backgroundColor: ['#4caf50', '#2196f3']
+					data: [summary.cashTipsTotal, summary.creditTipsTotal],
+					backgroundColor: ['#4caf50', '#2196f3']
 				}
 			]
 		};

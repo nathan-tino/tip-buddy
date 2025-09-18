@@ -1,27 +1,29 @@
 <div class="summary-content">
     @if (summaryData) {
         <!-- Data State -->
-        <div class="summary-data">
-            <div class="emphasis">Total Tips: {{ summaryData.totalTips | currency:'USD':'symbol':'1.0-0' }}</div>
-            <div>Cash Tips: {{ summaryData.cashTipsTotal | currency:'USD':'symbol':'1.0-0' }}</div>
-            <div>Credit Tips: {{ summaryData.creditTipsTotal | currency:'USD':'symbol':'1.0-0' }}</div>
-            <div>*Total Tipout: {{ summaryData.totalTipout | currency:'USD':'symbol':'1.0-0' }}</div>
-            <br />
-            <div class="emphasis">Hours Worked: {{ summaryData.totalHoursWorked }}</div>
-            <div>Total Shifts: {{ summaryData.totalShifts }}</div>
-            <div>Average Tips Per Shift: {{ summaryData.averageTipsPerShift | currency:'USD':'symbol':'1.0-0' }}</div>
-            <div>Tips Per Hour: {{ summaryData.tipsPerHour | currency:'USD':'symbol':'1.0-0' }}</div>
-            <br />
-            <div><span class="tipout-note">*Total Tipout has been automatically subtracted from credit tips</span></div>
-        </div>
-        <div class="summary-chart">
-            <canvas baseChart
-                [data]="doughnutChartData"
-                [type]="'doughnut'"
-                [options]="doughnutChartOptions"
-                [plugins]="[]"
-                width="300" height="300">
-            </canvas>
+        <div class="summary-flex">
+            <div class="summary-left">
+                <div class="emphasis">Hours Worked: {{ summaryData.totalHoursWorked }}</div>
+                <div>Total Shifts: {{ summaryData.totalShifts }}</div>
+                <div>Average Tips Per Shift: {{ summaryData.averageTipsPerShift | currency:'USD':'symbol':'1.0-0' }}</div>
+                <div>Tips Per Hour: {{ summaryData.tipsPerHour | currency:'USD':'symbol':'1.0-0' }}</div>
+            </div>
+            <div class="summary-chart">
+                <canvas baseChart
+                    [data]="doughnutChartData"
+                    [type]="'doughnut'"
+                    [options]="doughnutChartOptions"
+                    [plugins]="[]"
+                    width="400" height="200">
+                </canvas>
+            </div>
+            <div class="summary-right">
+                <div class="emphasis">Total Tips: {{ summaryData.totalTips | currency:'USD':'symbol':'1.0-0' }}</div>
+                <div>Cash Tips: {{ summaryData.cashTipsTotal | currency:'USD':'symbol':'1.0-0' }}</div>
+                <div>Credit Tips: {{ summaryData.creditTipsTotal | currency:'USD':'symbol':'1.0-0' }}</div>
+                <div>*Total Tipout: {{ summaryData.totalTipout | currency:'USD':'symbol':'1.0-0' }}</div>
+                <div><span class="tipout-note">*Total Tipout has been automatically subtracted from credit tips</span></div>
+            </div>
         </div>
     } @else {
         <!-- Empty State -->

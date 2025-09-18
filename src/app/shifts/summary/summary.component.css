@@ -1,3 +1,4 @@
+
 /* Enhanced Summary Component Styles */
 .emphasis {
     font-weight: var(--font-weight-bold);
@@ -11,12 +12,12 @@
     justify-content: center;
     align-items: center;
     background: linear-gradient(145deg, var(--p-surface-0) 0%, var(--p-surface-25) 100%);
-    padding: var(--spacing-2xl);
+    padding: var(--spacing-md) var(--spacing-xl);
     border-radius: var(--border-radius-xl);
     border: 1px solid var(--p-surface-100);
     box-shadow: var(--shadow-lg);
     width: 100%;
-    min-height: 200px;
+    min-height: 120px;
     position: relative;
     overflow: hidden;
 }
@@ -33,34 +34,57 @@
     pointer-events: none;
 }
 
-.summary-data {
+/* Desktop layout for summary-flex */
+.summary-flex {
     display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
-    font-size: var(--text-base);
-    color: var(--p-surface-800);
-    align-items: flex-end;
-    flex: 1;
-    padding-right: var(--spacing-3xl);
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
     position: relative;
     z-index: 1;
+}
+
+.summary-left, .summary-right {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: var(--text-sm);
+    color: var(--p-surface-800);
+    min-width: 160px;
+    max-width: 200px;
+}
+
+.summary-left {
+    align-items: flex-start;
+    text-align: left;
+}
+
+.summary-right {
+    align-items: flex-end;
+    text-align: right;
 }
 
 .summary-chart {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    min-width: 180px;
-    flex: 1;
-    padding-right: var(--spacing-3xl);
+    justify-content: center;
+    min-width: 280px;
     position: relative;
     z-index: 1;
+}
+
+.summary-data {
+    /* Legacy styles - keeping for backward compatibility but not used in new layout */
+    display: none;
 }
 
 .tipout-note {
     font-size: var(--text-xs);
     color: var(--p-surface-500);
     font-style: italic;
+    margin-top: 0.25rem;
 }
 
 /* Empty State Styles */
@@ -155,28 +179,35 @@
 /* Responsive Design */
 @media (max-width: 768px) {
     .summary-content {
-        flex-direction: column;
-        text-align: center;
-        gap: var(--spacing-xl);
-        padding: var(--spacing-xl);
+        padding: var(--spacing-sm) var(--spacing-md);
+        min-height: 100px;
     }
     
-    .summary-data {
+    .summary-flex {
+        flex-direction: column;
         align-items: center;
-        padding-right: 0;
-        width: 100%;
+        justify-content: center;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .summary-left, .summary-right {
+        min-width: unset;
+        max-width: unset;
+        align-items: center;
+        text-align: center;
     }
     
     .summary-chart {
-        padding-right: 0;
+        min-width: 240px;
         justify-content: center;
-        min-width: auto;
     }
     
     .empty-state {
         flex-direction: column;
         text-align: center;
         gap: var(--spacing-lg);
+        padding: var(--spacing-md) 0;
     }
     
     .empty-state-content {
@@ -193,7 +224,12 @@
 
 @media (max-width: 480px) {
     .summary-content {
-        padding: var(--spacing-lg);
+        padding: var(--spacing-xs) var(--spacing-sm);
+        min-height: 80px;
+    }
+    
+    .summary-chart {
+        min-width: 200px;
     }
     
     .placeholder-chart {
