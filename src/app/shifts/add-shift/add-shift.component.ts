@@ -15,9 +15,6 @@ import { ShiftFormModel } from '../shift-form/shift-form.model';
     <app-shift-form
       [title]="'Add Shift'"
       [dateInput]="dateInput"
-      [creditTipsInput]="0"
-      [cashTipsInput]="0"
-      [tipoutInput]="0"
       [hoursWorkedInput]="hoursWorkedInput"
       (submitted)="onSubmit($event)"
       (cancel)="onCancel()"
@@ -29,7 +26,7 @@ export class AddShiftComponent implements OnInit {
     @Output() close = new EventEmitter<GetShiftDto | undefined>();
     @Input() shiftDate: Date | undefined;
 
-    dateInput!: string;
+    dateInput!: Date;
     hoursWorkedInput?: number;
 
     constructor(private shiftService: ShiftService, private dateService: DateService) { }
@@ -37,7 +34,8 @@ export class AddShiftComponent implements OnInit {
     ngOnInit() {
         const dateValue = this.shiftDate;
         if (dateValue) {
-            this.dateInput = dateValue.toLocaleDateString('en-CA');
+            // We don't need to worry about timezone here because dateValue is generated on the client side
+            this.dateInput = new Date(dateValue);
         }
         this.hoursWorkedInput = undefined;
     }
@@ -48,10 +46,10 @@ export class AddShiftComponent implements OnInit {
 
     onSubmit(shift: ShiftFormModel) {
         const newShift: CreateShiftDto = {
-            creditTips: shift.creditTips,
-            cashTips: shift.cashTips,
-            tipout: shift.tipout,
-            date: this.dateService.convertStringToUtcDate(shift.date, shift.time)!,
+            creditTips: shift.creditTips ?? 0,
+            cashTips: shift.cashTips ?? 0,
+            tipout: shift.tipout ?? 0,
+            date: this.dateService.convertDateObjectsToUtcDate(shift.date, shift.time),
             hoursWorked: shift.hoursWorked
         };
 

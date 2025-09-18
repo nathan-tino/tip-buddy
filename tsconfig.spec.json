@@ -5,7 +5,8 @@
     "outDir": "./out-tsc/spec",
     "types": [
       "jasmine"
-    ]
+    ],
+    "sourceMap": false, // NOTE: Enable source maps for easier debugging if needed
   },
   "include": [
     "src/**/*.spec.ts",

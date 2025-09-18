@@ -7,10 +7,10 @@ import { ShiftFormComponent } from '../shift-form/shift-form.component';
 import { ShiftFormModel } from '../shift-form/shift-form.model';
 
 @Component({
-  selector: 'app-edit-shift',
-  standalone: true,
-  imports: [FormsModule, ShiftFormComponent],
-  template: `
+	selector: 'app-edit-shift',
+	standalone: true,
+	imports: [FormsModule, ShiftFormComponent],
+	template: `
     <app-shift-form
       [title]="'Edit Shift'"
       [dateInput]="dateInput"
@@ -23,45 +23,45 @@ import { ShiftFormModel } from '../shift-form/shift-form.model';
       (cancel)="onCancel()"
     ></app-shift-form>
   `,
-  styleUrl: './edit-shift.component.css'
+	styleUrl: './edit-shift.component.css'
 })
 export class EditShiftComponent implements OnInit {
-  @Input() shift!: GetShiftDto;
-  @Output() close = new EventEmitter<GetShiftDto | undefined>();
+	@Input() shift!: GetShiftDto;
+	@Output() close = new EventEmitter<GetShiftDto | undefined>();
 
-  dateInput!: string;
-  timeInput!: string;
+	dateInput!: Date;
+	timeInput!: Date;
 
-  constructor(private shiftService: ShiftService, private dateService: DateService) { }
+	constructor(private shiftService: ShiftService, private dateService: DateService) { }
 
-  ngOnInit() {
-    if (this.shift) {
-      const dateValue = new Date(this.shift.date);
-      this.dateInput = dateValue.toISOString().slice(0, 10);
-      this.timeInput = dateValue.toISOString().slice(11, 19);
+	ngOnInit() {
+        if (this.shift) {
+            const { localDate, localTime } = this.dateService.convertUtcDateToLocalComponents(this.shift.date);
+            this.dateInput = localDate;
+            this.timeInput = localTime;
+        }
     }
-  }
 
-  onCancel() {
-    this.close.emit(undefined);
-  }
+	onCancel() {
+		this.close.emit(undefined);
+	}
 
-  onSubmit(shift: ShiftFormModel) {
-    const updatedShift = {
-      id: this.shift.id,
-      creditTips: shift.creditTips,
-      cashTips: shift.cashTips,
-      tipout: shift.tipout,
-      date: this.dateService.convertStringToUtcDate(shift.date, shift.time),
-      hoursWorked: shift.hoursWorked
-    };
+	onSubmit(shift: ShiftFormModel) {
+		const updatedShift = {
+			id: this.shift.id,
+			creditTips: shift.creditTips ?? 0,
+			cashTips: shift.cashTips ?? 0,
+			tipout: shift.tipout ?? 0,
+			date: this.dateService.convertDateObjectsToUtcDate(shift.date, shift.time),
+			hoursWorked: shift.hoursWorked
+		};
 
-    this.shiftService.editShift(this.shift.id, updatedShift)
-      .subscribe({
-        next: (response) => {
-          this.close.emit(updatedShift);
-        },
-        error: (e) => console.error(e)
-      });
-  }
+		this.shiftService.editShift(this.shift.id, updatedShift)
+			.subscribe({
+				next: (response) => {
+					this.close.emit(updatedShift);
+				},
+				error: (e) => console.error(e)
+			});
+	}
 }

@@ -12,7 +12,7 @@ export class DayComponent {
   shifts = input<GetShiftDto[]>();
   addShift = output<Date>();
   editShift = output<GetShiftDto>();
-  deleteShift = output<number>();
+  deleteShift = output<string>();
 
   onAddShift() {
     this.addShift.emit(this.date());
@@ -24,8 +24,7 @@ export class DayComponent {
     }
   }
 
-  onDeleteShift(id: number) {
-    console.log('day component delete shift: ' + id);
+  onDeleteShift(id: string) {
     this.deleteShift.emit(id);
   }
 }

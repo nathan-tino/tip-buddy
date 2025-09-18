@@ -36,7 +36,7 @@ describe('SummaryComponent', () => {
 
 	it('updateChart updates doughnut data and center text', () => {
 		const mockShifts = [{
-			id: 1,
+			id: '1',
 			date: new Date(),
 			cashTips: 200,
 			creditTips: 100,

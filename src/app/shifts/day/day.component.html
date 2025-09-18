@@ -1,24 +1,28 @@
 
 <div class="cell-content">
-    <article>
-        {{ date().getDate() }}
-    </article>
+    <div class="day-header">
+        <article>
+            {{ date().getDate() }}
+        </article>
+    </div>
 
-    @if (shifts()) {
-        <table class="shifts">
-            @for(shift of shifts(); track shift) {
-                <tr class="shift-buttons">
-                    <td>${{shift.creditTips + shift.cashTips - shift.tipout}}</td>
-                    <td class="pull-right">
-                        <button class="shift-button" (click)="onEditShift(shift)">Edit</button>
-                        <button class="shift-button" (click)="onDeleteShift(shift.id)">Delete</button>
-                    </td>
-                </tr>
-            }
-        </table>
-    }
+    <div class="shifts-container">
+        @if (shifts()) {
+            <div class="shifts-list">
+                @for(shift of shifts(); track shift.id) {
+                    <div class="shift-item">
+                        <span class="shift-amount">${{shift.creditTips + shift.cashTips - shift.tipout}}</span>
+                        <div class="shift-actions">
+                            <i class="pi pi-pencil edit-btn" (click)="onEditShift(shift)"></i>
+                            <i class="pi pi-trash delete-btn" (click)="onDeleteShift(shift.id)"></i>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
 
-    <div>
-        <button class="hover-btn" (click)="onAddShift()">Add</button>
+    <div class="add-button-container">
+        <i class="pi pi-plus add-btn" (click)="onAddShift()"></i>
     </div>
 </div>

@@ -1,40 +1,92 @@
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* Modern Dialog Form Styling */
+.form-container {
+    padding: var(--spacing-lg) 0;
 }
 
-label {
-  font-weight: bold;
+.shift-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
 }
 
-input {
-  padding: 4px;
-  font-size: 1rem;
+.form-input {
+    width: 100%;
+    border-radius: var(--border-radius-md);
+    transition: all 0.2s ease-in-out;
 }
 
-button {
-  margin-top: 8px;
-  padding: 6px 12px;
-  font-size: 1rem;
+.form-input:focus {
+    outline: none;
+    border-color: var(--p-primary-500);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--p-primary-500) 20%, transparent);
 }
 
-.backdrop {
-  background-color: rgba(0, 0, 0, 0.9);
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
+/* Dialog Footer Styling */
+.dialog-footer {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: var(--spacing-md);
 }
 
-dialog {
-  width: 90%;
-  max-width: 30rem;
-  border-radius: 6px;
-  border: none;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
-  overflow: hidden;
-  padding: 1rem;
-  top: 5rem;
+.save-button {
+    min-width: 80px;
+}
+
+.cancel-button {
+    min-width: 80px;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+    :host ::ng-deep .shift-dialog .p-dialog {
+        width: 95vw !important;
+        margin: var(--spacing-lg);
+    }
+    
+    .dialog-footer {
+        flex-direction: column-reverse;
+        gap: var(--spacing-sm);
+    }
+    
+    .save-button,
+    .cancel-button {
+        width: 100%;
+    }
+}
+
+/* Enhanced Dialog Header */
+:host ::ng-deep .shift-dialog .p-dialog-header {
+    background: linear-gradient(135deg, var(--p-surface-50) 0%, var(--p-surface-100) 100%);
+    border-bottom: 1px solid var(--p-surface-200);
+    border-top-left-radius: var(--p-dialog-border-radius);
+    border-top-right-radius: var(--p-dialog-border-radius);
+}
+
+:host ::ng-deep .shift-dialog .p-dialog-title {
+    font-weight: var(--font-weight-semibold);
+    color: var(--p-surface-950);
+}
+
+/* Match dialog background and corners to site theme */
+:host ::ng-deep .shift-dialog .p-dialog {
+    background: var(--p-surface-0) !important;
+    color: var(--p-surface-900) !important;
+    box-shadow: var(--shadow-lg) !important;
+    border: 3px solid var(--p-surface-100) !important;
+    overflow: hidden !important;
+}
+
+/* Keep content and footer on the light surface but don't reapply corner radii */
+:host ::ng-deep .shift-dialog .p-dialog-content,
+:host ::ng-deep .shift-dialog .p-dialog-footer {
+    background: var(--p-surface-0) !important;
+    color: var(--p-surface-900) !important;
+}
+
+:host ::ng-deep .shift-dialog .p-dialog-footer {
+    border-top: 1px solid var(--p-surface-100) !important;
+    border-bottom-left-radius: var(--p-dialog-border-radius);
+    border-bottom-right-radius: var(--p-dialog-border-radius);
 }

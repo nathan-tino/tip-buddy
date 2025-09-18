@@ -51,11 +51,11 @@ export class ShiftService {
             map(parseShiftDate));
     }
 
-    deleteShift(id: number): Observable<any> {
+    deleteShift(id: string): Observable<any> {
         return this.http.delete(`${this.apiUrl}/${id}`, { withCredentials: true });
     }
 
-    editShift(id: number, shift: UpdateShiftDto): Observable<any> {
+    editShift(id: string, shift: UpdateShiftDto): Observable<any> {
         return this.http.put(`${this.apiUrl}/${id}`, shift, { withCredentials: true });
     }
 

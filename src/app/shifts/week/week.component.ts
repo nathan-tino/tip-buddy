@@ -15,7 +15,7 @@ export class WeekComponent {
 	shifts = input.required<GetShiftDto[]>();
 	addShift = output<Date>();
 	editShift = output<GetShiftDto>();
-	deleteShift = output<number>();
+	deleteShift = output<string>();
 
 	daysOfWeek: number[] = [0, 1, 2, 3, 4, 5, 6];
 	daysAndShifts: { date: Date, shifts: GetShiftDto[] }[] = [];
@@ -36,12 +36,19 @@ export class WeekComponent {
 		}
 	}
 
-	onDeleteShift(id: number) {
+	onDeleteShift(id: string) {
 		this.deleteShift.emit(id);
 	}
 
 	trackByDate(item: { date: Date, shifts: GetShiftDto[] }): string {
 		return item.date.toISOString();
+	}
+
+	isToday(date: Date): boolean {
+		const today = new Date();
+		return today.getFullYear() === date.getFullYear() &&
+			   today.getMonth() === date.getMonth() &&
+			   today.getDate() === date.getDate();
 	}
 
 	private populateDaysAndShifts() {

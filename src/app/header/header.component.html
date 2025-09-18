@@ -1,9 +1,45 @@
-<header>
-  <div>
-    <h1>Tip Buddy!</h1>
-    <p>Get them tips put in there and do it right</p>
-    @if (isLoggedIn) {
-      <button (click)="logout()" class="logout-btn">Logout</button>
-    }
-  </div>
-</header>
+<div class="app-header">
+	<div class="header-content">
+		<div class="header-brand">
+			<!-- Enhanced logo with better accessibility -->
+			<div class="logo-container">
+				<svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 35 35" role="img"
+					aria-label="Tip Buddy - mint green lion emblem" class="logo">
+					<!-- mane -->
+					<polygon points="17.5,3 32,12 28,30 7,30 3,12" fill="var(--brand-primary)" />
+
+					<!-- face base -->
+					<polygon points="17.5,9 26,16 22,28 13,28 9,16" fill="var(--brand-secondary)" />
+
+					<!-- eyes -->
+					<rect x="13" y="17" width="2" height="2" fill="var(--p-surface-950)" />
+					<rect x="20" y="17" width="2" height="2" fill="var(--p-surface-950)" />
+
+					<!-- nose -->
+					<polygon points="17.5,21 19,23 16,23" fill="var(--brand-accent)" />
+				</svg>
+			</div>
+
+			<!-- Enhanced brand text section -->
+			<div class="header-brand-text">
+				<h1 class="header-title">Tip Buddy</h1>
+				<p class="header-subtitle">Track your tips with confidence</p>
+			</div>
+		</div>
+
+		<!-- Enhanced actions section -->
+		<div class="header-actions">
+			@if (isLoggedIn) {
+				<p-button 
+					(click)="logout()" 
+					label="Sign Out" 
+					icon="pi pi-sign-out"
+					[outlined]="true"
+					severity="secondary"
+					size="small"
+					class="logout-button">
+				</p-button>
+			}
+		</div>
+	</div>
+</div>

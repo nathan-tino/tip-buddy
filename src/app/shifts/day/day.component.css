@@ -1,25 +1,213 @@
-.hover-btn {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.cell-content:hover .hover-btn {
-    display: inline-block;
-    opacity: 1;
-}
-
+/* Fixed Height Day Cell Component */
 .cell-content {
-    min-height: 100px;
+    height: 150px; /* Increased height for better readability on desktop */
+    padding: var(--spacing-xs);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
 }
 
-.shifts {
-    width: 100%;
+/* Day Header with Date */
+.day-header {
+    flex-shrink: 0; /* Don't shrink the header */
+    padding: var(--spacing-xs) 0;
+    margin-bottom: var(--spacing-xs);
 }
 
-.pull-right {
-    text-align: right;
+.day-header article {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--p-surface-800);
+    text-align: left;
+    margin: 0;
 }
 
-.shift-button {
-    margin-left: 2px;
+/* Scrollable Shifts Container */
+.shifts-container {
+    flex: 1; /* Take up remaining space */
+    overflow-y: auto; /* Allow vertical scrolling */
+    overflow-x: hidden;
+    margin-bottom: var(--spacing-xs);
+    /* Custom scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: var(--p-surface-300) transparent;
+}
+
+.shifts-container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.shifts-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.shifts-container::-webkit-scrollbar-thumb {
+    background: var(--p-surface-300);
+    border-radius: 2px;
+}
+
+.shifts-container::-webkit-scrollbar-thumb:hover {
+    background: var(--p-surface-400);
+}
+
+/* Individual Shift Items */
+.shifts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px; /* Tighter spacing between items */
+}
+
+.shift-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 var(--spacing-sm) var(--spacing-xs);
+    background: color-mix(in srgb, var(--p-surface-100) 50%, transparent);
+    border-radius: var(--border-radius-sm);
+    min-height: 24px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.shift-item:hover {
+    background: color-mix(in srgb, var(--p-surface-200) 70%, transparent);
+}
+
+.shift-amount {
+    font-weight: var(--font-weight-semibold);
+    color: var(--brand-accent);
+    font-size: var(--text-sm);
+}
+
+.shift-actions {
+    display: flex;
+    gap: 2px; /* Tighter gap between action buttons */
+    align-items: center;
+}
+
+/* Enhanced Button Styling */
+.edit-btn, .delete-btn, .add-btn {
+    cursor: pointer;
+    padding: 2px; /* Reduced padding for smaller buttons */
+    border-radius: var(--border-radius-sm);
+    transition: all 0.2s ease-in-out;
+    font-size: 11px; /* Smaller icon size */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px; /* Smaller minimum width */
+    min-height: 18px; /* Smaller minimum height */
+}
+
+.edit-btn {
+    color: var(--p-surface-600);
+}
+
+.edit-btn:hover {
+    color: var(--p-orange-500);
+    background: color-mix(in srgb, var(--p-orange-500) 10%, transparent);
+    transform: scale(1.1);
+}
+
+.delete-btn {
+    color: var(--p-surface-600);
+}
+
+.delete-btn:hover {
+    color: var(--p-red-500);
+    background: color-mix(in srgb, var(--p-red-500) 10%, transparent);
+    transform: scale(1.1);
+}
+
+/* Add Button Container */
+.add-button-container {
+    flex-shrink: 0; /* Don't shrink the add button area */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px; /* Fixed height for add button area */
+}
+
+.add-btn {
+    opacity: 0.6;
+    transition: all 0.2s ease-in-out;
+    color: var(--p-surface-500);
+    background: var(--p-surface-100);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.cell-content:hover .add-btn {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.add-btn:hover {
+    color: var(--p-primary-500);
+    background: var(--p-primary-100);
+    transform: scale(1.1);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Focus States for Accessibility */
+.edit-btn:focus,
+.delete-btn:focus,
+.add-btn:focus {
+    outline: 2px solid var(--p-primary-500);
+    outline-offset: 2px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .cell-content {
+        height: 120px; /* Smaller on tablet */
+        padding: var(--spacing-xs);
+    }
+    
+    .day-header article {
+        font-size: var(--text-base);
+    }
+    
+    .shift-item {
+        padding: 2px var(--spacing-xs);
+        min-height: 22px;
+    }
+    
+    .shift-amount {
+        font-size: var(--text-xs);
+    }
+    
+    .add-btn {
+        width: 20px;
+        height: 20px;
+        font-size: var(--text-xs);
+    }
+    
+    .edit-btn, .delete-btn {
+        min-width: 16px;
+        min-height: 16px;
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 640px) {
+    .cell-content {
+        height: 100px; /* Even smaller on mobile */
+    }
+    
+    .shifts-container::-webkit-scrollbar {
+        width: 3px;
+    }
+}
+
+/* Today Highlight Enhancement */
+.today .cell-content .day-header article {
+    color: var(--brand-accent);
+    font-weight: var(--font-weight-bold);
+}
+
+/* Empty State Styling */
+.cell-content:not(:hover) .add-btn {
+    display: inline-flex;
 }

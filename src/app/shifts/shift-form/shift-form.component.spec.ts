@@ -3,6 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ShiftFormComponent } from './shift-form.component';
 import { ShiftFormModel } from './shift-form.model';
 import { By } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ShiftFormComponent', () => {
     let component: ShiftFormComponent;
@@ -10,7 +11,7 @@ describe('ShiftFormComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ShiftFormComponent, ReactiveFormsModule]
+            imports: [ShiftFormComponent, ReactiveFormsModule, NoopAnimationsModule]
         }).compileComponents();
 
         fixture = TestBed.createComponent(ShiftFormComponent);
@@ -22,8 +23,8 @@ describe('ShiftFormComponent', () => {
     });
 
     it('should initialize with input values', () => {
-        component.dateInput = '2023-08-28';
-        component.timeInput = '14:30:00';
+        component.dateInput = new Date('2023-08-28T14:30:00Z');
+        component.timeInput = new Date('2023-08-28T14:30:00Z');
         component.creditTipsInput = 100;
         component.cashTipsInput = 50;
         component.tipoutInput = 20;
@@ -32,8 +33,8 @@ describe('ShiftFormComponent', () => {
         fixture.detectChanges();
 
         // Assuming the component uses these inputs directly
-        expect(component.dateInput).toBe('2023-08-28');
-        expect(component.timeInput).toBe('14:30:00');
+        expect(component.dateInput).toEqual(new Date('2023-08-28T14:30:00Z'));
+        expect(component.timeInput).toEqual(new Date('2023-08-28T14:30:00Z'));
         expect(component.creditTipsInput).toBe(100);
         expect(component.cashTipsInput).toBe(50);
         expect(component.tipoutInput).toBe(20);
@@ -41,8 +42,8 @@ describe('ShiftFormComponent', () => {
     });
 
     it('should emit submitted with form model on submit', () => {
-        component.dateInput = '2023-08-28';
-        component.timeInput = '14:30:00';
+        component.dateInput = new Date('2023-08-28');
+        component.timeInput = new Date('1970-01-01T14:30:00Z');
         component.creditTipsInput = 100;
         component.cashTipsInput = 50;
         component.tipoutInput = 20;
@@ -55,8 +56,8 @@ describe('ShiftFormComponent', () => {
         component.onSubmit();
 
         const expectedModel: ShiftFormModel = {
-            date: '2023-08-28',
-            time: '14:30:00',
+            date: new Date('2023-08-28'),
+            time: new Date('1970-01-01T14:30:00Z'),
             creditTips: 100,
             cashTips: 50,
             tipout: 20,
@@ -70,7 +71,10 @@ describe('ShiftFormComponent', () => {
         spyOn(component.cancel, 'emit');
 
         fixture.detectChanges();
-        const cancelButton = fixture.debugElement.query(By.css('#cancelButton'));
+        // Select the actual button inside the p-button component
+        // Note: this is a workaround due to the way PrimeNG renders buttons. There is no id on the button itself,
+        // not sure if it's due to a bug or not. I have an active question on their GitHub
+        const cancelButton = fixture.debugElement.query(By.css('.cancel-button button'));
         cancelButton.nativeElement.click();
 
         expect(component.cancel.emit).toHaveBeenCalled();

@@ -1,4 +1,8 @@
+import { ButtonModule } from 'primeng/button';
+import { ToolbarModule } from 'primeng/toolbar';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CardModule } from 'primeng/card';
+import { DividerModule } from 'primeng/divider';
 import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js';
 
 // Register Chart.js controllers and elements for tests
@@ -23,7 +27,7 @@ describe('ShiftsComponent', () => {
 
 	const mockShifts: GetShiftDto[] = [
 		{
-			id: 1,
+			id: '1',
 			date: new Date('2023-01-01T00:00:00Z'),
 			hoursWorked: 5,
 			cashTips: 50,
@@ -81,7 +85,7 @@ describe('ShiftsComponent', () => {
 		// Explicitly override ShiftsComponent imports to use only the stub
 		TestBed.overrideComponent(ShiftsComponent, {
 			set: {
-				imports: [AddShiftComponent, BaseChartDirective, EditShiftComponent, DatePipe, CurrencyPipe, StubWeekComponent, SummaryComponent]
+				imports: [AddShiftComponent, BaseChartDirective, EditShiftComponent, DatePipe, CurrencyPipe, StubWeekComponent, SummaryComponent, CardModule, ToolbarModule, DividerModule, ButtonModule]
 			}
 		});
 
@@ -92,7 +96,11 @@ describe('ShiftsComponent', () => {
 				EditShiftComponent,
 				BaseChartDirective,
 				StubWeekComponent,
-				SummaryComponent
+				SummaryComponent,
+				CardModule,
+				ToolbarModule,
+				DividerModule,
+				ButtonModule
 			],
 			providers: [
 				{ provide: ShiftService, useValue: mockShiftService },
@@ -137,7 +145,7 @@ describe('ShiftsComponent', () => {
 		resetShifts();
 
 		const newShift: GetShiftDto = {
-			id: 2,
+			id: '2',
 			date: new Date(),
 			hoursWorked: 4,
 			cashTips: 40,
@@ -165,15 +173,15 @@ describe('ShiftsComponent', () => {
 		resetShifts();
 		mockShiftService.deleteShift.and.returnValue(of(void 0));
 
-		component.onDeleteShift(1);
-		expect(mockShiftService.deleteShift).toHaveBeenCalledWith(1);
+	component.onDeleteShift('1');
+		expect(mockShiftService.deleteShift).toHaveBeenCalledWith('1');
 		expect(component.shifts.length).toBe(0);
 	});
 
 	it('should handle delete error gracefully', () => {
 		spyOn(console, 'error');
 		mockShiftService.deleteShift.and.returnValue(throwError(() => new Error('Delete failed')));
-		component.onDeleteShift(1);
+	component.onDeleteShift('1');
 		expect(console.error).toHaveBeenCalled();
 	});
 

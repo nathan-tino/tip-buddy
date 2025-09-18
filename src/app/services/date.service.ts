@@ -86,4 +86,48 @@ export class DateService {
       date.getMilliseconds()
     ));
   }
+
+  /**
+   * Converts Date objects to a UTC Date object for backend submission.
+   * This method treats the input values as they should appear in UTC,
+   * avoiding timezone double-conversion issues.
+   * @param dateObject - The Date object from the date picker.
+   * @param timeObject - Optional Date object from the time picker.
+   * @returns A UTC Date object.
+   */
+  convertDateObjectsToUtcDate(dateObject: Date, timeObject?: Date): Date {
+    // Extract date components from the date object
+    const year = dateObject.getFullYear();
+    const month = dateObject.getMonth();
+    const day = dateObject.getDate();
+    
+    // Extract time components from the time object, or use default
+    let hours = 8; // default hour
+    let minutes = 0; // default minutes
+    
+    if (timeObject) {
+      hours = timeObject.getHours();
+      minutes = timeObject.getMinutes();
+    }
+    
+    // Create UTC date directly without local date intermediate step
+    // This avoids timezone conversion issues
+    return new Date(Date.UTC(year, month, day, hours, minutes, 0, 0));
+  }
+
+  /**
+   * Converts a UTC date to separate local date and time components for display.
+   * @param utcDate - The UTC date to convert.
+   * @returns An object containing separate date and time Date objects.
+   */
+  convertUtcDateToLocalComponents(utcDate: Date): { localDate: Date, localTime: Date } {
+    // Convert UTC date to local date for display (date part only)
+    const localDate = new Date(utcDate.getUTCFullYear(), utcDate.getUTCMonth(), utcDate.getUTCDate());
+
+    // Create a time object using UTC time components from the shift
+    const localTime = new Date();
+    localTime.setHours(utcDate.getUTCHours(), utcDate.getUTCMinutes(), 0, 0);
+
+    return { localDate, localTime };
+  }
 }

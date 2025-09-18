@@ -31,7 +31,7 @@ describe('ShiftService', () => {
     it('should fetch all shifts without query params', () => {
       const dummyShifts: GetShiftDto[] = [
         {
-          id: 1,
+            id: '1',
           date: new Date('2024-07-01T10:00:00Z'),
           creditTips: 100,
           cashTips: 50,
@@ -39,7 +39,7 @@ describe('ShiftService', () => {
           hoursWorked: 8
         },
         {
-          id: 2,
+            id: '2',
           date: new Date('2024-07-02T12:00:00Z'),
           creditTips: 120,
           cashTips: 60,
@@ -81,7 +81,7 @@ describe('ShiftService', () => {
       };
 
       const createdShift: GetShiftDto = {
-        id: 3,
+    id: '3',
         ...newShift
       };
 
@@ -99,22 +99,24 @@ describe('ShiftService', () => {
   describe('deleteShift', () => {
     it('should DELETE shift by ID', () => {
       const id = 1;
+        const stringId = '1';
 
-      service.deleteShift(id).subscribe(response => {
-        expect(response).toEqual({});
-      });
+        service.deleteShift(stringId).subscribe(response => {
+          expect(response).toEqual({});
+        });
 
-      const req = httpMock.expectOne(`${apiUrl}/${id}`);
-      expect(req.request.method).toBe('DELETE');
-      req.flush({});
+        const req = httpMock.expectOne(`${apiUrl}/${stringId}`);
+        expect(req.request.method).toBe('DELETE');
+        req.flush({});
     });
   });
 
   describe('editShift', () => {
     it('should PUT updated shift data', () => {
       const id = 2;
-      const updatedShift: UpdateShiftDto = {
-        id: id,
+        const stringId = '2';
+        const updatedShift: UpdateShiftDto = {
+          id: stringId,
         date: new Date('2024-07-30T10:00:00Z'),
         creditTips: 150,
         cashTips: 70,
@@ -122,11 +124,11 @@ describe('ShiftService', () => {
         hoursWorked: 6
       };
 
-      service.editShift(id, updatedShift).subscribe(response => {
+        service.editShift(stringId, updatedShift).subscribe(response => {
         expect(response).toEqual({});
       });
 
-      const req = httpMock.expectOne(`${apiUrl}/${id}`);
+        const req = httpMock.expectOne(`${apiUrl}/${stringId}`);
       expect(req.request.method).toBe('PUT');
       expect(req.request.body).toEqual(updatedShift);
       req.flush({});
@@ -136,7 +138,7 @@ describe('ShiftService', () => {
   describe('sortByDateAscending', () => {
     it('should sort shifts by date ascending', () => {
       const a: GetShiftDto = {
-        id: 1,
+    id: '1',
         date: new Date('2024-07-01T10:00:00Z'),
         creditTips: 50,
         cashTips: 30,
@@ -144,7 +146,7 @@ describe('ShiftService', () => {
       };
 
       const b: GetShiftDto = {
-        id: 2,
+    id: '2',
         date: new Date('2024-07-02T10:00:00Z'),
         creditTips: 60,
         cashTips: 40,
@@ -161,8 +163,8 @@ describe('ShiftService', () => {
       const startDate = new Date('2024-07-01T00:00:00Z');
       const endDate = new Date('2024-07-07T00:00:00Z');
       const dummyShifts: GetShiftDto[] = [
-        { id: 1, date: new Date('2024-07-01T10:00:00Z'), creditTips: 100, cashTips: 50, tipout: 20, hoursWorked: 8 },
-        { id: 2, date: new Date('2024-07-02T12:00:00Z'), creditTips: 120, cashTips: 60, tipout: 25, hoursWorked: 7 }
+    { id: '1', date: new Date('2024-07-01T10:00:00Z'), creditTips: 100, cashTips: 50, tipout: 20, hoursWorked: 8 },
+    { id: '2', date: new Date('2024-07-02T12:00:00Z'), creditTips: 120, cashTips: 60, tipout: 25, hoursWorked: 7 }
       ];
       const expectedSummary = service.calculateShiftsSummary(dummyShifts);
 
@@ -180,8 +182,8 @@ describe('ShiftService', () => {
   describe('calculateShiftsSummary', () => {
     it('should return correct summary for shifts', () => {
       const shifts: GetShiftDto[] = [
-        { id: 1, date: new Date(), creditTips: 100, cashTips: 50, tipout: 20, hoursWorked: 8 },
-        { id: 2, date: new Date(), creditTips: 120, cashTips: 60, tipout: 25, hoursWorked: 7 }
+    { id: '1', date: new Date(), creditTips: 100, cashTips: 50, tipout: 20, hoursWorked: 8 },
+    { id: '2', date: new Date(), creditTips: 120, cashTips: 60, tipout: 25, hoursWorked: 7 }
       ];
       const summary = service.calculateShiftsSummary(shifts);
 
@@ -196,9 +198,9 @@ describe('ShiftService', () => {
   describe('calculateShiftsSummary edge cases', () => {
     it('should handle shifts with tipout, cashTips, creditTips, and hoursWorked set to 0', () => {
       const shifts: GetShiftDto[] = [
-        { id: 1, date: new Date(), tipout: 0, cashTips: 0, creditTips: 0, hoursWorked: 0 },
-        { id: 2, date: new Date(), tipout: 0, cashTips: 0, creditTips: 0, hoursWorked: 0 },
-        { id: 3, date: new Date(), tipout: 0, cashTips: 0, creditTips: 0, hoursWorked: 0 }
+    { id: '1', date: new Date(), tipout: 0, cashTips: 0, creditTips: 0, hoursWorked: 0 },
+    { id: '2', date: new Date(), tipout: 0, cashTips: 0, creditTips: 0, hoursWorked: 0 },
+    { id: '3', date: new Date(), tipout: 0, cashTips: 0, creditTips: 0, hoursWorked: 0 }
       ];
       const summary = service.calculateShiftsSummary(shifts);
       expect(summary.totalTips).toBe(0);
@@ -216,8 +218,8 @@ describe('ShiftService', () => {
 
     it('should handle tipout fallback to 0 (|| 0)', () => {
       const shifts: GetShiftDto[] = [
-        { id: 1, date: new Date(), tipout: 0, cashTips: 10, creditTips: 20, hoursWorked: 2 },
-        { id: 2, date: new Date(), tipout: 5, cashTips: 15, creditTips: 25, hoursWorked: 3 }
+    { id: '1', date: new Date(), tipout: 0, cashTips: 10, creditTips: 20, hoursWorked: 2 },
+    { id: '2', date: new Date(), tipout: 5, cashTips: 15, creditTips: 25, hoursWorked: 3 }
       ];
       const summary = service.calculateShiftsSummary(shifts);
       // tipout: 0 + 5 = 5
