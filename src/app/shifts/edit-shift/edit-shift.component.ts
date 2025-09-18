@@ -36,11 +36,9 @@ export class EditShiftComponent implements OnInit {
 
 	ngOnInit() {
         if (this.shift) {
-            // Convert UTC date to local date for display (date part only)
-            this.dateInput = new Date(this.shift.date.getUTCFullYear(), this.shift.date.getUTCMonth(), this.shift.date.getUTCDate());
-            // Create a time object using UTC time components from the shift
-            this.timeInput = new Date();
-            this.timeInput.setHours(this.shift.date.getUTCHours(), this.shift.date.getUTCMinutes(), 0, 0);
+            const { localDate, localTime } = this.dateService.convertUtcDateToLocalComponents(this.shift.date);
+            this.dateInput = localDate;
+            this.timeInput = localTime;
         }
     }
 

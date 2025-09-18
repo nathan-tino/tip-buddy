@@ -114,4 +114,20 @@ export class DateService {
     // This avoids timezone conversion issues
     return new Date(Date.UTC(year, month, day, hours, minutes, 0, 0));
   }
+
+  /**
+   * Converts a UTC date to separate local date and time components for display.
+   * @param utcDate - The UTC date to convert.
+   * @returns An object containing separate date and time Date objects.
+   */
+  convertUtcDateToLocalComponents(utcDate: Date): { localDate: Date, localTime: Date } {
+    // Convert UTC date to local date for display (date part only)
+    const localDate = new Date(utcDate.getUTCFullYear(), utcDate.getUTCMonth(), utcDate.getUTCDate());
+
+    // Create a time object using UTC time components from the shift
+    const localTime = new Date();
+    localTime.setHours(utcDate.getUTCHours(), utcDate.getUTCMinutes(), 0, 0);
+
+    return { localDate, localTime };
+  }
 }

@@ -15,7 +15,7 @@ describe('EditShiftComponent', () => {
 
 	beforeEach(async () => {
 	const shiftServiceMock = jasmine.createSpyObj('ShiftService', ['editShift']);
-	const dateServiceMock = jasmine.createSpyObj('DateService', ['convertStringToUtcDate', 'convertDateObjectsToUtcDate']);
+	const dateServiceMock = jasmine.createSpyObj('DateService', ['convertStringToUtcDate', 'convertDateObjectsToUtcDate', 'convertUtcDateToLocalComponents']);
 
 		await TestBed.configureTestingModule({
 			imports: [EditShiftComponent],
@@ -44,10 +44,26 @@ describe('EditShiftComponent', () => {
 			date: new Date('2023-08-28T14:30:00Z'),
 			hoursWorked: 8
 		};
+		
+		// Mock the return value of convertUtcDateToLocalComponents
+		const expectedLocalDate = new Date(2023, 7, 28); // August 28, 2023 (month is 0-based)
+		const expectedLocalTime = new Date();
+		expectedLocalTime.setHours(14, 30, 0, 0);
+		
+		dateServiceSpy.convertUtcDateToLocalComponents.and.returnValue({
+			localDate: expectedLocalDate,
+			localTime: expectedLocalTime
+		});
+		
 		component.shift = testShift;
 		component.ngOnInit();
-		expect(component.dateInput.toLocaleDateString('en-CA')).toBe('2023-08-28');
-		expect(component.timeInput.toLocaleTimeString('en-GB')).toBe('14:30:00');
+		
+		// Verify the method was called with the shift's date
+		expect(dateServiceSpy.convertUtcDateToLocalComponents).toHaveBeenCalledWith(testShift.date);
+		
+		// Verify the component properties were set correctly
+		expect(component.dateInput).toBe(expectedLocalDate);
+		expect(component.timeInput).toBe(expectedLocalTime);
 	});
 
 	it('should emit undefined on cancel', () => {
