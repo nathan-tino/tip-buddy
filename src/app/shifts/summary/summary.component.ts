@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
+import { Card } from 'primeng/card';
 
 import { ShiftsSummaryDto } from '../../dtos/shifts-summary.dto';
 import { GetShiftDto } from '../../dtos/get-shift.dto';
@@ -28,7 +29,7 @@ declare module 'chart.js' {
 @Component({
 	selector: 'app-summary',
 	standalone: true,
-	imports: [BaseChartDirective, CurrencyPipe],
+	imports: [BaseChartDirective, CurrencyPipe, Card],
 	templateUrl: './summary.component.html',
 	styleUrl: './summary.component.css'
 })

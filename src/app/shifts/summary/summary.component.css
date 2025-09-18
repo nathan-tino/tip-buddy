@@ -5,31 +5,17 @@
     letter-spacing: 0.025em;
 }
 
-.summary-content {
+.summary-card {
+    width: 100%;
+    margin-bottom: var(--spacing-lg);
+}
+
+.summary-card ::ng-deep .p-card-body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(145deg, var(--p-surface-0) 0%, var(--p-surface-25) 100%);
     padding: var(--spacing-md) var(--spacing-xl);
-    border-radius: var(--border-radius-xl);
-    border: 1px solid var(--p-surface-100);
-    box-shadow: var(--shadow-lg);
-    width: 100%;
     min-height: 120px;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Subtle background pattern */
-.summary-content::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at 80% 20%, color-mix(in srgb, var(--brand-primary) 5%, transparent) 0%, transparent 50%);
-    pointer-events: none;
 }
 
 /* Desktop layout for summary-flex */
@@ -176,7 +162,7 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .summary-content {
+    .summary-card ::ng-deep .p-card-body {
         padding: var(--spacing-sm) var(--spacing-md);
         min-height: 100px;
     }
@@ -221,7 +207,7 @@
 }
 
 @media (max-width: 480px) {
-    .summary-content {
+    .summary-card ::ng-deep .p-card-body {
         padding: var(--spacing-xs) var(--spacing-sm);
         min-height: 80px;
     }
