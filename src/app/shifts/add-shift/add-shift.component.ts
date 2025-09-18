@@ -15,9 +15,6 @@ import { ShiftFormModel } from '../shift-form/shift-form.model';
     <app-shift-form
       [title]="'Add Shift'"
       [dateInput]="dateInput"
-      [creditTipsInput]="0"
-      [cashTipsInput]="0"
-      [tipoutInput]="0"
       [hoursWorkedInput]="hoursWorkedInput"
       (submitted)="onSubmit($event)"
       (cancel)="onCancel()"
