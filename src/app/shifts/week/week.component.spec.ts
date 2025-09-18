@@ -23,7 +23,6 @@ describe('WeekComponent', () => {
 			id: '2',
 			date: new Date(2024, 6, 23),
 			cashTips: 40,
-
 			creditTips: 80,
 			tipout: 8,
 			hoursWorked: 4

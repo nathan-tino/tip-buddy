@@ -72,7 +72,7 @@ describe('ShiftFormComponent', () => {
 
         fixture.detectChanges();
         // Select the actual button inside the p-button component
-        // Note: this is a workoaround due to the way PrimeNG renders buttons. There is no id on the button itself,
+        // Note: this is a workaround due to the way PrimeNG renders buttons. There is no id on the button itself,
         // not sure if it's due to a bug or not. I have an active question on their GitHub
         const cancelButton = fixture.debugElement.query(By.css('.cancel-button button'));
         cancelButton.nativeElement.click();
