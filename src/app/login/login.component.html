@@ -38,9 +38,14 @@
 				<p-message severity="error" [text]="error" class="error-message"></p-message>
 				}
 
-				<!-- Login Button -->
+				<!-- Login Buttons -->
 				<p-button type="submit" label="Sign In" icon="pi pi-sign-in" [loading]="isLoading"
 					loadingIcon="pi pi-spin pi-spinner" styleClass="w-full login-button">
+				</p-button>
+				
+				<p-button type="button" label="Login as Demo User" icon="pi pi-user-plus" 
+					[loading]="isLoading" loadingIcon="pi pi-spin pi-spinner" 
+					styleClass="w-full demo-button" severity="secondary" (click)="demoLogin()">
 				</p-button>
 			</form>
 		</ng-template>

@@ -12,6 +12,10 @@ class MockAuthService {
 	login(dto?: any) {
 		return of({});
 	}
+	
+	demoLogin() {
+		return of({});
+	}
 }
 
 class MockRouter {
@@ -119,5 +123,79 @@ describe('LoginComponent', () => {
 		component.isLoading = false;
 		component.login();
 		expect(component.isLoading).toBeFalse(); // isLoading is set to false after login completes
+	});
+
+	// Demo Login Tests
+	it('should call AuthService.demoLogin and navigate on success', () => {
+		const authService = TestBed.inject(AuthService) as any;
+		const router = TestBed.inject(Router) as any;
+		spyOn(authService, 'demoLogin').and.returnValue(of({}));
+		spyOn(router, 'navigate');
+		
+		component.demoLogin();
+		
+		expect(authService.demoLogin).toHaveBeenCalled();
+		expect(router.navigate).toHaveBeenCalledWith(['/shifts']);
+		expect(component.isLoading).toBeFalse();
+		expect(component.error).toBeNull();
+	});
+
+	it('should set error message on AuthService.demoLogin error', () => {
+		const authService = TestBed.inject(AuthService) as any;
+		const errorMessage = 'Demo service unavailable';
+		spyOn(authService, 'demoLogin').and.returnValue(throwError(() => ({ error: { message: errorMessage } })));
+		
+		component.demoLogin();
+		
+		expect(authService.demoLogin).toHaveBeenCalled();
+		expect(component.error).toBe(errorMessage);
+		expect(component.isLoading).toBeFalse();
+	});
+
+	it('should set default error message on AuthService.demoLogin error without specific message', () => {
+		const authService = TestBed.inject(AuthService) as any;
+		spyOn(authService, 'demoLogin').and.returnValue(throwError(() => ({ error: {} })));
+		
+		component.demoLogin();
+		
+		expect(authService.demoLogin).toHaveBeenCalled();
+		expect(component.error).toBe('Demo login failed. Please try again.');
+		expect(component.isLoading).toBeFalse();
+	});
+
+	it('should clear error before demo login attempt', () => {
+		const authService = TestBed.inject(AuthService) as any;
+		spyOn(authService, 'demoLogin').and.returnValue(of({}));
+		component.error = 'Previous error';
+		
+		component.demoLogin();
+		
+		expect(component.error).toBeNull();
+	});
+
+	it('should set isLoading to true during demo login', () => {
+		const authService = TestBed.inject(AuthService) as any;
+		spyOn(authService, 'demoLogin').and.returnValue(of({}));
+		component.isLoading = false;
+		
+		component.demoLogin();
+		
+		expect(component.isLoading).toBeFalse(); // Should be false after completion
+	});
+
+	it('should not require username and password for demo login', () => {
+		const authService = TestBed.inject(AuthService) as any;
+		const router = TestBed.inject(Router) as any;
+		spyOn(authService, 'demoLogin').and.returnValue(of({}));
+		spyOn(router, 'navigate');
+		
+		// Ensure no username/password are set
+		component.userName = '';
+		component.password = '';
+		
+		component.demoLogin();
+		
+		expect(authService.demoLogin).toHaveBeenCalled();
+		expect(router.navigate).toHaveBeenCalledWith(['/shifts']);
 	});
 });

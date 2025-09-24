@@ -10,33 +10,44 @@ import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // TODO: Implement verify authentication by calling a protected backend endpoint (e.g., /api/Auth/me)
-  private loginUrl = `${environment.apiBaseUrl}/auth/login`;
-  private registerUrl = `${environment.apiBaseUrl}/auth/register`;
-  private logoutUrl = `${environment.apiBaseUrl}/auth/logout`;
-  
-  private _isLoggedIn = new BehaviorSubject<boolean>(false);
-  isLoggedIn$ = this._isLoggedIn.asObservable();
+	// TODO: Implement verify authentication by calling a protected backend endpoint (e.g., /api/Auth/me)
+	private loginUrl = `${environment.apiBaseUrl}/auth/login`;
+	private registerUrl = `${environment.apiBaseUrl}/auth/register`;
+	private logoutUrl = `${environment.apiBaseUrl}/auth/logout`;
+	private demoUrl = `${environment.apiBaseUrl}/auth/demo`;
 
-  constructor(private http: HttpClient) {}
+	private _isLoggedIn = new BehaviorSubject<boolean>(false);
+	isLoggedIn$ = this._isLoggedIn.asObservable();
 
-  login(dto: LoginDto): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(this.loginUrl, dto, { withCredentials: true }).pipe(
-      tap(() => this._isLoggedIn.next(true)),
-      catchError(err => {
-        this._isLoggedIn.next(false);
-        return throwError(() => err);
-      })
-    );
-  }
-  
-  register(dto: RegisterDto): Observable<RegisterResponse> {
-    return this.http.post<RegisterResponse>(this.registerUrl, dto, { withCredentials: true });
-  }
+	constructor(private http: HttpClient) { }
 
-  logout(): Observable<any> {
-    return this.http.post<any>(this.logoutUrl, {}, { withCredentials: true }).pipe(
-      tap(() => this._isLoggedIn.next(false))
-    );
-  }
+	login(dto: LoginDto): Observable<AuthResponse> {
+		return this.http.post<AuthResponse>(this.loginUrl, dto, { withCredentials: true }).pipe(
+			tap(() => this._isLoggedIn.next(true)),
+			catchError(err => {
+				this._isLoggedIn.next(false);
+				return throwError(() => err);
+			})
+		);
+	}
+
+	register(dto: RegisterDto): Observable<RegisterResponse> {
+		return this.http.post<RegisterResponse>(this.registerUrl, dto, { withCredentials: true });
+	}
+
+	logout(): Observable<any> {
+		return this.http.post<any>(this.logoutUrl, {}, { withCredentials: true }).pipe(
+			tap(() => this._isLoggedIn.next(false))
+		);
+	}
+
+	demoLogin(): Observable<AuthResponse> {
+		return this.http.post<AuthResponse>(this.demoUrl, {}, { withCredentials: true }).pipe(
+			tap(() => this._isLoggedIn.next(true)),
+			catchError(err => {
+				this._isLoggedIn.next(false);
+				return throwError(() => err);
+			})
+		);
+	}
 }
