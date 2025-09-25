@@ -114,4 +114,44 @@ describe('AuthService', () => {
 		expect(req.request.body).toEqual({});
 		req.flush({});
 	});
+
+	it('should set isDemoUser$ to true on demo login success', () => {
+		let isDemoUser: boolean | undefined;
+		service.isDemoUser$.subscribe(val => isDemoUser = val);
+		service.demoLogin().subscribe();
+		const req = httpMock.expectOne(`${apiBaseUrl}/auth/demo`);
+		req.flush({});
+		expect(isDemoUser).toBeTrue();
+	});
+
+	it('should set isDemoUser$ to false on demo login error', () => {
+		let isDemoUser: boolean | undefined;
+		service.isDemoUser$.subscribe(val => isDemoUser = val);
+		service.demoLogin().subscribe({
+			error: () => {
+				expect(isDemoUser).toBeFalse();
+			}
+		});
+		const req = httpMock.expectOne(`${apiBaseUrl}/auth/demo`);
+		req.flush('error', { status: 500, statusText: 'Internal Server Error' });
+	});
+
+	it('should set isDemoUser$ to false on regular login', () => {
+		const dto: LoginDto = { userName: 'user', password: 'pass' };
+		let isDemoUser: boolean | undefined;
+		service.isDemoUser$.subscribe(val => isDemoUser = val);
+		service.login(dto).subscribe();
+		const req = httpMock.expectOne(`${apiBaseUrl}/auth/login`);
+		req.flush({});
+		expect(isDemoUser).toBeFalse();
+	});
+
+	it('should set isDemoUser$ to false on logout', () => {
+		let isDemoUser: boolean | undefined;
+		service.isDemoUser$.subscribe(val => isDemoUser = val);
+		service.logout().subscribe();
+		const req = httpMock.expectOne(`${apiBaseUrl}/auth/logout`);
+		req.flush({});
+		expect(isDemoUser).toBeFalse();
+	});
 });

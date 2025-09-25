@@ -19,6 +19,9 @@ export class AuthService {
 	private _isLoggedIn = new BehaviorSubject<boolean>(false);
 	isLoggedIn$ = this._isLoggedIn.asObservable();
 
+	private _isDemoUser = new BehaviorSubject<boolean>(false);
+	isDemoUser$ = this._isDemoUser.asObservable();
+
 	constructor(private http: HttpClient) { }
 
 	login(dto: LoginDto): Observable<AuthResponse> {
@@ -37,15 +40,22 @@ export class AuthService {
 
 	logout(): Observable<any> {
 		return this.http.post<any>(this.logoutUrl, {}, { withCredentials: true }).pipe(
-			tap(() => this._isLoggedIn.next(false))
+			tap(() => {
+				this._isLoggedIn.next(false);
+				this._isDemoUser.next(false);
+			})
 		);
 	}
 
 	demoLogin(): Observable<AuthResponse> {
 		return this.http.post<AuthResponse>(this.demoUrl, {}, { withCredentials: true }).pipe(
-			tap(() => this._isLoggedIn.next(true)),
+			tap(() => {
+				this._isLoggedIn.next(true);
+				this._isDemoUser.next(true);
+			}),
 			catchError(err => {
 				this._isLoggedIn.next(false);
+				this._isDemoUser.next(false);
 				return throwError(() => err);
 			})
 		);
