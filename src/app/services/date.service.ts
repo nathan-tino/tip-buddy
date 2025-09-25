@@ -15,9 +15,9 @@ export class DateService {
    * @param referenceDate - The date to calculate the week from.
    * @returns An object containing the first and last day of the week.
    */
-  getFirstAndLastDayOfWeek(referenceDate: Date) : {firstDayOfWeek: Date, lastDayOfWeek: Date} {
+  getFirstAndLastDayOfWeek(referenceDate: Date): { firstDayOfWeek: Date, lastDayOfWeek: Date } {
     const dayOfWeek = referenceDate.getDay(); // 0 (Sunday) to 6 (Saturday)
-    
+
     // First day of the week (Sunday)
     const firstDayOfWeek = this.addDaysToDate(referenceDate, -1 * dayOfWeek);
     firstDayOfWeek.setHours(0, 0, 0, 0); // Reset time to midnight
@@ -100,33 +100,34 @@ export class DateService {
     const year = dateObject.getFullYear();
     const month = dateObject.getMonth();
     const day = dateObject.getDate();
-    
+
     // Extract time components from the time object, or use default
     let hours = 8; // default hour
     let minutes = 0; // default minutes
-    
+
     if (timeObject) {
       hours = timeObject.getHours();
       minutes = timeObject.getMinutes();
     }
-    
+
     // Create UTC date directly without local date intermediate step
     // This avoids timezone conversion issues
     return new Date(Date.UTC(year, month, day, hours, minutes, 0, 0));
   }
 
   /**
-   * Converts a UTC date to separate local date and time components for display.
-   * @param utcDate - The UTC date to convert.
+   * Splits an already-local date into separate date and time components for display.
+   * Use this when the date is already in local timezone (e.g., from parseShiftDate).
+   * @param localDateTime - The local date/time to split.
    * @returns An object containing separate date and time Date objects.
    */
-  convertUtcDateToLocalComponents(utcDate: Date): { localDate: Date, localTime: Date } {
-    // Convert UTC date to local date for display (date part only)
-    const localDate = new Date(utcDate.getUTCFullYear(), utcDate.getUTCMonth(), utcDate.getUTCDate());
+  splitLocalDateTimeIntoComponents(localDateTime: Date): { localDate: Date, localTime: Date } {
+    // Extract the date part (date only, time set to midnight)
+    const localDate = new Date(localDateTime.getFullYear(), localDateTime.getMonth(), localDateTime.getDate());
 
-    // Create a time object using UTC time components from the shift
+    // Create a time object using the local time components
     const localTime = new Date();
-    localTime.setHours(utcDate.getUTCHours(), utcDate.getUTCMinutes(), 0, 0);
+    localTime.setHours(localDateTime.getHours(), localDateTime.getMinutes(), 0, 0);
 
     return { localDate, localTime };
   }

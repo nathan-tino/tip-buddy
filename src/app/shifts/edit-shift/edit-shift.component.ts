@@ -36,7 +36,7 @@ export class EditShiftComponent implements OnInit {
 
 	ngOnInit() {
         if (this.shift) {
-            const { localDate, localTime } = this.dateService.convertUtcDateToLocalComponents(this.shift.date);
+            const { localDate, localTime } = this.dateService.splitLocalDateTimeIntoComponents(this.shift.date);
             this.dateInput = localDate;
             this.timeInput = localTime;
         }
