@@ -49,7 +49,7 @@ export class AddShiftComponent implements OnInit {
             creditTips: shift.creditTips ?? 0,
             cashTips: shift.cashTips ?? 0,
             tipout: shift.tipout ?? 0,
-            date: this.dateService.convertDateObjectsToUtcDate(shift.date, shift.time),
+            date: this.dateService.combineDateAndTimeObjects(shift.date, shift.time),
             hoursWorked: shift.hoursWorked
         };
 

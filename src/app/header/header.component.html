@@ -30,6 +30,17 @@
 		<!-- Enhanced actions section -->
 		<div class="header-actions">
 			@if (isLoggedIn) {
+				@if (isDemoUser) {
+					<p-button 
+						(click)="resetDemoShifts()" 
+						label="Reset Demo Shifts" 
+						icon="pi pi-refresh"
+						[outlined]="true"
+						severity="help"
+						size="small"
+						class="reset-demo-button">
+					</p-button>
+				}
 				<p-button 
 					(click)="logout()" 
 					label="Sign Out" 

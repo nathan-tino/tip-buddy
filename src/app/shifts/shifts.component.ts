@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, effect } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -47,10 +47,21 @@ export class ShiftsComponent implements OnInit, OnDestroy {
 
 	private destroy$ = new Subject<void>();
 
-	constructor(private shiftService: ShiftService, private dateService: DateService) { }
+	constructor(private shiftService: ShiftService, private dateService: DateService) {
+		// Listen for refresh signals
+		effect(() => {
+			// This will run whenever refreshTrigger$ changes - read the signal value
+			this.shiftService.refreshTrigger$();
+			
+			// Reload shifts if we have dates set
+			if (this.firstDayOfInterval && this.lastDayOfInterval) {
+				this.loadShifts();
+			}
+		});
+	}
 
 	ngOnInit(): void {
-		this.loadShiftsForDate();
+		this.setIntervalDates();
 	}
 
 	loadShifts(): void {
@@ -143,6 +154,12 @@ export class ShiftsComponent implements OnInit, OnDestroy {
 	}
 
 	loadShiftsForDate(date: Date | null = null) {
+		if (this.setIntervalDates(date)) {
+			this.loadShifts();
+		}
+	}
+
+	setIntervalDates(date: Date | null = null): boolean {
 		if (!date) {
 			date = new Date(new Date().setHours(0, 0, 0, 0));
 		}
@@ -150,8 +167,7 @@ export class ShiftsComponent implements OnInit, OnDestroy {
 		const { firstDayOfWeek, lastDayOfWeek } = this.dateService.getFirstAndLastDayOfWeek(date);
 		this.firstDayOfInterval = firstDayOfWeek;
 		this.lastDayOfInterval = lastDayOfWeek;
-
-		this.loadShifts();
+		return !!(this.firstDayOfInterval && this.lastDayOfInterval);
 	}
 
 	updateShiftsSignal() {

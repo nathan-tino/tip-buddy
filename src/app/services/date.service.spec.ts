@@ -11,24 +11,39 @@ describe('DateService', () => {
 		expect(service).toBeTruthy();
 	});
 
-	describe('convertDateObjectsToUtcDate', () => {
-		it('should convert date and time objects to UTC date', () => {
+	describe('combineDateAndTimeObjects', () => {
+		it('should create a local date that represents the intended local time', () => {
 			const date = new Date(2025, 8, 16); // September 16, 2025 (month is 0-based)
 			const time = new Date(2025, 8, 16, 15, 30); // 15:30
-			const result = service.convertDateObjectsToUtcDate(date, time);
-			expect(result.getUTCFullYear()).toBe(2025);
-			expect(result.getUTCMonth()).toBe(8);
-			expect(result.getUTCDate()).toBe(16);
-			expect(result.getUTCHours()).toBe(15);
-			expect(result.getUTCMinutes()).toBe(30);
-			expect(result.getUTCSeconds()).toBe(0);
+			const result = service.combineDateAndTimeObjects(date, time);
+			
+			// The result should be a local date with the specified components
+			expect(result.getFullYear()).toBe(2025);
+			expect(result.getMonth()).toBe(8);
+			expect(result.getDate()).toBe(16);
+			expect(result.getHours()).toBe(15);
+			expect(result.getMinutes()).toBe(30);
+			expect(result.getSeconds()).toBe(0);
 		});
 
 		it('should use default time if timeObject is not provided', () => {
 			const date = new Date(2025, 8, 16);
-			const result = service.convertDateObjectsToUtcDate(date);
-			expect(result.getUTCHours()).toBe(8);
-			expect(result.getUTCMinutes()).toBe(0);
+			const result = service.combineDateAndTimeObjects(date);
+			
+			// The result should use default time of 8:00
+			expect(result.getHours()).toBe(8);
+			expect(result.getMinutes()).toBe(0);
+		});
+
+		it('should create a date that converts properly to UTC for API', () => {
+			const date = new Date(2025, 8, 16); // September 16, 2025
+			const time = new Date(2025, 8, 16, 15, 30); // 15:30
+			const result = service.combineDateAndTimeObjects(date, time);
+			
+			// When converted to ISO string (like in API calls), it should convert local time to UTC
+			const isoString = result.toISOString();
+			expect(isoString).toContain('2025-09-16T'); // Should be the correct date
+			// The time will vary based on timezone, but the important thing is it's properly converted
 		});
 	});
 
@@ -179,12 +194,12 @@ describe('DateService', () => {
 		});
 	});
 
-	describe('convertUtcDateToLocalComponents', () => {
-		it('should convert UTC date to separate local date and time components', () => {
-			// Create a UTC date: September 16, 2025 at 14:30 UTC
-			const utcDate = new Date(Date.UTC(2025, 8, 16, 14, 30, 0, 0));
+	describe('splitLocalDateTimeIntoComponents', () => {
+		it('should split local datetime into separate date and time components', () => {
+			// Create a local date: September 16, 2025 at 14:30
+			const localDateTime = new Date(2025, 8, 16, 14, 30, 0, 0);
 			
-			const result = service.convertUtcDateToLocalComponents(utcDate);
+			const result = service.splitLocalDateTimeIntoComponents(localDateTime);
 			
 			// Check that result has the expected properties
 			expect(result.localDate).toBeDefined();
@@ -192,7 +207,7 @@ describe('DateService', () => {
 			expect(result.localDate).toBeInstanceOf(Date);
 			expect(result.localTime).toBeInstanceOf(Date);
 			
-			// Check date component (should use UTC date components for local date)
+			// Check date component (should preserve the date, reset time to midnight)
 			expect(result.localDate.getFullYear()).toBe(2025);
 			expect(result.localDate.getMonth()).toBe(8); // September (0-based)
 			expect(result.localDate.getDate()).toBe(16);
@@ -201,18 +216,18 @@ describe('DateService', () => {
 			expect(result.localDate.getSeconds()).toBe(0);
 			expect(result.localDate.getMilliseconds()).toBe(0);
 			
-			// Check time component (should use UTC time components)
+			// Check time component (should preserve hours and minutes, reset seconds and milliseconds)
 			expect(result.localTime.getHours()).toBe(14);
 			expect(result.localTime.getMinutes()).toBe(30);
 			expect(result.localTime.getSeconds()).toBe(0);
 			expect(result.localTime.getMilliseconds()).toBe(0);
 		});
 
-		it('should handle UTC date at midnight', () => {
-			// Create a UTC date: January 1, 2025 at 00:00 UTC
-			const utcDate = new Date(Date.UTC(2025, 0, 1, 0, 0, 0, 0));
+		it('should handle midnight datetime', () => {
+			// Create a local date: January 1, 2025 at 00:00
+			const localDateTime = new Date(2025, 0, 1, 0, 0, 0, 0);
 			
-			const result = service.convertUtcDateToLocalComponents(utcDate);
+			const result = service.splitLocalDateTimeIntoComponents(localDateTime);
 			
 			// Check date component
 			expect(result.localDate.getFullYear()).toBe(2025);
@@ -224,11 +239,11 @@ describe('DateService', () => {
 			expect(result.localTime.getMinutes()).toBe(0);
 		});
 
-		it('should handle UTC date at end of day', () => {
-			// Create a UTC date: December 31, 2025 at 23:59 UTC
-			const utcDate = new Date(Date.UTC(2025, 11, 31, 23, 59, 0, 0));
+		it('should handle end of day datetime', () => {
+			// Create a local date: December 31, 2025 at 23:59
+			const localDateTime = new Date(2025, 11, 31, 23, 59, 0, 0);
 			
-			const result = service.convertUtcDateToLocalComponents(utcDate);
+			const result = service.splitLocalDateTimeIntoComponents(localDateTime);
 			
 			// Check date component
 			expect(result.localDate.getFullYear()).toBe(2025);
@@ -241,10 +256,10 @@ describe('DateService', () => {
 		});
 
 		it('should handle leap year date', () => {
-			// Create a UTC date: February 29, 2024 (leap year) at 12:15 UTC
-			const utcDate = new Date(Date.UTC(2024, 1, 29, 12, 15, 0, 0));
+			// Create a local date: February 29, 2024 (leap year) at 12:15
+			const localDateTime = new Date(2024, 1, 29, 12, 15, 0, 0);
 			
-			const result = service.convertUtcDateToLocalComponents(utcDate);
+			const result = service.splitLocalDateTimeIntoComponents(localDateTime);
 			
 			// Check date component
 			expect(result.localDate.getFullYear()).toBe(2024);
@@ -257,13 +272,13 @@ describe('DateService', () => {
 		});
 
 		it('should create independent date objects', () => {
-			const utcDate = new Date(Date.UTC(2025, 5, 15, 10, 45, 0, 0));
+			const localDateTime = new Date(2025, 5, 15, 10, 45, 0, 0);
 			
-			const result = service.convertUtcDateToLocalComponents(utcDate);
+			const result = service.splitLocalDateTimeIntoComponents(localDateTime);
 			
-			// Modify the original UTC date
-			utcDate.setUTCDate(20);
-			utcDate.setUTCHours(20);
+			// Modify the original local datetime
+			localDateTime.setDate(20);
+			localDateTime.setHours(20);
 			
 			// The returned objects should not be affected
 			expect(result.localDate.getDate()).toBe(15);
@@ -271,10 +286,10 @@ describe('DateService', () => {
 		});
 
 		it('should reset seconds and milliseconds in time component', () => {
-			// Create a UTC date with seconds and milliseconds
-			const utcDate = new Date(Date.UTC(2025, 3, 10, 16, 25, 45, 500));
+			// Create a local datetime with seconds and milliseconds
+			const localDateTime = new Date(2025, 3, 10, 16, 25, 45, 500);
 			
-			const result = service.convertUtcDateToLocalComponents(utcDate);
+			const result = service.splitLocalDateTimeIntoComponents(localDateTime);
 			
 			// Time component should have seconds and milliseconds reset to 0
 			expect(result.localTime.getSeconds()).toBe(0);

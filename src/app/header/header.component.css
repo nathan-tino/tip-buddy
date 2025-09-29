@@ -90,6 +90,20 @@
     gap: var(--spacing-md);
 }
 
+/* Reset Demo Button Styling */
+.reset-demo-button {
+    background-color: var(--p-orange-50) !important;
+    border-color: var(--p-orange-200) !important;
+    color: var(--p-orange-700) !important;
+    transition: all 0.2s ease-in-out;
+}
+
+.reset-demo-button:hover:not(:disabled) {
+    background-color: var(--p-orange-100) !important;
+    border-color: var(--p-orange-300) !important;
+    color: var(--p-orange-800) !important;
+}
+
 /* Responsive Design */
 @media (max-width: 640px) {
     .app-header {
@@ -116,5 +130,17 @@
     
     .header-brand {
         gap: 0;
+    }
+    
+    .header-actions {
+        gap: var(--spacing-sm);
+    }
+    
+    .reset-demo-button {
+        min-width: unset;
+    }
+    
+    .reset-demo-button .p-button-label {
+        display: none;
     }
 }

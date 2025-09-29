@@ -58,4 +58,20 @@ export class LoginComponent {
 			}
 		});
 	}
+
+	demoLogin() {
+		this.isLoading = true;
+		this.error = null;
+
+		this.authService.demoLogin().subscribe({
+			next: (res) => {
+				this.isLoading = false;
+				this.router.navigate(['/shifts']);
+			},
+			error: (err) => {
+				this.error = err.error?.message || 'Demo login failed. Please try again.';
+				this.isLoading = false;
+			}
+		});
+	}
 }

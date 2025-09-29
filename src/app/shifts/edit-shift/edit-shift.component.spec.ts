@@ -15,7 +15,7 @@ describe('EditShiftComponent', () => {
 
 	beforeEach(async () => {
 	const shiftServiceMock = jasmine.createSpyObj('ShiftService', ['editShift']);
-	const dateServiceMock = jasmine.createSpyObj('DateService', ['convertStringToUtcDate', 'convertDateObjectsToUtcDate', 'convertUtcDateToLocalComponents']);
+	const dateServiceMock = jasmine.createSpyObj('DateService', ['convertStringToUtcDate', 'combineDateAndTimeObjects', 'splitLocalDateTimeIntoComponents']);
 
 		await TestBed.configureTestingModule({
 			imports: [EditShiftComponent],
@@ -45,12 +45,12 @@ describe('EditShiftComponent', () => {
 			hoursWorked: 8
 		};
 		
-		// Mock the return value of convertUtcDateToLocalComponents
+		// Mock the return value of splitLocalDateTimeIntoComponents
 		const expectedLocalDate = new Date(2023, 7, 28); // August 28, 2023 (month is 0-based)
 		const expectedLocalTime = new Date();
 		expectedLocalTime.setHours(14, 30, 0, 0);
 		
-		dateServiceSpy.convertUtcDateToLocalComponents.and.returnValue({
+		dateServiceSpy.splitLocalDateTimeIntoComponents.and.returnValue({
 			localDate: expectedLocalDate,
 			localTime: expectedLocalTime
 		});
@@ -59,7 +59,7 @@ describe('EditShiftComponent', () => {
 		component.ngOnInit();
 		
 		// Verify the method was called with the shift's date
-		expect(dateServiceSpy.convertUtcDateToLocalComponents).toHaveBeenCalledWith(testShift.date);
+		expect(dateServiceSpy.splitLocalDateTimeIntoComponents).toHaveBeenCalledWith(testShift.date);
 		
 		// Verify the component properties were set correctly
 		expect(component.dateInput).toBe(expectedLocalDate);
@@ -101,13 +101,13 @@ describe('EditShiftComponent', () => {
 			hoursWorked: 9
 		};
 
-		dateServiceSpy.convertDateObjectsToUtcDate.and.returnValue(convertedDate);
+		dateServiceSpy.combineDateAndTimeObjects.and.returnValue(convertedDate);
 		shiftServiceSpy.editShift.and.returnValue(of(updatedShift));
 		spyOn(component.close, 'emit');
 
 		component.onSubmit(shiftModel);
 
-		expect(dateServiceSpy.convertDateObjectsToUtcDate).toHaveBeenCalledWith(shiftModel.date, shiftModel.time);
+		expect(dateServiceSpy.combineDateAndTimeObjects).toHaveBeenCalledWith(shiftModel.date, shiftModel.time);
 		expect(shiftServiceSpy.editShift).toHaveBeenCalledWith('1', updatedShift);
 		expect(component.close.emit).toHaveBeenCalledWith(updatedShift);
 	});
