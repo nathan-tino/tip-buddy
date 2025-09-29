@@ -38,8 +38,8 @@ export class AuthService {
 		return this.http.post<RegisterResponse>(this.registerUrl, dto, { withCredentials: true });
 	}
 
-	logout(): Observable<any> {
-		return this.http.post<any>(this.logoutUrl, {}, { withCredentials: true }).pipe(
+	logout(): Observable<void> {
+		return this.http.post<void>(this.logoutUrl, {}, { withCredentials: true }).pipe(
 			tap(() => {
 				this._isLoggedIn.next(false);
 				this._isDemoUser.next(false);

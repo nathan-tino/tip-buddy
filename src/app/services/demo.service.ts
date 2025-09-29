@@ -9,7 +9,7 @@ export class DemoService {
 
 	constructor(private http: HttpClient) { }
 
-	resetDemoShifts(): Observable<any> {
-		return this.http.post<any>(this.resetDemoShiftsUrl, {}, { withCredentials: true });
+	resetDemoShifts(): Observable<void> {
+		return this.http.post<void>(this.resetDemoShiftsUrl, {}, { withCredentials: true });
 	}
 }
