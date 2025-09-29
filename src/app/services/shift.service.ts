@@ -1,5 +1,5 @@
 import { ShiftsSummaryDto } from '../dtos/shifts-summary.dto';
-import { Injectable } from "@angular/core";
+import { Injectable, signal } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 
@@ -15,6 +15,12 @@ function parseShiftDate<T extends { date: Date }>(shift: T): T & { date: Date } 
 @Injectable({ providedIn: 'root' })
 export class ShiftService {
     private apiUrl = `${environment.apiBaseUrl}/shifts`;
+
+    // Signal to trigger shift data refresh
+    private refreshTrigger = signal(0);
+    
+    // Public readonly signal for components to subscribe to
+    readonly refreshTrigger$ = this.refreshTrigger.asReadonly();
 
     constructor(private http: HttpClient) { }
 
@@ -112,5 +118,12 @@ export class ShiftService {
             totalHoursWorked,
             shifts
         };
+    }
+
+    /**
+     * Triggers a refresh signal for components to reload shift data
+     */
+    triggerRefresh(): void {
+        this.refreshTrigger.update(value => value + 1);
     }
 }

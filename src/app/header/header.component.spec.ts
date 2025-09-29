@@ -4,6 +4,7 @@ import { of, throwError, Subject } from 'rxjs';
 import { HeaderComponent } from './header.component';
 import { AuthService } from '../services/auth.service';
 import { DemoService } from '../services/demo.service';
+import { ShiftService } from '../services/shift.service';
 import { Router } from '@angular/router';
 
 describe('HeaderComponent', () => {
@@ -11,6 +12,7 @@ describe('HeaderComponent', () => {
 	let fixture: ComponentFixture<HeaderComponent>;
 	let authServiceSpy: jasmine.SpyObj<AuthService>;
 	let demoServiceSpy: jasmine.SpyObj<DemoService>;
+	let shiftServiceSpy: jasmine.SpyObj<ShiftService>;
 	let routerSpy: jasmine.SpyObj<Router>;
 	let isLoggedInSubject: Subject<boolean>;
 	let isDemoUserSubject: Subject<boolean>;
@@ -21,6 +23,7 @@ describe('HeaderComponent', () => {
 			isDemoUser$: new Subject<boolean>()
 		});
 		demoServiceSpy = jasmine.createSpyObj('DemoService', ['resetDemoShifts']);
+		shiftServiceSpy = jasmine.createSpyObj('ShiftService', ['triggerRefresh']);
 		routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 		isLoggedInSubject = authServiceSpy.isLoggedIn$ as Subject<boolean>;
 		isDemoUserSubject = authServiceSpy.isDemoUser$ as Subject<boolean>;
@@ -31,6 +34,7 @@ describe('HeaderComponent', () => {
 				provideHttpClient(),
 				{ provide: AuthService, useValue: authServiceSpy },
 				{ provide: DemoService, useValue: demoServiceSpy },
+				{ provide: ShiftService, useValue: shiftServiceSpy },
 				{ provide: Router, useValue: routerSpy }
 			]
 		}).compileComponents();
@@ -72,14 +76,13 @@ describe('HeaderComponent', () => {
 		expect(routerSpy.navigate).toHaveBeenCalledWith(['/login']);
 	});
 
-	it('should call DemoService.resetDemoShifts and reload page on success', () => {
+	it('should call resetDemoShifts and triggerRefresh when resetDemoShifts is called', () => {
 		demoServiceSpy.resetDemoShifts.and.returnValue(of({}));
-		spyOn(window.location, 'reload');
 		
 		component.resetDemoShifts();
 		
 		expect(demoServiceSpy.resetDemoShifts).toHaveBeenCalled();
-		expect(window.location.reload).toHaveBeenCalled();
+		expect(shiftServiceSpy.triggerRefresh).toHaveBeenCalled();
 	});
 
 	it('should handle resetDemoShifts error', () => {

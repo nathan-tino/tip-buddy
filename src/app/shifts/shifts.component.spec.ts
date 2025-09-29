@@ -39,7 +39,9 @@ describe('ShiftsComponent', () => {
 	const localDate = new Date('2023-01-01T00:00:00Z');
 
 	beforeEach(async () => {
-		mockShiftService = jasmine.createSpyObj('ShiftService', ['getShifts', 'deleteShift', 'sortByDateAscending', 'calculateShiftsSummary']);
+		mockShiftService = jasmine.createSpyObj('ShiftService', ['getShifts', 'deleteShift', 'sortByDateAscending', 'calculateShiftsSummary', 'triggerRefresh'], {
+			refreshTrigger$: jasmine.createSpy('refreshTrigger$').and.returnValue(0)
+		});
 		mockDateService = jasmine.createSpyObj('DateService', ['getFirstAndLastDayOfWeek', 'convertUtcToLocalDate', 'addDaysToDate']);
 
 		mockDateService.getFirstAndLastDayOfWeek.and.returnValue({
@@ -216,17 +218,17 @@ describe('ShiftsComponent', () => {
 	});
 
 	it('should call loadShiftsForDate with correct date on week picker change', () => {
-		spyOn(component, 'loadShiftsForDate');
+		const loadShiftsForDateSpy = spyOn(component, 'loadShiftsForDate');
 		const event = { target: { value: '2023-01-02' } } as unknown as Event;
 		component.onWeekPickerChange(event);
-		expect(component.loadShiftsForDate).toHaveBeenCalledWith(new Date('2023-01-02T00:00:00'));
+		expect(loadShiftsForDateSpy).toHaveBeenCalledWith(new Date('2023-01-02T00:00:00'));
 	});
 
 	it('should not call loadShiftsForDate if week picker value is empty', () => {
-		spyOn(component, 'loadShiftsForDate');
+		const loadShiftsForDateSpy = spyOn(component, 'loadShiftsForDate');
 		const event = { target: { value: '' } } as unknown as Event;
 		component.onWeekPickerChange(event);
-		expect(component.loadShiftsForDate).not.toHaveBeenCalled();
+		expect(loadShiftsForDateSpy).not.toHaveBeenCalled();
 	});
 
 	function resetShifts() {
