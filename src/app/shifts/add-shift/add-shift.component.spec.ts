@@ -16,7 +16,7 @@ describe('AddShiftComponent', () => {
 
 	beforeEach(async () => {
 	const shiftServiceMock = jasmine.createSpyObj('ShiftService', ['addShift']);
-	const dateServiceMock = jasmine.createSpyObj('DateService', ['convertStringToUtcDate', 'convertDateObjectsToUtcDate']);
+	const dateServiceMock = jasmine.createSpyObj('DateService', ['convertStringToUtcDate', 'combineDateAndTimeObjects']);
 
 		await TestBed.configureTestingModule({
 			imports: [AddShiftComponent],
@@ -73,13 +73,13 @@ describe('AddShiftComponent', () => {
 		};
 		const convertedDate = new Date('2023-08-28T14:30:00Z');
 
-	dateServiceSpy.convertDateObjectsToUtcDate.and.returnValue(convertedDate);
+	dateServiceSpy.combineDateAndTimeObjects.and.returnValue(convertedDate);
 		shiftServiceSpy.addShift.and.returnValue(of(createdShift));
 		spyOn(component.close, 'emit');
 
 		component.onSubmit(shiftModel);
 
-		expect(dateServiceSpy.convertDateObjectsToUtcDate).toHaveBeenCalledWith(shiftModel.date, shiftModel.time);
+		expect(dateServiceSpy.combineDateAndTimeObjects).toHaveBeenCalledWith(shiftModel.date, shiftModel.time);
 		expect(shiftServiceSpy.addShift).toHaveBeenCalledWith({
 			creditTips: 100,
 			cashTips: 50,

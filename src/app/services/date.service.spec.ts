@@ -11,24 +11,39 @@ describe('DateService', () => {
 		expect(service).toBeTruthy();
 	});
 
-	describe('convertDateObjectsToUtcDate', () => {
-		it('should convert date and time objects to UTC date', () => {
+	describe('combineDateAndTimeObjects', () => {
+		it('should create a local date that represents the intended local time', () => {
 			const date = new Date(2025, 8, 16); // September 16, 2025 (month is 0-based)
 			const time = new Date(2025, 8, 16, 15, 30); // 15:30
-			const result = service.convertDateObjectsToUtcDate(date, time);
-			expect(result.getUTCFullYear()).toBe(2025);
-			expect(result.getUTCMonth()).toBe(8);
-			expect(result.getUTCDate()).toBe(16);
-			expect(result.getUTCHours()).toBe(15);
-			expect(result.getUTCMinutes()).toBe(30);
-			expect(result.getUTCSeconds()).toBe(0);
+			const result = service.combineDateAndTimeObjects(date, time);
+			
+			// The result should be a local date with the specified components
+			expect(result.getFullYear()).toBe(2025);
+			expect(result.getMonth()).toBe(8);
+			expect(result.getDate()).toBe(16);
+			expect(result.getHours()).toBe(15);
+			expect(result.getMinutes()).toBe(30);
+			expect(result.getSeconds()).toBe(0);
 		});
 
 		it('should use default time if timeObject is not provided', () => {
 			const date = new Date(2025, 8, 16);
-			const result = service.convertDateObjectsToUtcDate(date);
-			expect(result.getUTCHours()).toBe(8);
-			expect(result.getUTCMinutes()).toBe(0);
+			const result = service.combineDateAndTimeObjects(date);
+			
+			// The result should use default time of 8:00
+			expect(result.getHours()).toBe(8);
+			expect(result.getMinutes()).toBe(0);
+		});
+
+		it('should create a date that converts properly to UTC for API', () => {
+			const date = new Date(2025, 8, 16); // September 16, 2025
+			const time = new Date(2025, 8, 16, 15, 30); // 15:30
+			const result = service.combineDateAndTimeObjects(date, time);
+			
+			// When converted to ISO string (like in API calls), it should convert local time to UTC
+			const isoString = result.toISOString();
+			expect(isoString).toContain('2025-09-16T'); // Should be the correct date
+			// The time will vary based on timezone, but the important thing is it's properly converted
 		});
 	});
 
