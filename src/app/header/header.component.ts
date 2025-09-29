@@ -62,6 +62,7 @@ export class HeaderComponent implements OnDestroy {
           this.shiftService.triggerRefresh();
         },
         error: (err) => {
+          //TODO: Handle error properly
           console.error('Failed to reset demo shifts:', err);
           // Optionally show an error message
         }
