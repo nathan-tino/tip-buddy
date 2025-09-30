@@ -77,7 +77,7 @@ describe('HeaderComponent', () => {
 	});
 
 	it('should call resetDemoShifts and triggerRefresh when resetDemoShifts is called', () => {
-		demoServiceSpy.resetDemoShifts.and.returnValue(of({}));
+		demoServiceSpy.resetDemoShifts.and.returnValue(of(undefined));
 		
 		component.resetDemoShifts();
 		

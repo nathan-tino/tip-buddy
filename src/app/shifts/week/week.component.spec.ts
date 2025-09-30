@@ -89,4 +89,41 @@ describe('WeekComponent', () => {
 		component.onDeleteShift('1');
 		expect(component.deleteShift.emit).toHaveBeenCalledWith('1');
 	});
+
+	describe('isToday', () => {
+		it('should return true when date is today', () => {
+			const today = new Date();
+			expect(component.isToday(today)).toBe(true);
+		});
+
+		it('should return false when date is different year', () => {
+			const today = new Date();
+			const differentYear = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
+			expect(component.isToday(differentYear)).toBe(false);
+		});
+
+		it('should return false when date is different month', () => {
+			const today = new Date();
+			const differentMonth = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+			expect(component.isToday(differentMonth)).toBe(false);
+		});
+
+		it('should return false when date is different day', () => {
+			const today = new Date();
+			const differentDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+			expect(component.isToday(differentDay)).toBe(false);
+		});
+
+		it('should return false when date is tomorrow', () => {
+			const tomorrow = new Date();
+			tomorrow.setDate(tomorrow.getDate() + 1);
+			expect(component.isToday(tomorrow)).toBe(false);
+		});
+
+		it('should return false when date is yesterday', () => {
+			const yesterday = new Date();
+			yesterday.setDate(yesterday.getDate() - 1);
+			expect(component.isToday(yesterday)).toBe(false);
+		});
+	});
 });
