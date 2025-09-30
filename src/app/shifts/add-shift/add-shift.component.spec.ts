@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { AddShiftComponent } from './add-shift.component';
 import { ShiftService } from '../../services/shift.service';
 import { DateService } from '../../services/date.service';
@@ -88,5 +88,105 @@ describe('AddShiftComponent', () => {
 			hoursWorked: 8
 		} as CreateShiftDto);
 		expect(component.close.emit).toHaveBeenCalledWith(createdShift);
+	});
+
+	it('should default creditTips, cashTips, and tipout to 0 when undefined', () => {
+		const shiftModel: ShiftFormModel = {
+			creditTips: undefined,
+			cashTips: undefined,
+			tipout: undefined,
+			date: new Date('2023-08-28'),
+			time: new Date('1970-01-01T14:30:00Z'),
+			hoursWorked: 8
+		};
+		const createdShift: GetShiftDto = {
+			id: '1',
+			creditTips: 0,
+			cashTips: 0,
+			tipout: 0,
+			date: new Date('2023-08-28T14:30:00Z'),
+			hoursWorked: 8
+		};
+		const convertedDate = new Date('2023-08-28T14:30:00Z');
+
+		dateServiceSpy.combineDateAndTimeObjects.and.returnValue(convertedDate);
+		shiftServiceSpy.addShift.and.returnValue(of(createdShift));
+		spyOn(component.close, 'emit');
+
+		component.onSubmit(shiftModel);
+
+		expect(shiftServiceSpy.addShift).toHaveBeenCalledWith({
+			creditTips: 0,
+			cashTips: 0,
+			tipout: 0,
+			date: convertedDate,
+			hoursWorked: 8
+		} as CreateShiftDto);
+		expect(component.close.emit).toHaveBeenCalledWith(createdShift);
+	});
+
+	it('should default creditTips, cashTips, and tipout to 0 when null', () => {
+		const shiftModel: ShiftFormModel = {
+			creditTips: null as any,
+			cashTips: null as any,
+			tipout: null as any,
+			date: new Date('2023-08-28'),
+			time: new Date('1970-01-01T14:30:00Z'),
+			hoursWorked: 8
+		};
+		const createdShift: GetShiftDto = {
+			id: '1',
+			creditTips: 0,
+			cashTips: 0,
+			tipout: 0,
+			date: new Date('2023-08-28T14:30:00Z'),
+			hoursWorked: 8
+		};
+		const convertedDate = new Date('2023-08-28T14:30:00Z');
+
+		dateServiceSpy.combineDateAndTimeObjects.and.returnValue(convertedDate);
+		shiftServiceSpy.addShift.and.returnValue(of(createdShift));
+		spyOn(component.close, 'emit');
+
+		component.onSubmit(shiftModel);
+
+		expect(shiftServiceSpy.addShift).toHaveBeenCalledWith({
+			creditTips: 0,
+			cashTips: 0,
+			tipout: 0,
+			date: convertedDate,
+			hoursWorked: 8
+		} as CreateShiftDto);
+		expect(component.close.emit).toHaveBeenCalledWith(createdShift);
+	});
+
+	it('should handle addShift error and log to console', () => {
+		const shiftModel: ShiftFormModel = {
+			creditTips: 100,
+			cashTips: 50,
+			tipout: 20,
+			date: new Date('2023-08-28'),
+			time: new Date('1970-01-01T14:30:00Z'),
+			hoursWorked: 8
+		};
+		const convertedDate = new Date('2023-08-28T14:30:00Z');
+		const error = new Error('Test error');
+
+		dateServiceSpy.combineDateAndTimeObjects.and.returnValue(convertedDate);
+		shiftServiceSpy.addShift.and.returnValue(throwError(() => error));
+		spyOn(component.close, 'emit');
+		spyOn(console, 'error');
+
+		component.onSubmit(shiftModel);
+
+		expect(shiftServiceSpy.addShift).toHaveBeenCalledWith({
+			creditTips: 100,
+			cashTips: 50,
+			tipout: 20,
+			date: convertedDate,
+			hoursWorked: 8
+		} as CreateShiftDto);
+		expect(console.error).toHaveBeenCalledWith(error);
+		expect(component.close.emit).not.toHaveBeenCalled();
 	});
 });

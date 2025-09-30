@@ -79,4 +79,44 @@ describe('ShiftFormComponent', () => {
 
         expect(component.cancel.emit).toHaveBeenCalled();
     });
+
+    it('should not emit submitted and log error when dateInput is not provided', () => {
+        // Set up component with no dateInput (undefined)
+        component.dateInput = undefined;
+        component.timeInput = new Date('1970-01-01T14:30:00Z');
+        component.creditTipsInput = 100;
+        component.cashTipsInput = 50;
+        component.tipoutInput = 20;
+        component.hoursWorkedInput = 8;
+
+        fixture.detectChanges();
+
+        spyOn(component.submitted, 'emit');
+        spyOn(console, 'error');
+
+        component.onSubmit();
+
+        expect(console.error).toHaveBeenCalledWith('Form submitted without valid date');
+        expect(component.submitted.emit).not.toHaveBeenCalled();
+    });
+
+    it('should not emit submitted and log error when dateInput is null', () => {
+        // Set up component with null dateInput
+        component.dateInput = null as any;
+        component.timeInput = new Date('1970-01-01T14:30:00Z');
+        component.creditTipsInput = 100;
+        component.cashTipsInput = 50;
+        component.tipoutInput = 20;
+        component.hoursWorkedInput = 8;
+
+        fixture.detectChanges();
+
+        spyOn(component.submitted, 'emit');
+        spyOn(console, 'error');
+
+        component.onSubmit();
+
+        expect(console.error).toHaveBeenCalledWith('Form submitted without valid date');
+        expect(component.submitted.emit).not.toHaveBeenCalled();
+    });
 });
