@@ -40,12 +40,14 @@ This approach forces Angular to apply your styles beyond the component boundary,
 When writing unit tests, follow these guidelines to ensure high-quality, maintainable test code:
 
 ### Avoid Type Safety Bypasses
-- **Never use `as any`** to bypass TypeScript type checking in tests
+- **NEVER use `as any`** to bypass TypeScript type checking in tests - this is a critical anti-pattern
+- **NEVER use `null as any`** or similar type assertions - work within the actual type system
 - **Never use manual component instantiation** with `new Component(dependencies)` - this bypasses Angular's TestBed
-- Instead of `component.property = undefined as any`, create realistic test scenarios:
+- Instead of bypassing types, create realistic test scenarios:
   - Use `TestBed.createComponent()`: `const freshFixture = TestBed.createComponent(Component); const freshComponent = freshFixture.componentInstance;`
-  - Test actual edge cases like uninitialized components
+  - Test actual edge cases like uninitialized components or undefined properties
   - Use proper mock objects that match expected interfaces
+  - If testing edge cases like `null` values, ensure your interfaces actually support those types
 
 ### Use Exact Object Matching
 - **Avoid `jasmine.objectContaining()`** for critical assertions

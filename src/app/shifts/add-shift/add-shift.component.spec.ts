@@ -115,48 +115,14 @@ describe('AddShiftComponent', () => {
 
 		component.onSubmit(shiftModel);
 
+		// Verify that undefined values were converted to 0 via ?? operator
 		expect(shiftServiceSpy.addShift).toHaveBeenCalledWith({
 			creditTips: 0,
 			cashTips: 0,
 			tipout: 0,
 			date: convertedDate,
 			hoursWorked: 8
-		} as CreateShiftDto);
-		expect(component.close.emit).toHaveBeenCalledWith(createdShift);
-	});
-
-	it('should default creditTips, cashTips, and tipout to 0 when null', () => {
-		const shiftModel: ShiftFormModel = {
-			creditTips: null as any,
-			cashTips: null as any,
-			tipout: null as any,
-			date: new Date('2023-08-28'),
-			time: new Date('1970-01-01T14:30:00Z'),
-			hoursWorked: 8
-		};
-		const createdShift: GetShiftDto = {
-			id: '1',
-			creditTips: 0,
-			cashTips: 0,
-			tipout: 0,
-			date: new Date('2023-08-28T14:30:00Z'),
-			hoursWorked: 8
-		};
-		const convertedDate = new Date('2023-08-28T14:30:00Z');
-
-		dateServiceSpy.combineDateAndTimeObjects.and.returnValue(convertedDate);
-		shiftServiceSpy.addShift.and.returnValue(of(createdShift));
-		spyOn(component.close, 'emit');
-
-		component.onSubmit(shiftModel);
-
-		expect(shiftServiceSpy.addShift).toHaveBeenCalledWith({
-			creditTips: 0,
-			cashTips: 0,
-			tipout: 0,
-			date: convertedDate,
-			hoursWorked: 8
-		} as CreateShiftDto);
+		});
 		expect(component.close.emit).toHaveBeenCalledWith(createdShift);
 	});
 
