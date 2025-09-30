@@ -102,12 +102,12 @@ describe('ShiftService', () => {
         const stringId = '1';
 
         service.deleteShift(stringId).subscribe(response => {
-          expect(response).toEqual({});
+          expect(response).toBeNull();
         });
 
         const req = httpMock.expectOne(`${apiUrl}/${stringId}`);
         expect(req.request.method).toBe('DELETE');
-        req.flush({});
+        req.flush(null);
     });
   });
 
@@ -125,13 +125,13 @@ describe('ShiftService', () => {
       };
 
         service.editShift(stringId, updatedShift).subscribe(response => {
-        expect(response).toEqual({});
+        expect(response).toBeNull();
       });
 
         const req = httpMock.expectOne(`${apiUrl}/${stringId}`);
       expect(req.request.method).toBe('PUT');
       expect(req.request.body).toEqual(updatedShift);
-      req.flush({});
+      req.flush(null);
     });
   });
 
