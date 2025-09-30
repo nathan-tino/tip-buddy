@@ -79,9 +79,7 @@ export class AuthService {
 		return this.http.get<AuthResponse>(this.meUrl, { withCredentials: true }).pipe(
 			tap((response) => {
 				this._isLoggedIn.next(true);
-				// Note: Demo user status should be determined by backend response
-				// For now, we'll preserve the current demo state if already set
-				// This should be updated when the backend provides demo user info
+				this._isDemoUser.next(response.isDemo || false);
 			}),
 			catchError(err => {
 				this._isLoggedIn.next(false);
