@@ -79,7 +79,7 @@ export class AuthService {
 		return this.http.get<AuthResponse>(this.meUrl, { withCredentials: true }).pipe(
 			tap((response) => {
 				this._isLoggedIn.next(true);
-				this._isDemoUser.next(response.isDemo || false);
+				this._isDemoUser.next(response?.isDemo || false);
 			}),
 			catchError(err => {
 				this._isLoggedIn.next(false);
