@@ -10,11 +10,11 @@ import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-	// TODO: Implement verify authentication by calling a protected backend endpoint (e.g., /api/Auth/me)
 	private loginUrl = `${environment.apiBaseUrl}/auth/login`;
 	private registerUrl = `${environment.apiBaseUrl}/auth/register`;
 	private logoutUrl = `${environment.apiBaseUrl}/auth/logout`;
 	private demoUrl = `${environment.apiBaseUrl}/auth/demo`;
+	private meUrl = `${environment.apiBaseUrl}/auth/me`;
 
 	private _isLoggedIn = new BehaviorSubject<boolean>(false);
 	isLoggedIn$ = this._isLoggedIn.asObservable();
@@ -43,8 +43,15 @@ export class AuthService {
 			tap(() => {
 				this._isLoggedIn.next(false);
 				this._isDemoUser.next(false);
+				this.clearClientState();
 			})
 		);
+	}
+
+	private clearClientState(): void {
+		// Clear any client-side storage if needed in the future
+		// For now, we're using HttpOnly cookies managed by the server
+		// This method is placeholder for future client-side state clearing
 	}
 
 	demoLogin(): Observable<AuthResponse> {
@@ -52,6 +59,29 @@ export class AuthService {
 			tap(() => {
 				this._isLoggedIn.next(true);
 				this._isDemoUser.next(true);
+			}),
+			catchError(err => {
+				this._isLoggedIn.next(false);
+				this._isDemoUser.next(false);
+				return throwError(() => err);
+			})
+		);
+	}
+
+	/**
+	 * Verifies the current user session by calling the backend /auth/me endpoint.
+	 * This method is called on app initialization to restore authentication state
+	 * after page reloads. It updates the isLoggedIn$ and isDemoUser$ observables
+	 * based on the server response.
+	 * @returns Observable<AuthResponse> - The auth response from the server
+	 */
+	verifySession(): Observable<AuthResponse> {
+		return this.http.get<AuthResponse>(this.meUrl, { withCredentials: true }).pipe(
+			tap((response) => {
+				this._isLoggedIn.next(true);
+				// Note: Demo user status should be determined by backend response
+				// For now, we'll preserve the current demo state if already set
+				// This should be updated when the backend provides demo user info
 			}),
 			catchError(err => {
 				this._isLoggedIn.next(false);
