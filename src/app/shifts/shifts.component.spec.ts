@@ -175,7 +175,7 @@ describe('ShiftsComponent', () => {
 		resetShifts();
 		mockShiftService.deleteShift.and.returnValue(of(void 0));
 
-	component.onDeleteShift('1');
+		component.onDeleteShift('1');
 		expect(mockShiftService.deleteShift).toHaveBeenCalledWith('1');
 		expect(component.shifts.length).toBe(0);
 	});
@@ -183,7 +183,7 @@ describe('ShiftsComponent', () => {
 	it('should handle delete error gracefully', () => {
 		spyOn(console, 'error');
 		mockShiftService.deleteShift.and.returnValue(throwError(() => new Error('Delete failed')));
-	component.onDeleteShift('1');
+		component.onDeleteShift('1');
 		expect(console.error).toHaveBeenCalled();
 	});
 
@@ -232,8 +232,12 @@ describe('ShiftsComponent', () => {
 	});
 
 	describe('loadShiftsForDate', () => {
+		// Centralized test constants for this describe block
+		const testDate = new Date('2023-03-15T10:30:00');
+		const expectedFirstDay = new Date(2023, 2, 12); // March 12, 2023 (Sunday)
+		const expectedLastDay = new Date(2023, 2, 18); // March 18, 2023 (Saturday)
+
 		it('should call setIntervalDates with provided date and loadShifts when setIntervalDates returns true', () => {
-			const testDate = new Date('2023-03-15T10:30:00');
 			const setIntervalDatesSpy = spyOn(component, 'setIntervalDates').and.returnValue(true);
 			const loadShiftsSpy = spyOn(component, 'loadShifts');
 
@@ -264,7 +268,6 @@ describe('ShiftsComponent', () => {
 		});
 
 		it('should not call loadShifts when setIntervalDates returns false', () => {
-			const testDate = new Date('2023-03-15T10:30:00');
 			const setIntervalDatesSpy = spyOn(component, 'setIntervalDates').and.returnValue(false);
 			const loadShiftsSpy = spyOn(component, 'loadShifts');
 
@@ -274,23 +277,18 @@ describe('ShiftsComponent', () => {
 			expect(loadShiftsSpy).not.toHaveBeenCalled();
 		});
 
-		it('should set component interval dates and load shifts when setIntervalDates succeeds', () => {
-			const { testDate, expectedFirstDay, expectedLastDay } = setupLoadShiftsForDateTest();
-
-			component.loadShiftsForDate(testDate);
-
-			// Verify interval dates were set correctly
-			expect(component.firstDayOfInterval).toEqual(expectedFirstDay);
-			expect(component.lastDayOfInterval).toEqual(expectedLastDay);
-			
-			// Verify loadShifts was called and made the service call
-			expect(mockShiftService.getShifts).toHaveBeenCalledWith(expectedFirstDay, expectedLastDay);
-		});
-
 		it('should integrate properly with the actual setIntervalDates method logic', () => {
 			// This test verifies the integration between loadShiftsForDate and setIntervalDates
 			// without mocking setIntervalDates, to ensure the real logic works correctly
-			const { testDate, expectedFirstDay, expectedLastDay } = setupLoadShiftsForDateTest();
+
+			mockDateService.getFirstAndLastDayOfWeek.and.returnValue({
+				firstDayOfWeek: expectedFirstDay,
+				lastDayOfWeek: expectedLastDay
+			});
+
+			// Reset the getShifts spy to track this specific call
+			mockShiftService.getShifts.calls.reset();
+			mockShiftService.getShifts.and.returnValue(of(mockShifts));
 
 			component.loadShiftsForDate(testDate);
 
@@ -301,24 +299,8 @@ describe('ShiftsComponent', () => {
 		});
 	});
 
-	function setupLoadShiftsForDateTest() {
-		const testDate = new Date('2023-03-15T10:30:00');
-		const expectedFirstDay = new Date(2023, 2, 12); // March 12, 2023 (Sunday)
-		const expectedLastDay = new Date(2023, 2, 18); // March 18, 2023 (Saturday)
-		
-		mockDateService.getFirstAndLastDayOfWeek.and.returnValue({
-			firstDayOfWeek: expectedFirstDay,
-			lastDayOfWeek: expectedLastDay
-		});
-
-		// Reset the getShifts spy to track this specific call
-		mockShiftService.getShifts.calls.reset();
-		mockShiftService.getShifts.and.returnValue(of(mockShifts));
-
-		return { testDate, expectedFirstDay, expectedLastDay };
-	}
-
 	function resetShifts() {
 		component.shifts = [...mockShifts.map(s => ({ ...s }))];
 	}
 });
+
