@@ -275,19 +275,7 @@ describe('ShiftsComponent', () => {
 		});
 
 		it('should set component interval dates and load shifts when setIntervalDates succeeds', () => {
-			// Setup - ensure setIntervalDates will return true by setting up the date service mock
-			const testDate = new Date('2023-03-15T10:30:00');
-			const expectedFirstDay = new Date(2023, 2, 12); // March 12, 2023 (Sunday)
-			const expectedLastDay = new Date(2023, 2, 18); // March 18, 2023 (Saturday)
-			
-			mockDateService.getFirstAndLastDayOfWeek.and.returnValue({
-				firstDayOfWeek: expectedFirstDay,
-				lastDayOfWeek: expectedLastDay
-			});
-
-			// Reset the getShifts spy to track this specific call
-			mockShiftService.getShifts.calls.reset();
-			mockShiftService.getShifts.and.returnValue(of(mockShifts));
+			const { testDate, expectedFirstDay, expectedLastDay } = setupLoadShiftsForDateTest();
 
 			component.loadShiftsForDate(testDate);
 
@@ -302,17 +290,7 @@ describe('ShiftsComponent', () => {
 		it('should integrate properly with the actual setIntervalDates method logic', () => {
 			// This test verifies the integration between loadShiftsForDate and setIntervalDates
 			// without mocking setIntervalDates, to ensure the real logic works correctly
-			const testDate = new Date('2023-03-15T10:30:00');
-			const expectedFirstDay = new Date(2023, 2, 12); // March 12, 2023 (Sunday) 
-			const expectedLastDay = new Date(2023, 2, 18); // March 18, 2023 (Saturday)
-			
-			mockDateService.getFirstAndLastDayOfWeek.and.returnValue({
-				firstDayOfWeek: expectedFirstDay,
-				lastDayOfWeek: expectedLastDay
-			});
-
-			mockShiftService.getShifts.calls.reset();
-			mockShiftService.getShifts.and.returnValue(of(mockShifts));
+			const { testDate, expectedFirstDay, expectedLastDay } = setupLoadShiftsForDateTest();
 
 			component.loadShiftsForDate(testDate);
 
@@ -322,6 +300,23 @@ describe('ShiftsComponent', () => {
 			expect(mockShiftService.getShifts).toHaveBeenCalledWith(expectedFirstDay, expectedLastDay);
 		});
 	});
+
+	function setupLoadShiftsForDateTest() {
+		const testDate = new Date('2023-03-15T10:30:00');
+		const expectedFirstDay = new Date(2023, 2, 12); // March 12, 2023 (Sunday)
+		const expectedLastDay = new Date(2023, 2, 18); // March 18, 2023 (Saturday)
+		
+		mockDateService.getFirstAndLastDayOfWeek.and.returnValue({
+			firstDayOfWeek: expectedFirstDay,
+			lastDayOfWeek: expectedLastDay
+		});
+
+		// Reset the getShifts spy to track this specific call
+		mockShiftService.getShifts.calls.reset();
+		mockShiftService.getShifts.and.returnValue(of(mockShifts));
+
+		return { testDate, expectedFirstDay, expectedLastDay };
+	}
 
 	function resetShifts() {
 		component.shifts = [...mockShifts.map(s => ({ ...s }))];
