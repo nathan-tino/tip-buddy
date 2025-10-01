@@ -154,4 +154,99 @@ describe('AuthService', () => {
 		req.flush({});
 		expect(isDemoUser).toBeFalse();
 	});
+
+	describe('verifySession', () => {
+		it('should call the correct /auth/me endpoint with credentials', () => {
+			service.verifySession().subscribe();
+			const req = httpMock.expectOne(`${apiBaseUrl}/auth/me`);
+			expect(req.request.method).toBe('GET');
+			expect(req.request.withCredentials).toBeTrue();
+			req.flush({ message: 'Session valid', isDemo: false });
+		});
+
+		it('should set isLoggedIn$ to true on successful session verification', () => {
+			let loggedIn: boolean | undefined;
+			service.isLoggedIn$.subscribe(val => loggedIn = val);
+			
+			service.verifySession().subscribe();
+			const req = httpMock.expectOne(`${apiBaseUrl}/auth/me`);
+			req.flush({ message: 'Session valid', isDemo: false });
+			
+			expect(loggedIn).toBeTrue();
+		});
+
+		it('should set isDemoUser$ to false for regular user session', () => {
+			let isDemoUser: boolean | undefined;
+			service.isDemoUser$.subscribe(val => isDemoUser = val);
+			
+			service.verifySession().subscribe();
+			const req = httpMock.expectOne(`${apiBaseUrl}/auth/me`);
+			req.flush({ message: 'Session valid', isDemo: false });
+			
+			expect(isDemoUser).toBeFalse();
+		});
+
+		it('should set isDemoUser$ to true for demo user session', () => {
+			let isDemoUser: boolean | undefined;
+			service.isDemoUser$.subscribe(val => isDemoUser = val);
+			
+			service.verifySession().subscribe();
+			const req = httpMock.expectOne(`${apiBaseUrl}/auth/me`);
+			req.flush({ message: 'Demo session valid', isDemo: true });
+			
+			expect(isDemoUser).toBeTrue();
+		});
+
+		it('should handle response without isDemo property and default to false', () => {
+			let isDemoUser: boolean | undefined;
+			service.isDemoUser$.subscribe(val => isDemoUser = val);
+			
+			service.verifySession().subscribe();
+			const req = httpMock.expectOne(`${apiBaseUrl}/auth/me`);
+			req.flush({ message: 'Session valid' }); // No isDemo property
+			
+			expect(isDemoUser).toBeFalse();
+		});
+
+		it('should set isLoggedIn$ and isDemoUser$ to false on session verification error', () => {
+			let loggedIn: boolean | undefined;
+			let isDemoUser: boolean | undefined;
+			service.isLoggedIn$.subscribe(val => loggedIn = val);
+			service.isDemoUser$.subscribe(val => isDemoUser = val);
+			
+			service.verifySession().subscribe({
+				error: () => {
+					expect(loggedIn).toBeFalse();
+					expect(isDemoUser).toBeFalse();
+				}
+			});
+			
+			const req = httpMock.expectOne(`${apiBaseUrl}/auth/me`);
+			req.flush('Unauthorized', { status: 401, statusText: 'Unauthorized' });
+		});
+
+		it('should return the auth response on successful verification', () => {
+			const mockResponse = { message: 'Session valid', isDemo: false };
+			
+			service.verifySession().subscribe(response => {
+				expect(response).toEqual(mockResponse);
+			});
+			
+			const req = httpMock.expectOne(`${apiBaseUrl}/auth/me`);
+			req.flush(mockResponse);
+		});
+
+		it('should propagate error when session verification fails', () => {
+			service.verifySession().subscribe({
+				next: () => fail('Should not succeed'),
+				error: (error) => {
+					expect(error.status).toBe(401);
+					expect(error.statusText).toBe('Unauthorized');
+				}
+			});
+			
+			const req = httpMock.expectOne(`${apiBaseUrl}/auth/me`);
+			req.flush('Token expired', { status: 401, statusText: 'Unauthorized' });
+		});
+	});
 });
