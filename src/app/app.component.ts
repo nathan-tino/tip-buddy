@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
 			},
 			error: (err) => {
 				// Session is invalid or expired, user is not authenticated
-				console.log('Session verification failed:', err);
+				// TODO: Use a logging service to log session verification errors in production
 				// If not already on login or register page, redirect to login
 				if (this.router.url !== '/login' && this.router.url !== '/register') {
 					this.router.navigate(['/login']);
