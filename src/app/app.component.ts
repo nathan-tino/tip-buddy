@@ -22,6 +22,7 @@ export class AppComponent implements OnInit {
 			next: () => {
 				// Session is valid, user is authenticated
 				console.log('User session verified');
+				// TODO [TB-37] Add logging and remove all console logs
 				// If currently on login page and user is authenticated, redirect to shifts
 				if (this.router.url === '/login') {
 					this.router.navigate(['/shifts']);
