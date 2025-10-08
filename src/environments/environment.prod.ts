@@ -1,3 +1,3 @@
 export const environment = {
-  apiBaseUrl: 'https://172-179-139-193.sslip.io/api'
+  apiBaseUrl: 'tip-buddy-api-d8fdefckdyc7evb9.westus2-01.azurewebsites.net/api'
 };
