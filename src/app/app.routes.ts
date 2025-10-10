@@ -17,5 +17,6 @@ export const routes: Routes = [
 		canActivate: [AuthGuard],
 		component: ShiftsComponent
 	},
-	{ path: 'register', component: RegisterComponent }
+	{ path: 'register', component: RegisterComponent },
+	{ path: '**', redirectTo: '', pathMatch: 'full' }
 ];
